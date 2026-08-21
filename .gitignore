@@ -22,3 +22,7 @@ scripts/.logo-raw.svg
 
 # the original spec delivery archive — same content as docs/ and mockups/
 rgi-service-docs_1.zip
+
+# any stray env dump, wherever it sits in the tree
+*.env.local
+*env.txt
