@@ -26,3 +26,9 @@ rgi-service-docs_1.zip
 # any stray env dump, wherever it sits in the tree
 *.env.local
 *env.txt
+
+# Vercel CLI link metadata
+.vercel
+
+.vercel
+.env*
