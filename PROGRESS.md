@@ -796,3 +796,88 @@ copy lingers.
   replaced through the admin one product at a time; a bulk migration to Cloudinary was not
   written.
 - CMI credentials, customer auth UI, GA4 + consent, real NAP for `LocalBusiness`.
+
+
+## Session 10 — 2026-08-21
+
+### Done — the site is live
+
+| | |
+|---|---|
+| **Storefront** | https://rgi-service.vercel.app |
+| **API** | https://rgi-service-api.vercel.app/api/v1 |
+| **Repo** | https://github.com/Mourad96-mh/rgi-service (public) |
+| **DB** | MongoDB Atlas — `db: connected` |
+
+**GitHub.** The project got its own standalone repo. This folder sits inside the
+`C:\Users\MOURAD` repo whose remote is **AT-DENTAl**, so committing from there would have
+pushed every Bureau project to another client's repository. Verified afterwards that the
+parent repo is untouched.
+
+Before the first push, every value in `.env` was extracted and all 352 files scanned for
+each one, plus a generic sweep for connection strings and tokens. **No live credential
+leaked** — only `.env.example` is on the remote. The matches that did appear were dev
+defaults already hardcoded in the source.
+
+**Hosting — both on Vercel, not Render.** Mourad deployed the API to Vercel rather than
+the Render blueprint. For a demo that is arguably the better call: Render's free tier
+sleeps after 15 min and takes ~50 s to wake, while Vercel cold-starts in a second or two.
+`render.yaml` stays in the repo as an alternative. Serverless trade-offs accepted: a new
+Mongo connection per cold start (Atlas M0 caps at 500) and a less effective 30 s rules
+cache. Transactions still work — Atlas is a replica set.
+
+**What broke and why.** The API returned `FUNCTION_INVOCATION_FAILED` on every request:
+`NODE_ENV=production` on Vercel, and `env.validation.ts` hard-requires `MONGODB_URI`,
+`JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `CORS_ORIGINS`. Reproduced locally before
+touching the dashboard.
+
+Setting them via `vercel env add` **timed out after 3 of 13** — the CLI needs one process
+spawn per variable per environment, ~39 spawns. Replaced with
+**`scripts/push-vercel-env.mjs`**, which posts the whole set to the REST API in one request
+with `upsert=true`. Reusable for the next project.
+
+### Fixed along the way
+
+- **CORS was an exact-match list**, so every Vercel preview deployment would have been
+  refused. Entries may now carry one wildcard (`https://*.vercel.app`). The wildcard
+  matches a single label, so `not-vercel.app.attacker.com` is still rejected — verified in
+  production alongside the real origin and a blocked attacker domain.
+- **`listen()` now binds `0.0.0.0`** — a PaaS routes to the pod address.
+- **The mobile burger menu was clipped to a 72 px sliver.** The header sets
+  `backdrop-blur`, and a `backdrop-filter` makes an element a containing block for its
+  `position: fixed` descendants — so the drawer's `fixed inset-0` sized against the 72 px
+  header instead of the viewport. Measured live: panel 390×72 holding 796 px of content,
+  17 links unreachable. Now rendered through a **portal into `document.body`** → 390×844.
+  Also added a visible close button (the backdrop strip was ~70 px on a 390 px screen),
+  Escape-to-close (it did not close before), focus into the panel and back to the burger,
+  `role="dialog"`, `overscroll-contain` and a safe-area pad.
+- **Cart steppers were 32×32**, under the 44 px touch guideline — now 44 px on touch, 32 px
+  from `sm` up.
+- The last footer line sat permanently under the floating contact buttons.
+
+**Admin password rotated.** The seed only ever *creates* the admin, never updates one, so
+the documented default could not be changed without
+**`scripts/rotate-admin-password.mjs`**. Ran it: old password 401, new one 200, existing
+sessions killed. The new password is in `.env` (gitignored), never in the git diff.
+
+### Mobile audit (390×844, live)
+
+Clean: no horizontal overflow on the product page or the cart, nothing rendering past the
+viewport, no fixed overlay covering a button. Cart driven end to end — add to cart, badge
+to 1, line + unit price + subtotal 5 990,00 MAD, full-width checkout button.
+
+### Open — pick up here
+
+1. **The Xbox Series X carries photos of a white Series S.** The query was right; the
+   image ranker scores candidates on border whiteness, so a white console on a white
+   background wins. **The other 42 products have not been re-checked for the same failure**
+   — that sweep is the first thing to do, and it is a data fix (re-source with explicit
+   URLs via `--only=<sku> --force`), not a code one.
+2. **Revoke the Vercel token** used for this deployment, at vercel.com/account/tokens.
+3. **Hobby plan is non-commercial** per Vercel's terms — fine for a demo, needs Pro (~$20/mo)
+   before the shop is really trading.
+4. Floating contact buttons overlap page content mid-scroll (inherent to FABs). Fix if
+   wanted: hide on scroll-down, show on scroll-up.
+5. Unchanged from before: CMI credentials, real product photography, customer auth UI,
+   categories/rules CRUD, GA4 + consent, real NAP + `LocalBusiness`, a real domain
+   (and then update `NEXT_PUBLIC_SITE_URL`, which the canonicals and sitemap are built from).
