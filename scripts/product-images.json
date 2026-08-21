@@ -1,0 +1,733 @@
+{
+  "GPU-RTX5080-TUF": [
+    {
+      "file": "/products/GPU-RTX5080-TUF-1.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/b598207c-3b70-44c8-9e56-90faca337800/v1/img/kv/pd.png",
+      "white": 1
+    },
+    {
+      "file": "/products/GPU-RTX5080-TUF-2.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/db0e9bff-466c-4943-9a53-153f4d698a6f/v1/img/kv/pd.png",
+      "white": 1
+    },
+    {
+      "file": "/products/GPU-RTX5080-TUF-3.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/3bb9ae38-f9b4-4f5a-b820-4b67b3b1a3d5/v1/img/kv/pd.png",
+      "white": 1
+    }
+  ],
+  "CASE-LL216-BK": [
+    {
+      "file": "/products/CASE-LL216-BK-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/99/72/LD0005997299.jpg",
+      "white": 0.96
+    },
+    {
+      "file": "/products/CASE-LL216-BK-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/26/78/LD0006267822.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CASE-LL216-BK-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71MEZslAjQL.jpg",
+      "white": 1
+    }
+  ],
+  "CASE-H6FLOW-WH": [
+    {
+      "file": "/products/CASE-H6FLOW-WH-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/26/91/LD0006269115.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CASE-H6FLOW-WH-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/03/56/LD0006035682.jpg",
+      "white": 0.94
+    },
+    {
+      "file": "/products/CASE-H6FLOW-WH-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/07/91/LD0006079165.jpg",
+      "white": 0.81
+    }
+  ],
+  "CASE-NR200P-BK": [
+    {
+      "file": "/products/CASE-NR200P-BK-1.webp",
+      "source": "https://www.coolermaster.com/on/demandware.static/-/Sites-cooler-master-main/default/dwb0374db6/Assets/masterbox-nr200p-v2/large/nr200p-v2-black-gallery-06.png",
+      "white": 1
+    },
+    {
+      "file": "/products/CASE-NR200P-BK-2.webp",
+      "source": "https://m.media-amazon.com/images/I/617V4n5O0vL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CASE-NR200P-BK-3.webp",
+      "source": "https://files.coolermaster.com/og-image/nr200p-v2-1200x630.jpg",
+      "white": 0.95
+    }
+  ],
+  "MB-B650TOMA-WIFI": [
+    {
+      "file": "/products/MB-B650TOMA-WIFI-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985059.jpg",
+      "white": 0.98
+    },
+    {
+      "file": "/products/MB-B650TOMA-WIFI-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985061.jpg",
+      "white": 0.97
+    },
+    {
+      "file": "/products/MB-B650TOMA-WIFI-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985060.jpg",
+      "white": 0.9
+    }
+  ],
+  "MB-B760M-TUF": [
+    {
+      "file": "/products/MB-B760M-TUF-1.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/4b7750f8-d47b-4afe-a42e-a729d04eb73b/img/1-TUF-GAMING-B660M-PLUS-WIFI-D4-2D-AURA.png",
+      "white": 1
+    },
+    {
+      "file": "/products/MB-B760M-TUF-2.webp",
+      "source": "https://storage-asset.msi.com/global/picture/image/feature/mb/B760/b760m-gaming-plus-wifi/b760m-gaming-plus-wifi-hero02-new1.png",
+      "white": 0.96
+    },
+    {
+      "file": "/products/MB-B760M-TUF-3.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/aec27763-6082-4c43-bdb8-b4f8099e995e/V1/img/spec-performance.webp",
+      "white": 1
+    }
+  ],
+  "MB-B550M-DS3H": [
+    {
+      "file": "/products/MB-B550M-DS3H-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/13/93/LD0006139380.jpg",
+      "white": 0.97
+    },
+    {
+      "file": "/products/MB-B550M-DS3H-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/26/58/LD0006265882.jpg",
+      "white": 0.95
+    },
+    {
+      "file": "/products/MB-B550M-DS3H-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/13/93/LD0006139379.jpg",
+      "white": 0.87
+    }
+  ],
+  "MB-B650E-ITX": [
+    {
+      "file": "/products/MB-B650E-ITX-1.webp",
+      "source": "https://pg.asrock.com/mb/photo/B650E%20PG-ITX%20WiFi(L3).png",
+      "white": 0.71
+    },
+    {
+      "file": "/products/MB-B650E-ITX-2.webp",
+      "source": "https://pg.asrock.com/mb/photo/B650E%20PG%20Riptide%20WiFi(L3).png",
+      "white": 0.73
+    },
+    {
+      "file": "/products/MB-B650E-ITX-3.webp",
+      "source": "https://pg.asrock.com/mb/photo/B650E%20PG%20Riptide%20WiFi(L1).png",
+      "white": 0.77
+    }
+  ],
+  "CPU-R7-7800X3D": [
+    {
+      "file": "/products/CPU-R7-7800X3D-1.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2505503-ryzen-7-7800x3d.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-R7-7800X3D-2.webp",
+      "source": "https://cdn.mos.cms.futurecdn.net/5tULyL28oacVVe4Dr4pWZc.jpg",
+      "white": 0.71
+    },
+    {
+      "file": "/products/CPU-R7-7800X3D-3.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2505503-ryzen-7-7800x3d-og.jpg",
+      "white": 0
+    }
+  ],
+  "CPU-R5-7600": [
+    {
+      "file": "/products/CPU-R5-7600-1.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2841053-amd-ryzen-5-7600-x3d.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-R5-7600-2.webp",
+      "source": "https://m.media-amazon.com/images/I/61RDXIvWNML._AC_.jpg",
+      "white": 0.71
+    },
+    {
+      "file": "/products/CPU-R5-7600-3.webp",
+      "source": "https://m.media-amazon.com/images/I/61RfWUr4kvL._AC_.jpg",
+      "white": 0.3
+    }
+  ],
+  "CPU-I5-14600KF": [
+    {
+      "file": "/products/CPU-I5-14600KF-1.webp",
+      "source": "https://m.media-amazon.com/images/I/61IgclF1FEL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-I5-14600KF-2.webp",
+      "source": "https://cdn.hstatic.net/products/200000536009/_new_-anh-sp-web_203ad209a11244ffae41eca68428f79b_master_0426a2356c0b4150bf8a59b5ac59573b_master.png",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-I5-14600KF-3.webp",
+      "source": "https://gitec.ge/images/thumbs/0069876_i5-14600kf.jpeg",
+      "white": 1
+    }
+  ],
+  "CPU-R5-5600": [
+    {
+      "file": "/products/CPU-R5-5600-1.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2505503-ryzen-5-5600x.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-R5-5600-2.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2505503-ryzen-5-8500g.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CPU-R5-5600-3.webp",
+      "source": "https://www.amd.com/content/dam/amd/en/images/products/processors/ryzen/2613900-ryzen-5-9600x.jpg",
+      "white": 1
+    }
+  ],
+  "COOL-DRP5": [
+    {
+      "file": "/products/COOL-DRP5-1.webp",
+      "source": "https://m.media-amazon.com/images/I/71u2qQdegUL.jpg",
+      "white": 0.98
+    },
+    {
+      "file": "/products/COOL-DRP5-2.webp",
+      "source": "https://m.media-amazon.com/images/I/61MjAee30VL._AC_.jpg",
+      "white": 0.94
+    },
+    {
+      "file": "/products/COOL-DRP5-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71YYFwtlRiL._AC_.jpg",
+      "white": 0.72
+    }
+  ],
+  "COOL-LF3-360": [
+    {
+      "file": "/products/COOL-LF3-360-1.webp",
+      "source": "https://www.arctic.de/media/eb/82/65/1707473361/Liquid_Freezer_III_360_ARGB_White_Rainbow_G01.png",
+      "white": 1
+    },
+    {
+      "file": "/products/COOL-LF3-360-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/11/36/LD0006113669.jpg",
+      "white": 0.93
+    },
+    {
+      "file": "/products/COOL-LF3-360-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71YEUVIlERL.jpg",
+      "white": 0.95
+    }
+  ],
+  "COOL-PA120-SE": [
+    {
+      "file": "/products/COOL-PA120-SE-1.webp",
+      "source": "https://www.thermalright.com/wp-content/uploads/2021/04/9-2.png",
+      "white": 1
+    },
+    {
+      "file": "/products/COOL-PA120-SE-2.webp",
+      "source": "https://www.thermalright.com/wp-content/uploads/2025/08/5-16.jpg",
+      "white": 0.94
+    },
+    {
+      "file": "/products/COOL-PA120-SE-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71KmumYGrXL._SL1500_.jpg",
+      "white": 0.96
+    }
+  ],
+  "RAM-CORS-32-DDR5-6000": [
+    {
+      "file": "/products/RAM-CORS-32-DDR5-6000-1.webp",
+      "source": "https://www.corsair.com/wp-content/uploads/2022/07/VENGEANCE_RGB_DDR5_HERO_TOP.png",
+      "white": 0.97
+    },
+    {
+      "file": "/products/RAM-CORS-32-DDR5-6000-2.webp",
+      "source": "https://assets.corsair.com/image/upload/akamai/pdp/dram/vengeance-rgb-ddr5/rgb-amd/vengeance_ddr5_amd_feat.png",
+      "white": 1
+    },
+    {
+      "file": "/products/RAM-CORS-32-DDR5-6000-3.webp",
+      "source": "https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Memory/vengeance-rgb-ddr5-wht-config/Gallery/Vengeance-RGB-DDR5-2UP-WHITE_01.webp",
+      "white": 0.91
+    }
+  ],
+  "RAM-KING-16-DDR5-5200": [
+    {
+      "file": "/products/RAM-KING-16-DDR5-5200-1.webp",
+      "source": "https://media.kingston.com/kingston/product/ktc-product-memory-beast-ddr4-rgb-kit4-1-zm-lg.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/RAM-KING-16-DDR5-5200-2.webp",
+      "source": "https://media.materiel.net/r900/products/MN0006192633.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/RAM-KING-16-DDR5-5200-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/86/98/LD0005869813_1.jpg",
+      "white": 0.85
+    }
+  ],
+  "RAM-GSK-32-DDR4-3600": [
+    {
+      "file": "/products/RAM-GSK-32-DDR4-3600-1.webp",
+      "source": "https://www.gskill.com/_upload/images/153611092210.png",
+      "white": 1
+    },
+    {
+      "file": "/products/RAM-GSK-32-DDR4-3600-2.webp",
+      "source": "https://www.gskill.com/_upload/images/156283353511.png",
+      "white": 0.99
+    },
+    {
+      "file": "/products/RAM-GSK-32-DDR4-3600-3.webp",
+      "source": "https://www.gskill.com/_upload/images/153605126610.png",
+      "white": 1
+    }
+  ],
+  "GPU-RTX5070-VENTUS": [
+    {
+      "file": "/products/GPU-RTX5070-VENTUS-1.webp",
+      "source": "https://storage-asset.msi.com/global/picture/image/feature/vga/NVIDIA/new-gen/GB203-300-VENTUS-3X-OC/design/msi-ventus-3x-design-front.png",
+      "white": 0.9
+    },
+    {
+      "file": "/products/GPU-RTX5070-VENTUS-2.webp",
+      "source": "https://storage-asset.msi.com/global/picture/image/feature/vga/NVIDIA/new-gen/GB205-300-VENTUS-3X-OC/design/msi-ventus-3x-design-back.png",
+      "white": 0.91
+    },
+    {
+      "file": "/products/GPU-RTX5070-VENTUS-3.webp",
+      "source": "https://storage-asset.msi.com/global/picture/image/feature/vga/NVIDIA/new-gen/ventus-2x-oc/design/msi-ventus-2x-design-front.png",
+      "white": 0.96
+    }
+  ],
+  "GPU-RX9070XT-PULSE": [
+    {
+      "file": "/products/GPU-RX9070XT-PULSE-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219829.jpg",
+      "white": 0.95
+    },
+    {
+      "file": "/products/GPU-RX9070XT-PULSE-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219808.jpg",
+      "white": 0.92
+    },
+    {
+      "file": "/products/GPU-RX9070XT-PULSE-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219830.jpg",
+      "white": 0.94
+    }
+  ],
+  "GPU-RTX5060-EAGLE": [
+    {
+      "file": "/products/GPU-RTX5060-EAGLE-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/24/42/LD0006244234.jpg",
+      "white": 0.95
+    },
+    {
+      "file": "/products/GPU-RTX5060-EAGLE-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/24/42/LD0006244232.jpg",
+      "white": 0.97
+    },
+    {
+      "file": "/products/GPU-RTX5060-EAGLE-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/23/77/LD0006237774.jpg",
+      "white": 0.86
+    }
+  ],
+  "SSD-990PRO-2TB": [
+    {
+      "file": "/products/SSD-990PRO-2TB-1.webp",
+      "source": "https://image-us.samsung.com/SamsungUS/home/computing/memory-and-storage/ssd/mz-v9p2t0cw/gallery/SDSAC-4923-MZ-V9P2T0CW_2TB_Back_Black-1600x1200.jpg?$product-details-jpg$?$product-details-jpg$",
+      "white": 1
+    },
+    {
+      "file": "/products/SSD-990PRO-2TB-2.webp",
+      "source": "https://img.kr.news.samsung.com/kr/wp-content/uploads/2022/08/%EC%82%AC%EC%A7%844-%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90-SSD-990-PRO-990-PRO-with-Heatsink_1000.png",
+      "white": 1
+    },
+    {
+      "file": "/products/SSD-990PRO-2TB-3.webp",
+      "source": "https://cdn.mos.cms.futurecdn.net/ch2kB6446ehiZjZGyZwji4.jpg",
+      "white": 1
+    }
+  ],
+  "SSD-P3PLUS-1TB": [
+    {
+      "file": "/products/SSD-P3PLUS-1TB-1.webp",
+      "source": "https://m.media-amazon.com/images/I/61HPncGbzJL._AC_.jpg",
+      "white": 0.85
+    },
+    {
+      "file": "/products/SSD-P3PLUS-1TB-2.webp",
+      "source": "https://m.media-amazon.com/images/I/51xZaoS+Q1L.jpg",
+      "white": 0.87
+    },
+    {
+      "file": "/products/SSD-P3PLUS-1TB-3.webp",
+      "source": "https://cdn.mos.cms.futurecdn.net/tYGuhTkdez39r5mgGHbY3a.jpg",
+      "white": 0.64
+    }
+  ],
+  "SSD-A400-480": [
+    {
+      "file": "/products/SSD-A400-480-1.webp",
+      "source": "https://compustore.pe/wp-content/uploads/2020/08/SSD480.jpg",
+      "white": 0.98
+    },
+    {
+      "file": "/products/SSD-A400-480-2.webp",
+      "source": "https://imtec.ba/1772-product_main_2x/ssd-kingston-a400-480gb-sata.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/SSD-A400-480-3.webp",
+      "source": "https://images.tcdn.com.br/img/img_prod/1401349/ssd_kingston_a400_480gb_sata_iii_2_5_sa400s37480g_317_3_1d331dd98d109b0664402dfca2f66193.jpg",
+      "white": 0.92
+    }
+  ],
+  "PSU-RM1000E": [
+    {
+      "file": "/products/PSU-RM1000E-1.webp",
+      "source": "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/v1680126576/products/Power-Supply-Units/base-rme-series-2023-psu-config/Gallery/1000W/RM1000e_07.webp",
+      "white": 1
+    },
+    {
+      "file": "/products/PSU-RM1000E-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/20/70/LD0006207029.jpg",
+      "white": 0.91
+    },
+    {
+      "file": "/products/PSU-RM1000E-3.webp",
+      "source": "https://assets.corsair.com/image/upload/f_auto,q_auto/v1742586315/products/Power-Supply-Units/base-rme-wht-2025-config/content/Panel03_Image_1000W_2x.png",
+      "white": 0.9
+    }
+  ],
+  "PSU-A850GL": [
+    {
+      "file": "/products/PSU-A850GL-1.webp",
+      "source": "https://asset.msi.com/resize/image/global/product/product_16861307271614336078f5c76c62ff157c01353710.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png",
+      "white": 1
+    },
+    {
+      "file": "/products/PSU-A850GL-2.webp",
+      "source": "https://asset.msi.com/resize/image/global/product/product_1688640881ab817ac1105b164c449c87c3fedb512d.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png",
+      "white": 1
+    },
+    {
+      "file": "/products/PSU-A850GL-3.webp",
+      "source": "https://storage-asset.msi.com/global/picture/product/product_17296927006602f4c3b6d358736fc5d1b1d42f4d30.webp",
+      "white": 1
+    }
+  ],
+  "PSU-SP10-650": [
+    {
+      "file": "/products/PSU-SP10-650-1.webp",
+      "source": "https://cdn.cclonline.com/cdn-cgi/image/width=2000/images/avante/03_System_Power_10_650W.jpg",
+      "white": 0.99
+    },
+    {
+      "file": "/products/PSU-SP10-650-2.webp",
+      "source": "https://media.ldlc.com/r705/ld/products/00/05/98/86/LD0005988635.jpg",
+      "white": 0.87
+    },
+    {
+      "file": "/products/PSU-SP10-650-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71S0o+QfisL._AC_.jpg",
+      "white": 0.81
+    }
+  ],
+  "PSU-V850-SFX": [
+    {
+      "file": "/products/PSU-V850-SFX-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/75/24/LD0005752478_1.jpg",
+      "white": 0.89
+    },
+    {
+      "file": "/products/PSU-V850-SFX-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/01/29/LD0006012918.jpg",
+      "white": 0.89
+    },
+    {
+      "file": "/products/PSU-V850-SFX-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/01/29/LD0006012917.jpg",
+      "white": 0.9
+    }
+  ],
+  "FAN-P12-PWM": [
+    {
+      "file": "/products/FAN-P12-PWM-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/26/97/LD0006269753.jpg",
+      "white": 0.93
+    },
+    {
+      "file": "/products/FAN-P12-PWM-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/99/08/LD0005990867.jpg",
+      "white": 0.91
+    },
+    {
+      "file": "/products/FAN-P12-PWM-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71zrv43p18L.jpg",
+      "white": 0.93
+    }
+  ],
+  "FAN-SL120-V2-3P": [
+    {
+      "file": "/products/FAN-SL120-V2-3P-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/18/49/LD0006184919.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/FAN-SL120-V2-3P-2.webp",
+      "source": "https://m.media-amazon.com/images/I/41aZQIbVKAL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/FAN-SL120-V2-3P-3.webp",
+      "source": "https://i5.walmartimages.com/seo/Lian-Li-UNI-Fan-SL120-V2-RGB-Black-Single-Pack-Without-Controller-UF-SL120V2-1B_28f1e4bc-eb80-4457-8c6f-acad00699cc3.016983f555fce37849b17d9bdd587911.jpeg",
+      "white": 1
+    }
+  ],
+  "PC-NOVA-5070": [
+    {
+      "file": "/products/PC-NOVA-5070-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/06/03/56/LD0006035682.jpg",
+      "white": 0.94
+    },
+    {
+      "file": "/products/PC-NOVA-5070-2.webp",
+      "source": "https://m.media-amazon.com/images/I/61moA9MB8mL._AC_.jpg",
+      "white": 0.97
+    },
+    {
+      "file": "/products/PC-NOVA-5070-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71YVEUXCEeL._AC_.jpg",
+      "white": 0.86
+    }
+  ],
+  "PC-APEX-5080": [
+    {
+      "file": "/products/PC-APEX-5080-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/99/72/LD0005997299.jpg",
+      "white": 0.96
+    },
+    {
+      "file": "/products/PC-APEX-5080-2.webp",
+      "source": "https://m.media-amazon.com/images/I/713YRJACKnL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/PC-APEX-5080-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71YVEUXCEeL._AC_.jpg",
+      "white": 0.86
+    }
+  ],
+  "PC-START-5060": [
+    {
+      "file": "/products/PC-START-5060-1.webp",
+      "source": "https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Cases/3500x/3500x-argb/White/gallery/3500X_ARGB_WHT_01.webp",
+      "white": 0.86
+    },
+    {
+      "file": "/products/PC-START-5060-2.webp",
+      "source": "https://m.media-amazon.com/images/I/91PWoWt8RKL.jpg",
+      "white": 0.77
+    },
+    {
+      "file": "/products/PC-START-5060-3.webp",
+      "source": "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/products/Cases/2500D/CC-9011266-WW/Gallery/2500X_WHITE_HERO_01_AA.webp",
+      "white": 0.63
+    }
+  ],
+  "WS-STUDIO-64": [
+    {
+      "file": "/products/WS-STUDIO-64-1.webp",
+      "source": "https://m.media-amazon.com/images/I/71VBHEeEYSL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/WS-STUDIO-64-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/60/55/LD0005605542_2.jpg",
+      "white": 0.94
+    },
+    {
+      "file": "/products/WS-STUDIO-64-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/04/01/15/LD0004011512_2.jpg",
+      "white": 0.94
+    }
+  ],
+  "NB-ROG-G16-5070": [
+    {
+      "file": "/products/NB-ROG-G16-5070-1.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/601ee339-f392-4b62-87c3-972107bda726/v1/img/kv/pd-front.png",
+      "white": 1
+    },
+    {
+      "file": "/products/NB-ROG-G16-5070-2.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/601ee339-f392-4b62-87c3-972107bda726/v1/img/display/display-pd.png",
+      "white": 1
+    },
+    {
+      "file": "/products/NB-ROG-G16-5070-3.webp",
+      "source": "https://dlcdnwebimgs.asus.com/files/media/601ee339-f392-4b62-87c3-972107bda726/v1/img/kv/pd-back.png",
+      "white": 1
+    }
+  ],
+  "NB-LOQ15-5060": [
+    {
+      "file": "/products/NB-LOQ15-5060-1.webp",
+      "source": "https://psrefstuff.lenovo.com/syspool/Sys/PDF/LOQ/LOQ_15IRH8/LOQ_15IRH8_OverViewPic.jpg",
+      "white": 0.96
+    },
+    {
+      "file": "/products/NB-LOQ15-5060-2.webp",
+      "source": "https://m.media-amazon.com/images/I/71e8-LokEdL.jpg",
+      "white": 0.88
+    },
+    {
+      "file": "/products/NB-LOQ15-5060-3.webp",
+      "source": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6578/6578512cv1d.jpg",
+      "white": 0.89
+    }
+  ],
+  "MON-LG-27GS95QE": [
+    {
+      "file": "/products/MON-LG-27GS95QE-1.webp",
+      "source": "https://www.lg.com/content/dam/channel/wcms/br/images/produtos/it/27gs95qe-b/1-1600-27gs95qe-b.jpg/jcr:content/renditions/thum-1600x1062.jpeg",
+      "white": 1
+    },
+    {
+      "file": "/products/MON-LG-27GS95QE-2.webp",
+      "source": "https://www.lg.com/content/dam/channel/wcms/de/monitore/gaming/27gs95qe-b/gallery/ultragear-27gs95qe-galley-02-2010.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+      "white": 0.99
+    },
+    {
+      "file": "/products/MON-LG-27GS95QE-3.webp",
+      "source": "https://www.lg.com/content/dam/channel/wcms/es/productos/it/2024/monitores/ultragear/27gs95qe-b-aeu/gallery/123_mnt_27gs95qe-b-aeu/01_lg_27GS95QE-B.AEU_gallery_main_2010x1334.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+      "white": 1
+    }
+  ],
+  "MON-SAM-G5-32": [
+    {
+      "file": "/products/MON-SAM-G5-32-1.webp",
+      "source": "https://image-us.samsung.com/SamsungUS/home/computing/monitors/lc32g57tqwnxdc/10-06-2020/Asset-1.jpg?$product-details-jpg$",
+      "white": 1
+    },
+    {
+      "file": "/products/MON-SAM-G5-32-2.webp",
+      "source": "https://image-us.samsung.com/SamsungUS/home/computing/monitors/gaming/12282023/gal/G55C_002_Back_Black_PC_1600x1200.jpg?$product-details-jpg$",
+      "white": 0.78
+    },
+    {
+      "file": "/products/MON-SAM-G5-32-3.webp",
+      "source": "https://img.global.news.samsung.com/uk/wp-content/uploads/2020/06/Odyssey-G9_2.jpg",
+      "white": 0.24
+    }
+  ],
+  "PER-GPROX-TKL": [
+    {
+      "file": "/products/PER-GPROX-TKL-1.webp",
+      "source": "https://resource.logitech.com/content/dam/gaming/en/products/pro-x-tkl/gallery-1-pro-x-tkl-white-lightspeed-gaming-keyboard.png",
+      "white": 1
+    },
+    {
+      "file": "/products/PER-GPROX-TKL-2.webp",
+      "source": "https://product.hstatic.net/200000722513/product/earvn-ban-phim-logitech-g-pro-x-tkl-light-speed-tactile-switch-white-1_d383291768ef4233b0c2b2491c4f89d0.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/PER-GPROX-TKL-3.webp",
+      "source": "https://m.media-amazon.com/images/I/71TyGobdfQL._AC_.jpg",
+      "white": 0.87
+    }
+  ],
+  "PER-DAV3-PRO": [
+    {
+      "file": "/products/PER-DAV3-PRO-1.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/97/53/LD0005975350.jpg",
+      "white": 0.93
+    },
+    {
+      "file": "/products/PER-DAV3-PRO-2.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/97/53/LD0005975349.jpg",
+      "white": 0.91
+    },
+    {
+      "file": "/products/PER-DAV3-PRO-3.webp",
+      "source": "https://media.ldlc.com/r1600/ld/products/00/05/97/53/LD0005975353.jpg",
+      "white": 0.96
+    }
+  ],
+  "PER-CLOUD3": [
+    {
+      "file": "/products/PER-CLOUD3-1.webp",
+      "source": "http://au.hyperx.com/cdn/shop/files/hyperx_cloud_iii_red_66x0049_angle_3.jpg?v=1695878882",
+      "white": 1
+    },
+    {
+      "file": "/products/PER-CLOUD3-2.webp",
+      "source": "http://row.hyperx.com/cdn/shop/files/hyperx_cloud_iii_red_66x0049_angle_2.jpg?v=1692736987",
+      "white": 1
+    },
+    {
+      "file": "/products/PER-CLOUD3-3.webp",
+      "source": "https://ca.hyperx.com/cdn/shop/files/hyperx_cloud_iii_red_66x0049_angle_5_2048x2048.jpg?v=1692736863",
+      "white": 0.99
+    }
+  ],
+  "CON-PS5-SLIM-DIG": [
+    {
+      "file": "/products/CON-PS5-SLIM-DIG-1.webp",
+      "source": "https://m.media-amazon.com/images/I/51fM0CKG+HL.jpg",
+      "white": 1
+    },
+    {
+      "file": "/products/CON-PS5-SLIM-DIG-2.webp",
+      "source": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6523/6523167_bd.jpg",
+      "white": 0.9
+    },
+    {
+      "file": "/products/CON-PS5-SLIM-DIG-3.webp",
+      "source": "https://static1.thegamerimages.com/wordpress/wp-content/uploads/sharedimages/2024/04/sony-playstation-5-console-game-system.jpg",
+      "white": 0.92
+    }
+  ],
+  "CON-XSX-1TB": [
+    {
+      "file": "/products/CON-XSX-1TB-1.webp",
+      "source": "https://i5.walmartimages.com/seo/Microsoft-Xbox-Series-X-1TB-Digital-Edition_92e06221-6348-40bc-b83b-31c508acd19c.0d3f7d474076f59b65b5276264c2b029.jpeg",
+      "white": 1
+    },
+    {
+      "file": "/products/CON-XSX-1TB-2.webp",
+      "source": "https://static1.howtogeekimages.com/wordpress/wp-content/uploads/2024/10/xbox-series-x-white.jpg",
+      "white": 0.95
+    },
+    {
+      "file": "/products/CON-XSX-1TB-3.webp",
+      "source": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/10/xbox-series-s-console-game-platform.jpg",
+      "white": 0.97
+    }
+  ]
+}

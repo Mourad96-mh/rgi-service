@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * The tokens live in Tailwind (tailwind.config.ts). These variables exist so raw CSS
+ * (gradients, glows, gradient text) can reference the same values — one palette, two
+ * syntaxes. DESIGN_SYSTEM.md §2.
+ */
+:root {
+  --bg: #0a0b12;
+  --bg-2: #0f1119;
+  --surface: #141726;
+  --surface-2: #1a1e30;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-2: rgba(255, 255, 255, 0.14);
+  --text: #eef0f6;
+  --muted: #9aa1b8;
+  --faint: #6b7191;
+  --accent: #7c5cff;
+  --accent-2: #22d3ee;
+  --accent-3: #ff4d8d;
+  --success: #34d399;
+  --warn: #fbbf24;
+  --grad: linear-gradient(120deg, #7c5cff 0%, #22d3ee 100%);
+  --grad-soft: linear-gradient(120deg, rgba(124, 92, 255, 0.18), rgba(34, 211, 238, 0.14));
+  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
+  --glow: 0 0 40px -8px rgba(124, 92, 255, 0.55);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    letter-spacing: -0.02em;
+  }
+
+  /* Keyboard users must always see where they are (DESIGN_SYSTEM.md §8). */
+  :focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgba(124, 92, 255, 0.35);
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-wrap px-6;
+  }
+
+  .grad-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn {
+    @apply inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-sm2 border
+      border-transparent px-[22px] py-[13px] text-[15px] font-semibold transition;
+  }
+
+  .btn-primary {
+    @apply text-bg shadow-glow;
+    background: var(--grad);
+  }
+
+  .btn-primary:hover {
+    @apply -translate-y-0.5 brightness-110;
+  }
+
+  .btn-ghost {
+    @apply border-line2 bg-white/[.04] text-text;
+  }
+
+  .btn-ghost:hover {
+    @apply border-accent bg-white/[.09];
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-[7px] rounded-full border border-line2 bg-white/[.03]
+      px-[13px] py-1.5 text-[12.5px] font-semibold text-muted;
+  }
+
+  .chip {
+    @apply rounded-[7px] px-2.5 py-[5px] text-[11px] font-bold uppercase tracking-[.06em];
+  }
+
+  .surface-card {
+    @apply rounded-card border border-line bg-surface;
+  }
+
+  .spec-pill {
+    @apply rounded-md border border-line bg-white/[.04] px-2 py-[3px] text-[11px] text-muted;
+  }
+
+  .icobtn {
+    @apply grid h-[42px] w-[42px] place-items-center rounded-[11px] border border-line
+      bg-surface text-muted transition hover:border-line2 hover:text-text;
+  }
+
+  .field {
+    @apply w-full rounded-sm2 border border-line bg-surface px-4 py-[11px] text-sm text-text
+      placeholder:text-faint focus:border-accent focus:outline-none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  /*
+   * Product photos are manufacturer pack shots on a white background. On a dark UI they
+   * only look intentional if the whole image area is light, so every photo — card, hero
+   * slide, gallery — sits on the same tile. It doubles as the empty-state surface.
+   */
+  .photo-tile {
+    @apply overflow-hidden rounded-lg2 border border-line2;
+    background: #ffffff;
+  }
+
+  .photo-tile-flat {
+    @apply border-b border-line;
+    background: #ffffff;
+  }
+}

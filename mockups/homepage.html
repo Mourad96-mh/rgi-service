@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rgi Service — Mockup design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b12; --bg-2:#0f1119; --surface:#141726; --surface-2:#1a1e30;
+  --border:rgba(255,255,255,.08); --border-2:rgba(255,255,255,.14);
+  --text:#eef0f6; --muted:#9aa1b8; --faint:#6b7191;
+  --accent:#7c5cff; --accent-2:#22d3ee; --accent-3:#ff4d8d;
+  --success:#34d399; --warn:#fbbf24;
+  --grad:linear-gradient(120deg,#7c5cff 0%,#22d3ee 100%);
+  --grad-soft:linear-gradient(120deg,rgba(124,92,255,.18),rgba(34,211,238,.14));
+  --radius:18px; --radius-sm:12px; --radius-lg:26px;
+  --shadow:0 20px 50px -20px rgba(0,0,0,.7);
+  --glow:0 0 40px -8px rgba(124,92,255,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,.display{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1220px;margin:0 auto;padding:0 24px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;padding:13px 22px;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;transition:.2s;white-space:nowrap}
+.btn-primary{background:var(--grad);color:#0a0b12;box-shadow:var(--glow)}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--border-2);color:var(--text)}
+.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:var(--accent)}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:100px;border:1px solid var(--border-2);color:var(--muted);background:rgba(255,255,255,.03)}
+.chip{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:7px}
+
+/* announcement */
+.announce{background:linear-gradient(90deg,rgba(124,92,255,.16),rgba(34,211,238,.1));border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);text-align:center;padding:9px 16px}
+.announce b{color:var(--text)}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(10,11,18,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;gap:26px;height:72px}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk';font-weight:700;font-size:21px;letter-spacing:-.02em}
+.logo .mark{width:38px;height:38px;border-radius:11px;background:var(--grad);display:grid;place-items:center;color:#0a0b12;font-weight:700;box-shadow:var(--glow)}
+.search{flex:1;max-width:440px;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 15px;color:var(--muted);font-size:14px}
+.nav-links{display:flex;gap:22px;font-size:14.5px;font-weight:500;color:var(--muted)}
+.nav-links a{transition:.15s;position:relative;padding:4px 0}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.hot{color:var(--text)}
+.icons{display:flex;align-items:center;gap:16px;margin-left:auto}
+.icobtn{width:42px;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--surface);display:grid;place-items:center;color:var(--muted);position:relative;transition:.15s}
+.icobtn:hover{color:var(--text);border-color:var(--border-2)}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--accent-3);color:#fff;font-size:11px;font-weight:700;width:19px;height:19px;border-radius:50%;display:grid;place-items:center}
+.subnav{border-top:1px solid var(--border);height:46px;display:flex;align-items:center;gap:26px;font-size:13.5px;font-weight:500;color:var(--muted)}
+.subnav a:hover{color:var(--text)}
+.subnav .badge{margin-left:6px;background:var(--accent-3);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px}
+
+/* hero */
+.hero{position:relative;padding:70px 0 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-160px;left:-140px;width:520px;height:520px;background:radial-gradient(circle,rgba(124,92,255,.45),transparent 65%);filter:blur(30px);z-index:0}
+.hero::after{content:"";position:absolute;top:-60px;right:-120px;width:480px;height:480px;background:radial-gradient(circle,rgba(34,211,238,.3),transparent 65%);filter:blur(30px);z-index:0}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.hero h1{font-size:56px;line-height:1.02;font-weight:700;margin:20px 0 18px}
+.hero p{color:var(--muted);font-size:17px;max-width:460px;margin-bottom:28px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:30px;margin-top:38px}
+.hero-stats .n{font-family:'Space Grotesk';font-size:26px;font-weight:700}
+.hero-stats .l{font-size:12.5px;color:var(--faint)}
+.hero-visual{position:relative;aspect-ratio:1/1;border-radius:var(--radius-lg);background:radial-gradient(circle at 50% 40%,rgba(124,92,255,.28),transparent 60%),var(--surface);border:1px solid var(--border-2);display:grid;place-items:center;box-shadow:var(--shadow);overflow:hidden}
+.hero-visual .rig{font-size:140px;filter:drop-shadow(0 20px 40px rgba(124,92,255,.5))}
+.hero-visual .float{position:absolute;background:rgba(20,23,38,.85);backdrop-filter:blur(10px);border:1px solid var(--border-2);border-radius:14px;padding:12px 16px;font-size:13px;box-shadow:var(--shadow)}
+.hero-visual .f1{top:26px;left:26px}
+.hero-visual .f2{bottom:26px;right:26px}
+.hero-visual .float .k{color:var(--faint);font-size:11px}
+.hero-visual .float .v{font-weight:700;font-family:'Space Grotesk'}
+
+/* section shells */
+section.block{padding:56px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;gap:20px}
+.sec-head h2{font-size:30px;font-weight:700}
+.sec-head p{color:var(--muted);font-size:14.5px;margin-top:6px}
+.sec-head a{color:var(--accent-2);font-size:14px;font-weight:600}
+
+/* category tiles */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cat{position:relative;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:22px;overflow:hidden;transition:.22s;min-height:130px}
+.cat:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow)}
+.cat .ico{font-size:30px;margin-bottom:14px}
+.cat h3{font-size:16px;font-weight:600}
+.cat span{font-size:12.5px;color:var(--faint)}
+.cat::after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;background:var(--grad-soft);border-radius:50%;opacity:0;transition:.22s}
+.cat:hover::after{opacity:1}
+
+/* configurator CTA */
+.config{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-2);background:linear-gradient(120deg,#12132022,#1a1e30);padding:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center}
+.config::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(124,92,255,.28),transparent 45%),radial-gradient(circle at 90% 90%,rgba(34,211,238,.22),transparent 45%);z-index:0}
+.config>*{position:relative;z-index:1}
+.config h2{font-size:34px;font-weight:700;margin:14px 0}
+.config p{color:var(--muted);max-width:420px;margin-bottom:24px}
+.config .steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:center;gap:14px;background:rgba(10,11,18,.5);border:1px solid var(--border);border-radius:12px;padding:13px 16px}
+.step .num{width:28px;height:28px;border-radius:8px;background:var(--grad);color:#0a0b12;font-weight:700;font-size:13px;display:grid;place-items:center}
+.step .lbl{font-weight:600;font-size:14px}
+.step .st{margin-left:auto;font-size:12px;color:var(--success);font-weight:600}
+.step .st.x{color:var(--warn)}
+
+/* product cards */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.2s;display:flex;flex-direction:column}
+.card:hover{border-color:var(--border-2);transform:translateY(-4px);box-shadow:var(--shadow)}
+.card .media{aspect-ratio:4/3;background:radial-gradient(circle at 50% 45%,rgba(124,92,255,.2),transparent 62%),var(--surface-2);display:grid;place-items:center;font-size:60px;position:relative}
+.card .tag{position:absolute;top:12px;left:12px;background:var(--accent-3);color:#fff}
+.card .tag.new{background:var(--accent-2);color:#04222a}
+.card .fav{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:9px;background:rgba(10,11,18,.6);border:1px solid var(--border);display:grid;place-items:center;color:var(--muted)}
+.card .body{padding:16px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card .brand{font-size:11.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.card .name{font-size:14.5px;font-weight:600;line-height:1.35}
+.card .specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.card .specs span{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:3px 8px;border-radius:6px}
+.card .foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;padding-top:8px}
+.card .price .old{font-size:12px;color:var(--faint);text-decoration:line-through}
+.card .price .now{font-family:'Space Grotesk';font-size:19px;font-weight:700}
+.card .add{width:42px;height:42px;border-radius:11px;background:var(--grad);color:#0a0b12;display:grid;place-items:center;box-shadow:var(--glow);transition:.15s}
+.card .add:hover{transform:scale(1.08)}
+.instock{font-size:11.5px;color:var(--success);font-weight:600;display:flex;align-items:center;gap:5px}
+.instock .dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success)}
+
+/* trust band */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.trust .t{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;gap:14px;align-items:flex-start}
+.trust .t .ico{font-size:24px}
+.trust .t h4{font-size:14.5px;font-weight:600;margin-bottom:3px}
+.trust .t p{font-size:12.5px;color:var(--faint)}
+
+/* brands */
+.brands{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:.85}
+.brands .b{font-family:'Space Grotesk';font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:100px;padding:10px 22px;font-size:14px}
+
+/* footer */
+footer{border-top:1px solid var(--border);background:var(--bg-2);padding:52px 0 30px;margin-top:20px}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}
+.foot-grid h5{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:16px;font-weight:600}
+.foot-grid a{display:block;color:var(--muted);font-size:13.5px;margin-bottom:10px}
+.foot-grid a:hover{color:var(--text)}
+.foot-about p{color:var(--muted);font-size:13.5px;margin:14px 0;max-width:280px}
+.pay{display:flex;gap:8px;margin-top:14px}
+.pay span{font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:6px 11px}
+.foot-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;color:var(--faint);font-size:12.5px;flex-wrap:wrap;gap:10px}
+.note{text-align:center;font-size:12px;color:var(--faint);padding:14px;background:var(--surface);border-top:1px solid var(--border)}
+
+@media(max-width:960px){
+  .hero-grid,.config{grid-template-columns:1fr}
+  .hero h1{font-size:42px}
+  .cats,.grid4,.trust{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .nav-links,.search{display:none}
+}
+@media(max-width:560px){
+  .cats,.grid4,.trust,.foot-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="announce">🚚 Livraison partout au Maroc · <b>Paiement à la livraison</b> disponible · Garantie 12 mois sur tous nos PC</div>
+
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <a class="logo"><span class="mark">R</span>Rgi<span class="grad-text">Service</span></a>
+      <div class="search">🔎 Rechercher un produit, une marque…</div>
+      <div class="icons">
+        <a class="icobtn" title="Compte">👤</a>
+        <a class="icobtn" title="Favoris">♡</a>
+        <a class="icobtn" title="Panier">🛒<span class="cart-count">3</span></a>
+      </div>
+    </div>
+    <nav class="subnav">
+      <a class="grad-text" style="font-weight:700">⚡ Configurateur PC <span class="badge">-5%</span></a>
+      <a>PC Gamers</a><a>PC Portables</a><a>Workstation PRO</a><a>Composants</a>
+      <a>Périphériques</a><a>Consoles</a><a>Moniteurs</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill">🇲🇦 N°1 du gaming au Maroc</span>
+      <h1>Le PC de tes rêves,<br><span class="grad-text">assemblé pour toi.</span></h1>
+      <p>PC gamers, workstations et composants haut de gamme. Configure ta machine sur mesure ou choisis parmi nos builds prêts à dominer.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary">⚡ Configurer mon PC</a>
+        <a class="btn btn-ghost">Voir les PC gamers →</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="n grad-text">2 500+</div><div class="l">Configurations livrées</div></div>
+        <div><div class="n grad-text">4.9/5</div><div class="l">Avis clients</div></div>
+        <div><div class="n grad-text">48h</div><div class="l">Montage & livraison</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="rig">🖥️</div>
+      <div class="float f1"><div class="k">RTX 5090 · Ryzen 9</div><div class="v grad-text">Build Ultra</div></div>
+      <div class="float f2"><div class="k">À partir de</div><div class="v">24 990 MAD</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Explore par catégorie</h2><p>Tout pour jouer, créer et performer.</p></div><a>Tout voir →</a></div>
+    <div class="cats">
+      <a class="cat"><div class="ico">🎮</div><h3>PC Gamers</h3><span>Intel & Ryzen</span></a>
+      <a class="cat"><div class="ico">💻</div><h3>PC Portables</h3><span>MSI · Alienware · Lenovo</span></a>
+      <a class="cat"><div class="ico">🎨</div><h3>Workstation PRO</h3><span>RTX 5090 / 4090</span></a>
+      <a class="cat"><div class="ico">🧩</div><h3>Composants</h3><span>GPU · CPU · RAM · SSD</span></a>
+      <a class="cat"><div class="ico">⌨️</div><h3>Périphériques</h3><span>Clavier · Souris · Casque</span></a>
+      <a class="cat"><div class="ico">🕹️</div><h3>Consoles</h3><span>PS5 · Xbox · Switch</span></a>
+      <a class="cat"><div class="ico">🖥️</div><h3>Moniteurs</h3><span>IPS · OLED · Mini-LED</span></a>
+      <a class="cat"><div class="ico">🪑</div><h3>Setup & Sièges</h3><span>Confort gaming</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATOR -->
+<section class="block">
+  <div class="wrap">
+    <div class="config">
+      <div>
+        <span class="pill" style="border-color:var(--accent);color:var(--text)">⚡ Exclusif · -5% sur les configs</span>
+        <h2>Assemble ton PC,<br><span class="grad-text">sans erreur de compatibilité.</span></h2>
+        <p>Notre configurateur vérifie automatiquement chaque pièce : socket, RAM, alimentation, refroidissement. Impossible de se tromper. Montage pro, cable management et Windows 11 inclus.</p>
+        <a class="btn btn-primary">Lancer le configurateur →</a>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="num">1</span><span class="lbl">Processeur — Ryzen 9 7900X</span><span class="st">✓ Compatible</span></div>
+        <div class="step"><span class="num">2</span><span class="lbl">Carte mère — X670E (AM5)</span><span class="st">✓ Compatible</span></div>
+        <div class="step"><span class="num">3</span><span class="lbl">RAM — 32 Go DDR5 6000</span><span class="st">✓ Compatible</span></div>
+        <div class="step"><span class="num">4</span><span class="lbl">GPU — RTX 5090</span><span class="st x">⚡ 850W conseillé</span></div>
+        <div class="step"><span class="num">5</span><span class="lbl">Alimentation — 1000W Gold</span><span class="st">✓ Compatible</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLASH DEALS -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>🔥 Offres flash</h2><p>Stocks limités — jusqu'à -22%.</p></div><a>Toutes les promos →</a></div>
+    <div class="grid4">
+      <div class="card">
+        <div class="media">🎮<span class="tag chip">-18%</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="brand">Rgi Build</span>
+          <span class="name">PC Gamer Vortex RTX 4070 · Ryzen 7</span>
+          <div class="specs"><span>Ryzen 7 7700</span><span>RTX 4070</span><span>32Go DDR5</span></div>
+          <div class="instock"><span class="dot"></span>En stock</div>
+          <div class="foot"><div class="price"><div class="old">15 990 MAD</div><div class="now grad-text">12 990 MAD</div></div><a class="add">🛒</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="media">🖥️<span class="tag chip">-12%</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="brand">MSI</span>
+          <span class="name">Moniteur MAG 27" QHD 180Hz OLED</span>
+          <div class="specs"><span>27"</span><span>OLED</span><span>180Hz</span></div>
+          <div class="instock"><span class="dot"></span>En stock</div>
+          <div class="foot"><div class="price"><div class="old">4 490 MAD</div><div class="now grad-text">3 950 MAD</div></div><a class="add">🛒</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="media">🧩<span class="tag chip new">NOUVEAU</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="brand">NVIDIA</span>
+          <span class="name">Carte graphique GeForce RTX 5080 16Go</span>
+          <div class="specs"><span>16Go GDDR7</span><span>PCIe 5.0</span></div>
+          <div class="instock"><span class="dot"></span>En stock</div>
+          <div class="foot"><div class="price"><div class="now grad-text">13 490 MAD</div></div><a class="add">🛒</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="media">⌨️<span class="tag chip">-22%</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="brand">Logitech G</span>
+          <span class="name">Pack Clavier + Souris Pro Gaming RGB</span>
+          <div class="specs"><span>Mécanique</span><span>25K DPI</span></div>
+          <div class="instock"><span class="dot"></span>En stock</div>
+          <div class="foot"><div class="price"><div class="old">1 290 MAD</div><div class="now grad-text">990 MAD</div></div><a class="add">🛒</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="block">
+  <div class="wrap">
+    <div class="trust">
+      <div class="t"><div class="ico">🔧</div><div><h4>Montage professionnel</h4><p>Assemblage + cable management soignés inclus.</p></div></div>
+      <div class="t"><div class="ico">🛡️</div><div><h4>Garantie 12 mois</h4><p>Sur tous nos PC et composants.</p></div></div>
+      <div class="t"><div class="ico">💳</div><div><h4>Paiement flexible</h4><p>Carte (CMI) ou paiement à la livraison.</p></div></div>
+      <div class="t"><div class="ico">🚚</div><div><h4>Livraison rapide</h4><p>Partout au Maroc sous 48h.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="block" style="padding-top:0">
+  <div class="wrap brands">
+    <span class="b">NVIDIA</span><span class="b">AMD</span><span class="b">Intel</span><span class="b">MSI</span>
+    <span class="b">ASUS ROG</span><span class="b">Corsair</span><span class="b">Logitech G</span><span class="b">Razer</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="logo"><span class="mark">R</span>Rgi<span class="grad-text">Service</span></a>
+        <p>Ton spécialiste gaming & high-tech au Maroc. PC sur mesure, composants et setup complets.</p>
+        <div class="pay"><span>💳 CMI</span><span>💵 Cash à la livraison</span></div>
+      </div>
+      <div><h5>Boutique</h5><a>PC Gamers</a><a>Configurateur PC</a><a>Composants</a><a>Périphériques</a><a>Consoles</a></div>
+      <div><h5>Service client</h5><a>Suivi de commande</a><a>Livraison & retours</a><a>Garantie</a><a>Contact</a><a>FAQ</a></div>
+      <div><h5>Rgi Service</h5><a>📍 Casablanca, Maroc</a><a>📞 +212 6 00 00 00 00</a><a>À propos</a><a>Blog & guides</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Rgi Service. Tous droits réservés.</span><span>Conditions · Confidentialité</span></div>
+  </div>
+</footer>
+
+<div class="note">🎨 Maquette de design (mockup) — Rgi Service. Couleurs, typographie et composants définis dans DESIGN_SYSTEM.md. Contenu et images sont des placeholders.</div>
+
+</body>
+</html>

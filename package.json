@@ -1,0 +1,33 @@
+{
+  "name": "rgi-service",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Rgi Service — Moroccan gaming-PC e-commerce with compatibility-checked PC configurator",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev --workspace=@rgi/api",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "seed": "npm run seed --workspace=@rgi/api",
+    "dev:web": "npm run dev --workspace=@rgi/web",
+    "start": "concurrently -n api,web -c magenta,cyan \"npm:start:api\" \"npm:start:web\"",
+    "start:api": "npm run start --workspace=@rgi/api",
+    "start:web": "npm run start --workspace=@rgi/web",
+    "images": "node scripts/fetch-product-images.mjs",
+    "images:trim": "node scripts/trim-product-images.mjs",
+    "logo": "node scripts/build-logo.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "sharp": "^0.35.3"
+  }
+}
