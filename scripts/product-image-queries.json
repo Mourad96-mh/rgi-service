@@ -1,53 +1,153 @@
 {
-  "CASE-LL216-BK": "Lian Li Lancool 216 black case product photo white background",
+  "CASE-LL216-BK": "Lian Li Lancool 216 RGB black mid tower case front view",
   "CASE-H6FLOW-WH": "NZXT H6 Flow white PC case",
-  "CASE-NR200P-BK": "Cooler Master NR200P black mini ITX case",
+  "CASE-NR200P-BK": [
+    "https://m.media-amazon.com/images/I/71RrVSiVDXL.jpg",
+    "https://files.pccasegear.com/images/1596507774-MCB-NR200P-KGNN-S00-thb.jpg",
+    "https://cdn2.electronicscrazy.sg/Productimage/2022-12-1412-10-0580.webp"
+  ],
   "MB-B650TOMA-WIFI": [
     "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985059.jpg",
     "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985060.jpg",
     "https://media.ldlc.com/r1600/ld/products/00/05/98/50/LD0005985061.jpg"
   ],
-  "MB-B760M-TUF": "ASUS TUF Gaming B760M-PLUS WIFI D5 motherboard white background",
+  "MB-B760M-TUF": "ASUS TUF Gaming B760M-PLUS WIFI D5 micro ATX motherboard product photo",
   "MB-B550M-DS3H": "Gigabyte B550M DS3H AC motherboard product",
-  "MB-B650E-ITX": "ASRock B650E PG-ITX WiFi motherboard",
-  "CPU-R7-7800X3D": "AMD Ryzen 7 7800X3D processor box",
+  "MB-B650E-ITX": "ASRock B650E PG-ITX WiFi mini ITX motherboard product photo",
+  "CPU-R7-7800X3D": [
+    "https://media.ldlc.com/r1600/ld/products/00/06/02/14/LD0006021480.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/06/02/14/LD0006021479.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/06/02/14/LD0006021478.jpg"
+  ],
   "CPU-R5-7600": "AMD Ryzen 5 7600 processor box",
-  "CPU-I5-14600KF": "Intel Core i5-14600KF processor box",
-  "CPU-R5-5600": "AMD Ryzen 5 5600 box product photo white background",
-  "COOL-DRP5": "be quiet! Dark Rock Pro 5 CPU cooler",
-  "COOL-LF3-360": "Arctic Liquid Freezer III 360 AIO cooler product white background",
+  "CPU-I5-14600KF": [
+    "https://m.media-amazon.com/images/I/61IgclF1FEL.jpg",
+    "https://cdn.hstatic.net/products/200000536009/_new_-anh-sp-web_203ad209a11244ffae41eca68428f79b_master_0426a2356c0b4150bf8a59b5ac59573b_master.png",
+    "https://media.ldlc.com/r1600/ld/products/00/06/07/49/LD0006074917.jpg"
+  ],
+  "CPU-R5-5600": [
+    "https://www.pc-koubou.jp/upload/save_image/04151239_6258e9064955d.jpg",
+    "https://www.nexus.com.bd/images/detailed/12/AMD_Ryzen_5_5600_Processor.jpg",
+    "https://hardwareonline.com/215508-thickbox_default/amd-ryzen-5-5600-35-ghz-box.webp"
+  ],
+  "COOL-DRP5": [
+    "https://files.pccasegear.com/images/BK036-add3.jpg",
+    "https://m.media-amazon.com/images/I/71Zvkf1gx9L._AC_.jpg",
+    "https://cdn.mwave.com.au/images/400/be_quiet_dark_rock_pro_5_air_cpu_cooler_ac70128_29013.jpg"
+  ],
+  "COOL-LF3-360": [
+    "https://media.ldlc.com/r1600/ld/products/00/06/11/36/LD0006113653.jpg",
+    "https://c1.neweggimages.com/productimage/nb1280/35-186-278-04.jpg",
+    "https://www.arctic.de/media/12/62/c7/1707469622/Liquid_Freezer_III_360_Black_G06.jpg"
+  ],
   "COOL-PA120-SE": "Thermalright Peerless Assassin 120 SE cooler",
-  "RAM-CORS-32-DDR5-6000": "Corsair Vengeance RGB DDR5 32GB memory kit",
-  "RAM-KING-16-DDR5-5200": "Kingston Fury Beast DDR5 16GB memory kit",
-  "RAM-GSK-32-DDR4-3600": "G.Skill Ripjaws V DDR4 32GB memory kit",
+  "RAM-CORS-32-DDR5-6000": [
+    "https://www.corsair.com/wp-content/uploads/2022/07/VENGEANCE_RGB_DDR5_HERO_TOP.png",
+    "https://assets.corsair.com/image/upload/c_pad,q_85,h_1100,w_1100,f_auto/products/Memory/vengeance-rgb-ddr5-config/black/2up/Vengeance-RGB-DDR5-2UP-BLACK_01.webp",
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/95/LD0005969590_0005969593_0005969596_0005969599_0005969629_0006027331.jpg"
+  ],
+  "RAM-KING-16-DDR5-5200": [
+    "https://m.media-amazon.com/images/I/717cPftxQgL._AC_.jpg",
+    "https://img.terabyteshop.com.br/produto/g/memoria-ddr5-kingston-fury-beast-expo-16gb-2x8gb-5200mhz-black-kf552c36bbek2-16_165438.png",
+    "https://media.ldlc.com/r1600/ld/products/00/05/90/13/LD0005901306_1_0005946808_0005946845_0005946849_0005946853.jpg"
+  ],
+  "RAM-GSK-32-DDR4-3600": [
+    "https://www.gskill.com/_upload/images/156283178411.png",
+    "https://media.ldlc.com/r1600/ld/products/00/05/52/88/LD0005528877_2_0005528921_0005611513_0005642915_0005729437_0005808401.jpg",
+    "https://media.materiel.net/r900/products/MN0005216433_1.jpg"
+  ],
   "GPU-RTX5080-TUF": "ASUS TUF Gaming GeForce RTX 5080 graphics card",
-  "GPU-RTX5070-VENTUS": "MSI GeForce RTX 5070 Ventus 3X OC graphics card white background",
-  "GPU-RX9070XT-PULSE": "Sapphire PULSE Radeon RX 9070 XT 16GB carte graphique ldlc",
+  "GPU-RTX5070-VENTUS": [
+    "https://storage-asset.msi.com/global/picture/image/feature/vga/NVIDIA/new-gen/GB205-300-VENTUS-3X-OC/design/msi-ventus-3x-design-front.png",
+    "https://storage-asset.msi.com/global/picture/image/feature/vga/NVIDIA/new-gen/GB205-300-VENTUS-3X-OC/design/msi-ventus-3x-design-back.png",
+    "https://m.media-amazon.com/images/I/71pdLSkA4NL._AC_SL1500_.jpg"
+  ],
+  "GPU-RX9070XT-PULSE": [
+    "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219828.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219830.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/06/21/98/LD0006219829.jpg"
+  ],
   "GPU-RTX5060-EAGLE": [
     "https://media.ldlc.com/r1600/ld/products/00/06/24/42/LD0006244234.jpg",
     "https://media.ldlc.com/r1600/ld/products/00/06/24/42/LD0006244232.jpg",
-    "https://media.ldlc.com/r1600/ld/products/00/06/23/77/LD0006237774.jpg"
+    "https://media.ldlc.com/r1600/ld/products/00/06/24/42/LD0006244233.jpg"
   ],
-  "SSD-990PRO-2TB": "Samsung 990 PRO 2TB NVMe SSD",
-  "SSD-P3PLUS-1TB": "Crucial P3 Plus NVMe SSD product photo white background",
-  "SSD-A400-480": "Kingston A400 480GB SATA SSD",
-  "PSU-RM1000E": "Corsair RM1000e alimentation modulaire ldlc",
+  "SSD-990PRO-2TB": [
+    "https://media.ldlc.com/r1600/ld/products/00/05/97/31/LD0005973115.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/97/31/LD0005973116.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/97/31/LD0005973117.jpg"
+  ],
+  "SSD-P3PLUS-1TB": [
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/44/LD0005964404_0005964433.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/44/LD0005964405_0005964434.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/44/LD0005964406_0005964435.jpg"
+  ],
+  "SSD-A400-480": [
+    "https://compustore.pe/wp-content/uploads/2020/08/SSD480.jpg",
+    "https://images.tcdn.com.br/img/img_prod/1401349/ssd_kingston_a400_480gb_sata_iii_2_5_sa400s37480g_317_3_1d331dd98d109b0664402dfca2f66193.jpg",
+    "https://dontek.lk/wp-content/uploads/2024/12/Dontek-Thumb-35.png"
+  ],
+  "PSU-RM1000E": [
+    "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/v1680126576/products/Power-Supply-Units/base-rme-series-2023-psu-config/Gallery/1000W/RM1000e_07.webp",
+    "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/v1680126576/products/Power-Supply-Units/base-rme-series-2023-psu-config/Gallery/1000W/RM1000e_01.webp",
+    "https://media.ldlc.com/r1600/ld/products/00/05/97/98/LD0005979841.jpg"
+  ],
   "PSU-A850GL": "MSI MAG A850GL PCIE5 power supply product white background",
-  "PSU-SP10-650": "be quiet! System Power 10 650W power supply",
-  "PSU-V850-SFX": "Cooler Master V850 SFX Gold power supply",
-  "FAN-P12-PWM": "Arctic P12 PWM PST fan product photo white background",
-  "FAN-SL120-V2-3P": "Lian Li Uni Fan SL120 V2 RGB three pack",
-  "PC-NOVA-5070": "NZXT H6 Flow white gaming PC build RGB",
-  "PC-APEX-5080": "Lian Li Lancool 216 gaming PC build RGB black",
+  "PSU-SP10-650": [
+    "https://media.ldlc.com/r1600/ld/products/00/05/98/86/LD0005988636.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/98/86/LD0005988634.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/98/86/LD0005988635.jpg"
+  ],
+  "PSU-V850-SFX": [
+    "https://media.ldlc.com/r1600/ld/products/00/05/75/24/LD0005752478_1.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/75/24/LD0005752475_1.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/75/24/LD0005752477_1.jpg"
+  ],
+  "FAN-P12-PWM": [
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/69/LD0005966947.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/69/LD0005966948.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/96/69/LD0005966949.jpg"
+  ],
+  "FAN-SL120-V2-3P": [
+    "https://files.pccasegear.com/images/1667516481-SL120V2-3-BK-thb.jpg",
+    "https://thaher.tech/wp-content/uploads/2023/02/TT-FAN-0157.jpg",
+    "https://files.pccasegear.com/UserFiles/SL120V2-1-BK-lian-li-sl120-v2-uni-fan-argb-pwm-120mm-black-product6.jpg"
+  ],
+  "PC-NOVA-5070": "NZXT H6 Flow white gaming PC build RGB fans front",
+  "PC-APEX-5080": [
+    "https://m.media-amazon.com/images/I/713YRJACKnL.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/99/72/LD0005997295.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/05/99/72/LD0005997296.jpg"
+  ],
   "PC-START-5060": "gaming PC tower case product photo white background",
   "WS-STUDIO-64": "Fractal Design Define 7 black PC tower white background",
   "NB-ROG-G16-5070": "ASUS ROG Strix G16 2025 gaming laptop white background",
-  "NB-LOQ15-5060": "Lenovo LOQ 15 gaming laptop",
+  "NB-LOQ15-5060": [
+    "https://m.media-amazon.com/images/I/71Q-+ssbfvL._AC_SL1500_.jpg",
+    "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6578/6578512cv1d.jpg",
+    "https://m.media-amazon.com/images/I/71EiUhT3AQL._AC_SL1500_.jpg"
+  ],
   "MON-LG-27GS95QE": "LG UltraGear 27GS95QE OLED monitor",
-  "MON-SAM-G5-32": "Samsung Odyssey G5 32 inch curved monitor front white background",
-  "PER-GPROX-TKL": "Logitech G Pro X TKL Lightspeed keyboard white background",
+  "MON-SAM-G5-32": "Samsung Odyssey G5 32 inch curved gaming monitor product photo",
+  "PER-GPROX-TKL": [
+    "https://media.ldlc.com/r1600/ld/products/00/06/06/13/LD0006061311.jpg",
+    "https://m.media-amazon.com/images/I/61eRCzlo6bL.jpg",
+    "https://product.hstatic.net/200000722513/product/earvn-ban-phim-logitech-g-pro-x-tkl-light-speed-tactile-switch-white-1_d383291768ef4233b0c2b2491c4f89d0.jpg"
+  ],
   "PER-DAV3-PRO": "Razer DeathAdder V3 Pro souris noire ldlc",
-  "PER-CLOUD3": "HyperX Cloud III headset",
-  "CON-PS5-SLIM-DIG": "PlayStation 5 Slim Digital console white background",
-  "CON-XSX-1TB": "Xbox Series X console product photo white background"
+  "PER-CLOUD3": [
+    "https://au.hyperx.com/cdn/shop/files/hyperx_cloud_iii_red_66x0049_angle_3.jpg?v=1695878882",
+    "https://row.hyperx.com/cdn/shop/files/hyperx_cloud_iii_red_66x0049_angle_2.jpg?v=1692736987",
+    "https://media.ldlc.com/r1600/ld/products/00/06/04/67/LD0006046766.jpg"
+  ],
+  "CON-PS5-SLIM-DIG": [
+    "https://media.ldlc.com/r1600/ld/products/00/06/08/65/LD0006086501.jpg",
+    "https://media.ldlc.com/r1600/ld/products/00/06/08/65/LD0006086502.jpg",
+    "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6566/6566040_rd.jpg"
+  ],
+  "CON-XSX-1TB": [
+    "https://m.media-amazon.com/images/I/616klipzdtL.jpg",
+    "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6478/6478033_sd.jpg",
+    "https://m.media-amazon.com/images/I/61uc-bhh0LL.jpg"
+  ]
 }

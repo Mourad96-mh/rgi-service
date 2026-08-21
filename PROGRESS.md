@@ -881,3 +881,60 @@ to 1, line + unit price + subtotal 5 990,00 MAD, full-width checkout button.
 5. Unchanged from before: CMI credentials, real product photography, customer auth UI,
    categories/rules CRUD, GA4 + consent, real NAP + `LocalBusiness`, a real domain
    (and then update `NEXT_PUBLIC_SITE_URL`, which the canonicals and sitemap are built from).
+
+
+## Session 11 — 2026-08-22
+
+### The product-image sweep (open item #1 from session 10)
+
+Every one of the **43 products × 3 images** was looked at, not just the Xbox. Method:
+`sharp` composites the 129 webp files into labelled contact sheets, read at thumbnail size
+to triage, then any suspect image re-rendered at 420 px to confirm before touching it.
+
+**24 of 43 products carried at least one wrong image.** The Series X was not an isolated
+failure — the same ranker preference for a white border had picked a *white* Series X
+Digital and a Series S; but most of the rest were a different failure mode entirely: the
+DuckDuckGo query matched the right words and the ranker then chose whatever pack shot was
+cleanest, regardless of model, colour or generation.
+
+| Failure | Examples |
+|---|---|
+| Wrong model | Dark Rock **Elite** for the Pro 5 · Crucial **P5 Plus / P310 / T500** for the P3 Plus · Odyssey **G9** for the G5 32" · Ventus **2X** for the 3X · 5060 **Ti** box for the 5060 · Arctic P12 **Max** for the P12 PWM PST · SL **Wireless** for the Uni Fan SL120 V2 · **Pure Power 12** box for System Power 10 · V850**i** for the V850 SFX |
+| Wrong brand | **Thermaltake** Smart BX3 sold as be quiet! System Power 10 · an **MSI** board on the ASUS TUF B760M |
+| Wrong generation | Ryzen **7000**-series box art on the Ryzen 5 5600 · original fat **PS5** on the PS5 Slim Digital · **Xbox One X** box |
+| Wrong spec | Fury Beast **DDR4** on a DDR5 product — the label is legible in the photo, and `rgb: false` in the seed while the picture showed RGB |
+| Wrong colour | white Lancool 216, white Vengeance, **red** Ripjaws V, **magenta** G Pro X, white PSU |
+| Not a pack shot | award-badge banners, spec-dimension drawings, "AVAILABLE IN TWO COLORS" marketing slides, a cable diagram, a third-party shop's watermarked composite |
+| Wrong product entirely | LDLC IDs `LD0006113654/5` are a **Galaxy S24 Ultra**, not the Liquid Freezer III — LDLC's numbering is not sequential per product |
+
+### How it was fixed
+
+Data, not code, exactly as planned. Sharpening the queries fixed maybe half; the rest
+needed **explicit image URLs**, which `product-image-queries.json` already supports as an
+array. To find them, `.probe.mjs` (temporary) ran the same DDG image search but printed
+*titles* alongside the URLs, so the choice was made by reading "Sapphire **PURE**" vs
+"Sapphire **PUlse**" rather than by trusting the ranker. Preferred sources, in order:
+LDLC (`media.ldlc.com`, 1600×1600 on white), the manufacturer's own CDN, then Amazon/Best
+Buy. Every guessed sibling URL was `curl`-checked for a 200 before being committed, and
+every SKU was re-rendered and re-read after the fetch — several "fixes" were caught being
+wrong on the second pass (the Galaxy S24, a Forza bundle box, a full-size keyboard).
+
+**Now:** 43/43 products verified correct model, colour and generation. 129 files, no
+orphans, manifest and disk in sync.
+
+### Left as acceptable
+
+- A handful of images are retail **boxes** rather than bare product (Xbox, Liquid Freezer
+  III, SL120 3-pack, A400 — whose retail photos are nearly all blister packs). They show
+  the right product and are labelled.
+- `MB-B650E-ITX-1` and `MB-B650TOMA-WIFI-3` are rear-I/O panel shots — correct product,
+  just a dull third angle.
+- `PC-START-5060` still shows three different white cases; it is a house build with no
+  real photography, so the case is a stand-in either way.
+- `MON-LG-27GS95QE-3` is an LG marketing render with Spanish text on the screen.
+
+### Unchanged from session 10
+
+Revoke the Vercel token · Hobby plan is non-commercial · FABs overlap on scroll · CMI
+credentials, real photography, customer auth UI, categories/rules CRUD, GA4 + consent,
+real NAP, a real domain.
