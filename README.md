@@ -41,3 +41,9 @@ Hand this whole folder to the coding assistant. It reads **`CLAUDE.md` first**, 
    also powers faceted filtering and the configurator.
 
 Start with `CLAUDE.md`.
+
+## Déploiement
+
+Voir **[DEPLOY.md](DEPLOY.md)** : l'API NestJS sur Render (`render.yaml`), la vitrine
+Next.js sur Vercel, MongoDB sur Atlas. L'ordre compte — la vitrine appelle l'API côté
+serveur, donc l'API doit être en ligne en premier.
