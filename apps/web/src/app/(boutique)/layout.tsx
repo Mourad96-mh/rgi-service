@@ -26,7 +26,9 @@ export default async function BoutiqueLayout({ children }: { children: React.Rea
       <Header categories={categories} />
       <main id="contenu">{children}</main>
       <Footer categories={categories} />
-      <p className="border-t border-line bg-surface px-4 py-3.5 text-center text-xs text-faint">
+      {/* Extra bottom padding on phones so this last line is not sitting permanently
+          underneath the floating WhatsApp / phone buttons. */}
+      <p className="border-t border-line bg-surface px-4 pb-[104px] pt-3.5 text-center text-xs text-faint sm:py-3.5">
         {t.common.brand} · {t.common.tagline}
       </p>
       <ContactFab />
