@@ -1,5 +1,55 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { CONTACT, whatsappUrl } from '@/lib/contact';
 import { t } from '@/locales/fr';
+
+/** Ignore scrolls smaller than this, so a trackpad twitch does not flip the buttons. */
+const MOVE_THRESHOLD_PX = 10;
+/** The page must be scrolled at least this far before hiding is allowed — at the top of
+ *  the page the buttons have nothing to get out of the way of yet. */
+const MIN_SCROLL_TO_HIDE_PX = 96;
+
+/**
+ * Show the buttons at rest and on the way up; slide them away on the way down.
+ *
+ * A floating button inherently covers whatever is under it, and on a 390 px screen that
+ * is a real chunk of a product card. Reading is scrolling *down*, so that is the gesture
+ * that should clear the corner; reaching for the corner is preceded by scrolling *up* or
+ * stopping, and both bring the buttons back.
+ *
+ * `last` is a plain variable rather than state: this runs on every scroll frame and must
+ * not re-render. When a move is under the threshold `last` is deliberately left alone, so
+ * slow drags accumulate instead of being swallowed one sub-threshold frame at a time.
+ */
+function useHiddenWhileScrollingDown() {
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    let last = window.scrollY;
+    let frame = 0;
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const current = window.scrollY;
+        const delta = current - last;
+        if (Math.abs(delta) < MOVE_THRESHOLD_PX) return;
+        last = current;
+        setHidden(delta > 0 && current > MIN_SCROLL_TO_HIDE_PX);
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return hidden;
+}
 
 /**
  * Floating WhatsApp + phone buttons, bottom-right on every storefront page.
@@ -7,13 +57,25 @@ import { t } from '@/locales/fr';
  * WhatsApp keeps its own brand green rather than the site's violet→cyan: shoppers
  * recognise the mark by its colour, and a re-tinted WhatsApp icon reads as decoration.
  *
- * Server-rendered plain links — no JavaScript, so they work before hydration and are
- * crawlable. `aria-label` carries the full French wording; the visible label is
- * desktop-only, so the mobile buttons stay out of the way of the content.
+ * The links are plain `<a>` elements rendered on the server, so they work before
+ * hydration and are crawlable; the client hook only adds the hide-on-scroll behaviour on
+ * top of a visible default. `aria-label` carries the full French wording; the visible
+ * label is desktop-only, so the mobile buttons stay out of the way of the content.
+ *
+ * Hidden means `visibility: hidden`, not just moved off-screen: that drops the links out
+ * of the tab order, so a keyboard user cannot land on a button they cannot see. It is
+ * animated with the transform, and CSS keeps the element visible for the length of the
+ * transition, so the slide-out still plays.
  */
 export function ContactFab() {
+  const hidden = useHiddenWhileScrollingDown();
+
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5 print:hidden">
+    <div
+      className={`fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5 transition-all duration-300 ease-out motion-reduce:transition-none print:hidden ${
+        hidden ? 'invisible translate-y-[calc(100%+1.5rem)] opacity-0' : 'visible translate-y-0 opacity-100'
+      }`}
+    >
       <a
         href={whatsappUrl(t.contact.whatsappPrefill)}
         target="_blank"
