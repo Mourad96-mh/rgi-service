@@ -76,7 +76,7 @@ export function AnnounceBar() {
   return (
     // The sentence is long enough to run to three lines on a 320 px phone; a step down in
     // size and a tighter leading keeps it to two without truncating the promise.
-    <div className="border-b border-line bg-[linear-gradient(90deg,rgba(124,92,255,.16),rgba(34,211,238,.1))] px-4 py-[9px] text-center text-[12px] leading-snug text-muted sm:text-[13px]">
+    <div className="border-b border-line bg-[linear-gradient(90deg,rgba(109,75,255,.10),rgba(14,165,196,.07))] px-4 py-[9px] text-center text-[12px] leading-snug text-muted sm:text-[13px]">
       🚚 {t.announce.text}
     </div>
   );

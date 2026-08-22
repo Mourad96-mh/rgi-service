@@ -166,7 +166,7 @@ function Builder({ slots }: { slots: SlotDefinition[] }) {
                 wide — the error line above already carries the same information. */}
             <span
               className={`chip hidden shrink-0 xs:inline-block ${
-                evaluation?.isValid ? 'bg-success/15 text-success' : 'bg-white/[.06] text-faint'
+                evaluation?.isValid ? 'bg-success/15 text-success' : 'bg-text/[.06] text-faint'
               }`}
             >
               {evaluation?.isValid ? t.configurator.ready : t.configurator.notReady}

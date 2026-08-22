@@ -248,7 +248,7 @@ export function CategoryManager({ tree }: { tree: CategoryNode[] }) {
       ) : null}
 
       {rows.length ? (
-        <ul className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
+        <ul className="surface-card divide-y divide-[rgba(16,24,48,.09)]">
           {rows.map(({ node, depth }) => (
             <li
               key={node.id}

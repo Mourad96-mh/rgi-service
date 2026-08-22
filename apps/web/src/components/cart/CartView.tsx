@@ -225,7 +225,7 @@ function CartRow({
               type="button"
               aria-label={t.product.decrease}
               onClick={() => onQuantity(line.quantity - 1)}
-              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
+              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-text/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
             >
               −
             </button>
@@ -234,7 +234,7 @@ function CartRow({
               type="button"
               aria-label={t.product.increase}
               onClick={() => onQuantity(line.quantity + 1)}
-              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
+              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-text/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
             >
               +
             </button>

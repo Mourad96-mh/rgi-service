@@ -125,7 +125,7 @@ function PartOption({
         onClick={onPick}
         aria-pressed={chosen}
         className={`flex w-full gap-3 rounded-card border p-3 text-left transition hover:-translate-y-0.5 hover:border-line2 ${
-          chosen ? 'border-accent2 bg-white/[.05]' : 'border-line bg-surface'
+          chosen ? 'border-accent2 bg-text/[.05]' : 'border-line bg-surface'
         }`}
       >
         {/* 76 px of thumbnail leaves barely 130 px for a part name on a 320 px screen, so

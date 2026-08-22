@@ -1,9 +1,14 @@
 # DESIGN_SYSTEM.md — Rgi Service Visual System
 
-Goal: a **modern, beautiful, premium gaming** aesthetic — dark, high-contrast, with a
-vibrant gradient accent, soft glows, and glassy surfaces. See the rendered reference
-**`mockups/homepage.html`** — build the real UI to match its look and feel. This file is the
-source of truth for tokens; put them in the Tailwind theme and reuse everywhere.
+Goal: a **modern, beautiful, premium gaming** aesthetic — **light, white-background**,
+high-contrast, with a vibrant gradient accent used sparingly on clean white surfaces.
+
+> **Changed 2026-08-22 at the client's request: the site is light, not dark.** The palette
+> below replaces the original near-black one. `mockups/homepage.html` still shows the old
+> dark treatment and is now a *layout* reference only — do not take colour from it.
+
+The tokens live in **`apps/web/src/styles/globals.css`** as `--c-*` RGB channels, which is
+the single source of truth; `tailwind.config.ts` composes them and never repeats a value.
 
 > The accent is a **token**. If the client has official brand colors, swap `--accent` /
 > `--accent-2` and everything updates. The violet→cyan default below is the recommended look.
@@ -11,12 +16,12 @@ source of truth for tokens; put them in the Tailwind theme and reuse everywhere.
 ---
 
 ## 1. Design principles
-- **Dark-first, cinematic.** Near-black backgrounds, content floats on subtly lighter
-  glassy surfaces. Light mode optional later; design dark first.
+- **Light, clean, retail-grade.** White page, content on white cards separated by a
+  hairline border and a whisper of shadow; alternate bands in a cool near-white.
 - **One vivid gradient accent** (violet → cyan) used with restraint: CTAs, highlights,
   key numbers, the logo mark. Never flood the page with it.
-- **Glow & depth.** Soft radial glows behind hero/CTA, layered shadows, 1px translucent
-  borders. Feels high-end, not flat.
+- **Depth, not glow.** On white, a glow reads as a smudge: use tight ambient shadows and
+  1px dark-tinted borders. Coloured lift is reserved for the primary CTA.
 - **Spec-forward but breathable.** Lots of negative space; specs shown as small pills.
 - **Motion is subtle.** Hover lifts (translateY -4px), gentle scale on buttons, smooth
   transitions (~180–220ms). No gimmicks.
@@ -26,34 +31,38 @@ source of truth for tokens; put them in the Tailwind theme and reuse everywhere.
 
 ```css
 /* Backgrounds */
---bg:        #0a0b12;   /* page */
---bg-2:      #0f1119;   /* alt sections / footer */
---surface:   #141726;   /* cards, inputs */
---surface-2: #1a1e30;   /* raised / media wells */
+--bg:        #ffffff;   /* page */
+--bg-2:      #f5f7fa;   /* alt sections / footer */
+--surface:   #ffffff;   /* cards, inputs */
+--surface-2: #f7f9fc;   /* raised / media wells / photo tiles */
 
-/* Borders (translucent) */
---border:    rgba(255,255,255,.08);
---border-2:  rgba(255,255,255,.14);
+/* Borders (dark tints — a white tint is invisible on white) */
+--border:    rgba(16,24,48,.10);
+--border-2:  rgba(16,24,48,.18);
 
-/* Text */
---text:      #eef0f6;   /* primary */
---muted:     #9aa1b8;   /* secondary */
---faint:     #6b7191;   /* tertiary / captions */
+/* Text — every value clears WCAG AA (4.5:1) on both #ffffff and #f5f7fa */
+--text:      #0e1220;   /* primary   18.65:1 */
+--muted:     #55607a;   /* secondary  6.29:1 */
+--faint:     #636d85;   /* captions   5.18:1 */
 
-/* Accent + status */
---accent:    #7c5cff;   /* violet (primary) */
---accent-2:  #22d3ee;   /* cyan (secondary) */
---accent-3:  #ff4d8d;   /* pink (deals/sale, cart badge) */
---success:   #34d399;   /* in stock / compatible */
---warn:      #fbbf24;   /* warnings (e.g. PSU note) */
+/* Accent + status — deepened for a light ground. The original dark-theme values
+   scored 1.8-2.6:1 on white and were unreadable. */
+--accent:    #5b3df5;   /* violet    6.12:1 */
+--accent-2:  #0e7490;   /* teal      5.36:1  (was cyan #22d3ee, 1.81:1) */
+--accent-3:  #d81b60;   /* pink      4.95:1 */
+--success:   #0f7a4f;   /* 5.36:1    (was #34d399, 1.92:1) */
+--warn:      #a35a06;   /* 5.22:1 */
 
-/* Signature gradient */
---grad:      linear-gradient(120deg,#7c5cff 0%,#22d3ee 100%);
---grad-soft: linear-gradient(120deg,rgba(124,92,255,.18),rgba(34,211,238,.14));
+/* Two gradients, on purpose */
+--grad:      linear-gradient(120deg,#6d4bff 0%,#0e8ba8 100%);  /* fills; white sits on top */
+--grad-text: linear-gradient(120deg,#5b3df5 0%,#0e7490 100%);  /* text; both stops AA alone */
+--grad-soft: linear-gradient(120deg,rgba(109,75,255,.10),rgba(14,165,196,.08));
 ```
 
 Usage rules:
-- **Primary CTA** = `--grad` fill with dark text (#0a0b12) + glow shadow.
+- **Primary CTA** = `--grad` fill with **white** text + the coloured lift shadow.
+- **Never paint text with `--grad`** — use `--grad-text`. The fill gradient's cyan half
+  drops to ~2:1 on white, which would make the right-hand end of every price unreadable.
 - **Sale/discount tags & cart badge** = `--accent-3`.
 - **In-stock / compatible** = `--success`; **warnings** = `--warn`.
 - **Prices (the "now" price)** and hero key numbers use the gradient text treatment.

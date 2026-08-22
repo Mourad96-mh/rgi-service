@@ -113,7 +113,7 @@ export function ProductGallery({
           role="dialog"
           aria-modal="true"
           aria-label={name}
-          className="fixed inset-0 z-50 grid place-items-center bg-bg/95 p-4 backdrop-blur sm:p-6"
+          className="fixed inset-0 z-50 grid place-items-center bg-bg2/97 p-4 backdrop-blur sm:p-6"
           onClick={() => setZoomed(false)}
         >
           <div className="photo-tile relative h-full max-h-[68vh] w-full max-w-[900px] sm:max-h-[80vh]">
@@ -148,7 +148,7 @@ function GalleryArrow({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`absolute top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-black/10 bg-white/85 text-bg shadow-soft transition hover:bg-white sm:h-9 sm:w-9 ${
+      className={`absolute top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-line2 bg-surface/95 text-text shadow-soft backdrop-blur transition hover:bg-surface sm:h-9 sm:w-9 ${
         side === 'left' ? 'left-3' : 'right-3'
       }`}
     >

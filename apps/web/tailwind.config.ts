@@ -1,10 +1,11 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * The tokens from `docs/DESIGN_SYSTEM.md` §2–§4, mirrored 1:1 from the mockup's CSS
- * variables. Swapping `accent` / `accent2` here re-skins the whole site — storefront and
- * admin alike — which is exactly what the doc asks for when the client's brand colours
- * arrive.
+ * The tokens from `docs/DESIGN_SYSTEM.md` §2–§4. Values are NOT repeated here: each one
+ * points at the `--c-*` channels declared in `styles/globals.css`, which is the single
+ * source of truth. Swapping `--c-accent` / `--c-accent-2` there re-skins the whole site —
+ * storefront and admin alike — and a second theme becomes a second `:root` block rather
+ * than an edit in two files that can drift.
  */
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
@@ -19,21 +20,26 @@ const config: Config = {
         xs: '400px',
         '3xl': '1760px',
       },
+      /*
+       * Every colour resolves to the `--c-*` channels in globals.css, so the palette has
+       * exactly one definition. `rgb(... / <alpha-value>)` keeps Tailwind's opacity
+       * modifiers working — `bg-bg/72` on the sticky header still composes correctly.
+       */
       colors: {
-        bg: '#0a0b12',
-        bg2: '#0f1119',
-        surface: '#141726',
-        surface2: '#1a1e30',
-        text: '#eef0f6',
-        muted: '#9aa1b8',
-        faint: '#6b7191',
-        accent: '#7c5cff',
-        accent2: '#22d3ee',
-        accent3: '#ff4d8d',
-        success: '#34d399',
-        warn: '#fbbf24',
-        line: 'rgba(255,255,255,.08)',
-        line2: 'rgba(255,255,255,.14)',
+        bg: 'rgb(var(--c-bg) / <alpha-value>)',
+        bg2: 'rgb(var(--c-bg-2) / <alpha-value>)',
+        surface: 'rgb(var(--c-surface) / <alpha-value>)',
+        surface2: 'rgb(var(--c-surface-2) / <alpha-value>)',
+        text: 'rgb(var(--c-text) / <alpha-value>)',
+        muted: 'rgb(var(--c-muted) / <alpha-value>)',
+        faint: 'rgb(var(--c-faint) / <alpha-value>)',
+        accent: 'rgb(var(--c-accent) / <alpha-value>)',
+        accent2: 'rgb(var(--c-accent-2) / <alpha-value>)',
+        accent3: 'rgb(var(--c-accent-3) / <alpha-value>)',
+        success: 'rgb(var(--c-success) / <alpha-value>)',
+        warn: 'rgb(var(--c-warn) / <alpha-value>)',
+        line: 'var(--border)',
+        line2: 'var(--border-2)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'Space Grotesk', 'Inter', 'sans-serif'],
@@ -47,13 +53,12 @@ const config: Config = {
         lg2: '26px',
       },
       boxShadow: {
-        soft: '0 20px 50px -20px rgba(0,0,0,.7)',
-        glow: '0 0 40px -8px rgba(124,92,255,.55)',
+        soft: 'var(--shadow)',
+        glow: 'var(--glow)',
       },
       backgroundImage: {
-        grad: 'linear-gradient(120deg,#7c5cff 0%,#22d3ee 100%)',
-        'grad-soft':
-          'linear-gradient(120deg,rgba(124,92,255,.18),rgba(34,211,238,.14))',
+        grad: 'var(--grad)',
+        'grad-soft': 'var(--grad-soft)',
       },
       maxWidth: {
         wrap: '1220px',

@@ -88,7 +88,7 @@ export default async function AdminHomePage() {
             </Link>
           </div>
           {stats.lowStock.length ? (
-            <ul className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
+            <ul className="surface-card divide-y divide-[rgba(16,24,48,.09)]">
               {stats.lowStock.map((row) => (
                 <li key={row.id} className="flex items-center justify-between gap-4 px-4 py-3">
                   <Link
@@ -115,7 +115,7 @@ export default async function AdminHomePage() {
         <section>
           <h2 className="mb-3 font-display text-lg font-bold">{t.admin.topProductsTitle}</h2>
           {stats.topProducts.length ? (
-            <ul className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
+            <ul className="surface-card divide-y divide-[rgba(16,24,48,.09)]">
               {stats.topProducts.map((row) => (
                 <li key={row.name} className="flex items-center justify-between gap-4 px-4 py-3">
                   <span className="min-w-0 flex-1 truncate text-[13.5px]">{row.name}</span>

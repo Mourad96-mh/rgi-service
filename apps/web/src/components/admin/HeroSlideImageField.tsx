@@ -135,7 +135,7 @@ export function HeroSlideImageField({
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-semibold">{label}</span>
-          <span className={`chip ${custom ? 'bg-accent2/15 text-accent2' : 'bg-white/[.07] text-faint'}`}>
+          <span className={`chip ${custom ? 'bg-accent2/15 text-accent2' : 'bg-text/[.07] text-faint'}`}>
             {custom ? t.admin.heroCustom : t.admin.heroDefault}
           </span>
         </div>

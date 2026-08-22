@@ -282,7 +282,7 @@ export function AttributeManager({
       ) : null}
 
       {visible.length ? (
-        <ul className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
+        <ul className="surface-card divide-y divide-[rgba(16,24,48,.09)]">
           {visible.map((definition) => (
             <li
               key={definition.id}

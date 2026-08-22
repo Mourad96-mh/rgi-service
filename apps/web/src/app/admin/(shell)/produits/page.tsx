@@ -134,11 +134,11 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                   <th className="px-4 py-3 text-right font-semibold">{t.admin.actions}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(255,255,255,.06)]">
+              <tbody className="divide-y divide-[rgba(16,24,48,.09)]">
                 {products.data.map((product) => {
                   const image = primaryImage(product);
                   return (
-                    <tr key={product.id} className="transition hover:bg-white/[.03]">
+                    <tr key={product.id} className="transition hover:bg-text/[.03]">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
                           <span className="photo-tile relative h-[42px] w-[42px] shrink-0">
@@ -255,7 +255,7 @@ function StatusChip({ status }: { status: ProductStatus }) {
           ? 'bg-success/15 text-success'
           : status === 'draft'
             ? 'bg-warn/15 text-warn'
-            : 'bg-white/[.07] text-faint'
+            : 'bg-text/[.07] text-faint'
       }`}
     >
       {STATUS_LABEL[status]}

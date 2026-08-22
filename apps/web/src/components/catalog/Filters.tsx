@@ -208,7 +208,7 @@ function FilterLink({
       aria-pressed={active}
       className={`flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm
         transition lg:min-h-0 lg:px-2.5 lg:py-1.5 ${
-        active ? 'bg-grad-soft font-semibold text-text' : 'text-muted hover:bg-white/[.04] hover:text-text'
+        active ? 'bg-grad-soft font-semibold text-text' : 'text-muted hover:bg-text/[.04] hover:text-text'
       }`}
     >
       <span className="flex min-w-0 items-center gap-2">

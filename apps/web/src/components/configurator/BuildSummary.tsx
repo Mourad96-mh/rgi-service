@@ -65,7 +65,7 @@ export function BuildSummary({
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <h2 className="font-display text-lg font-bold">{t.configurator.summaryTitle}</h2>
         <span
-          className={`chip ${ready ? 'bg-success/15 text-success' : 'bg-white/[.06] text-faint'}`}
+          className={`chip ${ready ? 'bg-success/15 text-success' : 'bg-text/[.06] text-faint'}`}
         >
           {ready ? t.configurator.ready : t.configurator.notReady}
         </span>
@@ -129,7 +129,7 @@ export function BuildSummary({
         </Block>
       ) : null}
 
-      <div className="mt-5 flex items-start gap-2.5 rounded-sm2 border border-line bg-white/[.03] p-3.5 text-[12.5px] text-muted">
+      <div className="mt-5 flex items-start gap-2.5 rounded-sm2 border border-line bg-text/[.03] p-3.5 text-[12.5px] text-muted">
         <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-success" />
         <span>
           <span className="block font-semibold text-text">{t.configurator.services}</span>
@@ -177,7 +177,7 @@ export function BuildSummary({
       </div>
 
       {added ? (
-        <p role="status" className="mt-4 flex flex-wrap items-center gap-2 rounded-sm2 border border-line2 bg-white/[.04] px-4 py-3 text-[12.5px] text-success">
+        <p role="status" className="mt-4 flex flex-wrap items-center gap-2 rounded-sm2 border border-line2 bg-text/[.04] px-4 py-3 text-[12.5px] text-success">
           <CheckIcon className="h-4 w-4" />
           {t.cart.addedBuild}
           <Link href={routes.cart} className="font-semibold text-accent2 hover:underline">
@@ -193,7 +193,7 @@ export function BuildSummary({
       ) : null}
 
       {shareUrl ? (
-        <div className="mt-4 rounded-sm2 border border-line2 bg-white/[.04] p-3.5">
+        <div className="mt-4 rounded-sm2 border border-line2 bg-text/[.04] p-3.5">
           <p className="text-[12.5px] font-semibold">{t.configurator.savedTitle}</p>
           <p className="mt-1 text-[12px] text-muted">{t.configurator.savedText}</p>
           <p className="mt-2 truncate rounded-md bg-bg2 px-2.5 py-2 text-[11.5px] text-faint">

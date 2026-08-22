@@ -31,11 +31,14 @@ listings, filters, spec tables, and the builder flow, then build original **Rgi 
 that improves on them. See `docs/DESIGN_REFERENCE.md`. Reproduce the *patterns* — never copy
 any site's assets, logo, copy, or images.
 
-**Visual design — match the mockup.** The intended look is a modern, dark, premium gaming
-aesthetic with a violet→cyan gradient accent. A rendered reference homepage is at
-`mockups/homepage.html`, and all design tokens (colors, fonts, spacing, components) are in
-`docs/DESIGN_SYSTEM.md`. Build the real UI to match that look; put the tokens in the Tailwind
-theme and reuse the same components everywhere (storefront **and** admin).
+**Visual design.** The intended look is a modern, **light (white-background)**, premium
+gaming aesthetic with a violet→teal gradient accent. *(Changed 2026-08-22 at the client's
+request — the site was originally dark.)* All design tokens live in
+`apps/web/src/styles/globals.css` as `--c-*` channels and are documented in
+`docs/DESIGN_SYSTEM.md`; `tailwind.config.ts` references them and never repeats a value.
+`mockups/homepage.html` still shows the old dark treatment — treat it as a **layout**
+reference only, never a colour one. Reuse the same components everywhere (storefront
+**and** admin).
 
 ## 2. Tech stack (DECIDED — do not substitute)
 

@@ -200,7 +200,7 @@ export default async function ProductPage({ params }: PageProps) {
                   id: 'specs',
                   label: t.product.tabSpecs,
                   content: (
-                    <dl className="surface-card max-w-[720px] divide-y divide-[rgba(255,255,255,.06)] overflow-hidden">
+                    <dl className="surface-card max-w-[720px] divide-y divide-[rgba(16,24,48,.09)] overflow-hidden">
                       {specs.map((spec) => (
                         <div key={spec.key} className="flex justify-between gap-4 px-4 py-3 text-sm sm:gap-6">
                           <dt className="shrink-0 text-muted">{spec.label}</dt>

@@ -8,24 +8,70 @@
  * syntaxes. DESIGN_SYSTEM.md §2.
  */
 :root {
-  --bg: #0a0b12;
-  --bg-2: #0f1119;
-  --surface: #141726;
-  --surface-2: #1a1e30;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-2: rgba(255, 255, 255, 0.14);
-  --text: #eef0f6;
-  --muted: #9aa1b8;
-  --faint: #6b7191;
-  --accent: #7c5cff;
-  --accent-2: #22d3ee;
-  --accent-3: #ff4d8d;
-  --success: #34d399;
-  --warn: #fbbf24;
-  --grad: linear-gradient(120deg, #7c5cff 0%, #22d3ee 100%);
-  --grad-soft: linear-gradient(120deg, rgba(124, 92, 255, 0.18), rgba(34, 211, 238, 0.14));
-  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
-  --glow: 0 0 40px -8px rgba(124, 92, 255, 0.55);
+  /*
+   * LIGHT THEME — the client asked for a white site (2026-08-22). This replaces the
+   * dark palette DESIGN_SYSTEM.md §2 originally specified; that doc has been updated to
+   * match rather than left to contradict the code.
+   *
+   * This is not the dark palette inverted. Measured on white, the old tokens were
+   * unusable: cyan #22d3ee scored 1.81:1 and success #34d399 1.92:1, against the 4.5:1
+   * WCAG AA needs for body text. Every colour below was picked to clear AA on white while
+   * keeping the violet→cyan identity recognisable.
+   *
+   * `--c-*` are raw RGB channels, the single source of truth: Tailwind composes them with
+   * `<alpha-value>` so `bg-surface/70` keeps working, and the plain `--name` beneath is
+   * derived for hand-written CSS. Change a colour in one place only.
+   */
+  --c-bg: 255 255 255;
+  --c-bg-2: 245 247 250;
+  --c-surface: 255 255 255;
+  --c-surface-2: 247 249 252;
+
+  --c-text: 14 18 32;
+  --c-muted: 85 96 122;
+  --c-faint: 99 109 133;
+
+  --c-accent: 91 61 245;
+  --c-accent-2: 14 116 144;
+  --c-accent-3: 216 27 96;
+  --c-success: 15 122 79;
+  --c-warn: 163 90 6;
+
+  --bg: rgb(var(--c-bg));
+  --bg-2: rgb(var(--c-bg-2));
+  --surface: rgb(var(--c-surface));
+  --surface-2: rgb(var(--c-surface-2));
+  --text: rgb(var(--c-text));
+  --muted: rgb(var(--c-muted));
+  --faint: rgb(var(--c-faint));
+  --accent: rgb(var(--c-accent));
+  --accent-2: rgb(var(--c-accent-2));
+  --accent-3: rgb(var(--c-accent-3));
+  --success: rgb(var(--c-success));
+  --warn: rgb(var(--c-warn));
+
+  /* On white a border must be a dark tint; the old white tints were invisible. */
+  --border: rgba(16, 24, 48, 0.1);
+  --border-2: rgba(16, 24, 48, 0.18);
+
+  /*
+   * Two gradients, deliberately. `--grad` fills buttons and badges, where white sits on
+   * top and the stops may stay vivid. `--grad-text` paints text directly on the page —
+   * prices, the "Configurateur" link — so both stops have to clear AA on white by
+   * themselves. Using the fill gradient for text would make the cyan half of every price
+   * unreadable.
+   */
+  --grad: linear-gradient(120deg, #6d4bff 0%, #0e8ba8 100%);
+  --grad-text: linear-gradient(120deg, #5b3df5 0%, #0e7490 100%);
+  --grad-soft: linear-gradient(120deg, rgba(109, 75, 255, 0.1), rgba(14, 165, 196, 0.08));
+
+  /*
+   * Light UIs need shadows that suggest a millimetre of lift, not a spotlit stage. The
+   * dark theme's 50px/0.7-black drop would read as dirt on white, so this is a tight
+   * ambient pair, and the "glow" is now a coloured lift under the primary button.
+   */
+  --shadow: 0 8px 24px -10px rgba(16, 24, 48, 0.16), 0 2px 6px -2px rgba(16, 24, 48, 0.08);
+  --glow: 0 10px 22px -10px rgba(91, 61, 245, 0.5);
 }
 
 @layer base {
@@ -67,7 +113,7 @@
   }
 
   ::selection {
-    background: rgba(124, 92, 255, 0.35);
+    background: rgba(109, 75, 255, 0.18);
   }
 }
 
@@ -126,7 +172,7 @@
   }
 
   .grad-text {
-    background: var(--grad);
+    background: var(--grad-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -164,8 +210,14 @@
     @apply rounded-[7px] px-2.5 py-[5px] text-[11px] font-bold uppercase tracking-[.06em];
   }
 
+  /*
+   * White card on a white page: the 1px border alone leaves it flat, so a whisper of
+   * ambient shadow gives it a plane of its own. Deliberately far lighter than the dark
+   * theme's drop shadow — on light, visible shadow reads as grime.
+   */
   .surface-card {
     @apply rounded-card border border-line bg-surface;
+    box-shadow: 0 1px 2px rgba(16, 24, 48, 0.04), 0 6px 16px -12px rgba(16, 24, 48, 0.12);
   }
 
   .spec-pill {
@@ -204,17 +256,21 @@
 
 @layer components {
   /*
-   * Product photos are manufacturer pack shots on a white background. On a dark UI they
-   * only look intentional if the whole image area is light, so every photo — card, hero
-   * slide, gallery — sits on the same tile. It doubles as the empty-state surface.
+   * Product photos are manufacturer pack shots on a white background.
+   *
+   * On the old dark UI this tile existed to stop a white cut-out floating in blackness.
+   * On a white page the problem inverts: a white photo on a white card has no edges at
+   * all, and the product appears to bleed into the layout. So the tile is now a faint
+   * cool-grey well — barely a shade off the card, but enough that the pack shot reads as
+   * an object sitting *in* something. It still doubles as the empty-state surface.
    */
   .photo-tile {
-    @apply overflow-hidden rounded-lg2 border border-line2;
-    background: #ffffff;
+    @apply overflow-hidden rounded-lg2 border border-line;
+    background: var(--surface-2);
   }
 
   .photo-tile-flat {
     @apply border-b border-line;
-    background: #ffffff;
+    background: var(--surface-2);
   }
 }

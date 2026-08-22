@@ -83,7 +83,7 @@ export function ContactFab() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t.contact.whatsappAria}
-        className="group flex min-h-[44px] min-w-[44px] items-center justify-center gap-2.5 rounded-full bg-[#25D366] py-2.5 pl-3 pr-3 text-bg shadow-[0_8px_24px_rgba(0,0,0,.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:pr-4"
+        className="group flex min-h-[44px] min-w-[44px] items-center justify-center gap-2.5 rounded-full bg-[#25D366] py-2.5 pl-3 pr-3 text-[#0e1220] shadow-[0_10px_24px_-8px_rgba(16,24,48,.35)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:pr-4"
       >
         <WhatsAppIcon />
         <span className="hidden text-[13.5px] font-semibold sm:inline">
@@ -94,7 +94,7 @@ export function ContactFab() {
       <a
         href={CONTACT.phoneHref}
         aria-label={`${t.contact.callAria} ${CONTACT.phoneDisplay}`}
-        className="group flex min-h-[44px] min-w-[44px] items-center justify-center gap-2.5 rounded-full border border-line2 bg-bg2/95 py-2.5 pl-3 pr-3 text-text shadow-[0_8px_24px_rgba(0,0,0,.45)] backdrop-blur transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:pr-4"
+        className="group flex min-h-[44px] min-w-[44px] items-center justify-center gap-2.5 rounded-full border border-line2 bg-surface/95 py-2.5 pl-3 pr-3 text-text shadow-[0_10px_24px_-8px_rgba(16,24,48,.35)] backdrop-blur transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:pr-4"
       >
         <PhoneIcon />
         <span className="hidden text-[13.5px] font-semibold sm:inline">

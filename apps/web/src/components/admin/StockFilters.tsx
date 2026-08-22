@@ -51,7 +51,7 @@ function Tab({ href, active, label }: { href: string; active: boolean; label: st
       href={href}
       aria-current={active ? 'true' : undefined}
       className={`inline-flex min-h-[40px] flex-1 items-center justify-center whitespace-nowrap rounded-[9px] px-3 text-[13px] font-semibold transition sm:flex-none ${
-        active ? 'bg-white/[.09] text-text' : 'text-muted hover:text-text'
+        active ? 'bg-text/[.09] text-text' : 'text-muted hover:text-text'
       }`}
     >
       {label}

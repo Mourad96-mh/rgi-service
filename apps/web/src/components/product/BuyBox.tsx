@@ -63,7 +63,7 @@ function QtyButton({
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="grid h-11 w-11 place-items-center rounded-[9px] text-lg font-bold text-muted transition hover:bg-white/[.06] hover:text-text disabled:opacity-30 sm:h-9 sm:w-9"
+      className="grid h-11 w-11 place-items-center rounded-[9px] text-lg font-bold text-muted transition hover:bg-text/[.06] hover:text-text disabled:opacity-30 sm:h-9 sm:w-9"
     >
       {children}
     </button>

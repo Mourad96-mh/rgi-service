@@ -80,9 +80,9 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                   <Th align="right">{t.admin.amount}</Th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(255,255,255,.06)]">
+              <tbody className="divide-y divide-[rgba(16,24,48,.09)]">
                 {orders.data.map((order) => (
-                  <tr key={order.id} className="transition hover:bg-white/[.03]">
+                  <tr key={order.id} className="transition hover:bg-text/[.03]">
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/commandes/${order.id}`}

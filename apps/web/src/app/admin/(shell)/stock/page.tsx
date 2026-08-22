@@ -102,9 +102,9 @@ export default async function AdminStockPage({ searchParams }: { searchParams: S
                   <th className="px-4 py-3 font-semibold">{t.admin.stockThreshold}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(255,255,255,.06)]">
+              <tbody className="divide-y divide-[rgba(16,24,48,.09)]">
                 {products.data.map((product) => (
-                  <tr key={product.id} className="transition hover:bg-white/[.03]">
+                  <tr key={product.id} className="transition hover:bg-text/[.03]">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <Thumb product={product} size={42} />

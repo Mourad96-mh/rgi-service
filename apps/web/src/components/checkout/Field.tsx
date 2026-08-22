@@ -77,7 +77,7 @@ export function Choice({
       disabled={disabled}
       onClick={onSelect}
       className={`flex min-h-[56px] w-full items-start gap-3 rounded-sm2 border p-3.5 text-left transition disabled:opacity-45 sm:p-4 ${
-        checked ? 'border-accent2 bg-white/[.05]' : 'border-line bg-bg2 hover:border-line2'
+        checked ? 'border-accent2 bg-text/[.05]' : 'border-line bg-bg2 hover:border-line2'
       }`}
     >
       <span

@@ -120,7 +120,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
 
           <section>
             <h2 className="mb-3 font-display text-lg font-bold">{t.admin.orderHistory}</h2>
-            <ol className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
+            <ol className="surface-card divide-y divide-[rgba(16,24,48,.09)]">
               {order.statusHistory.map((entry) => (
                 <li key={`${entry.status}-${entry.at}`} className="flex items-center justify-between gap-4 px-4 py-3">
                   <span className="text-[13px]">{ORDER_STATUS_LABEL_FR[entry.status]}</span>

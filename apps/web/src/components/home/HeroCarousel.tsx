@@ -10,10 +10,15 @@ import { ArrowIcon, BoltIcon } from '@/components/ui/Icons';
 const AUTOPLAY_MS = 6500;
 const SWIPE_PX = 45;
 
+/*
+ * Corner tints behind the slide. On the old near-black page these were glows at .28-.45
+ * alpha; on white the same values read as grey smog, so they sit at roughly a quarter of
+ * the strength and act as a wash of brand colour instead.
+ */
 const TINT: Record<HeroSlide['tint'], { left: string; right: string }> = {
-  violet: { left: 'rgba(124,92,255,.45)', right: 'rgba(34,211,238,.28)' },
-  cyan: { left: 'rgba(34,211,238,.38)', right: 'rgba(124,92,255,.35)' },
-  pink: { left: 'rgba(255,77,141,.34)', right: 'rgba(124,92,255,.38)' },
+  violet: { left: 'rgba(109,75,255,.12)', right: 'rgba(14,165,196,.09)' },
+  cyan: { left: 'rgba(14,165,196,.12)', right: 'rgba(109,75,255,.10)' },
+  pink: { left: 'rgba(216,27,96,.10)', right: 'rgba(109,75,255,.11)' },
 };
 
 /**
@@ -115,7 +120,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 <span
                   aria-hidden
                   className={`block h-[6px] rounded-full transition-all ${
-                    i === index ? 'w-8 bg-grad shadow-glow' : 'w-3 bg-white/20 hover:bg-white/40'
+                    i === index ? 'w-8 bg-grad shadow-glow' : 'w-3 bg-text/20 hover:bg-text/40'
                   }`}
                 />
               </button>

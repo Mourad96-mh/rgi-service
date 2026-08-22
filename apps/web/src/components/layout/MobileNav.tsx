@@ -91,7 +91,7 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
               <button
                 type="button"
                 aria-label={t.common.close}
-                className="absolute inset-0 h-full w-full bg-bg/80 backdrop-blur-sm"
+                className="absolute inset-0 h-full w-full bg-[rgba(14,18,32,.45)] backdrop-blur-sm"
                 onClick={close}
               />
 
@@ -132,7 +132,7 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                     <Link
                       href={routes.account}
                       onClick={close}
-                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-sm2 border border-line bg-white/[.03] px-3 text-[13px] font-semibold text-muted"
+                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-sm2 border border-line bg-text/[.03] px-3 text-[13px] font-semibold text-muted"
                     >
                       <UserIcon className="h-4 w-4" />
                       {t.common.account}
@@ -140,7 +140,7 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                     <Link
                       href="/favoris"
                       onClick={close}
-                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-sm2 border border-line bg-white/[.03] px-3 text-[13px] font-semibold text-muted"
+                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-sm2 border border-line bg-text/[.03] px-3 text-[13px] font-semibold text-muted"
                     >
                       <HeartIcon className="h-4 w-4" />
                       {t.common.favorites}
@@ -150,7 +150,7 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                   <Link
                     href={routes.configurator}
                     onClick={close}
-                    className="mb-3 flex items-center gap-2 rounded-sm2 border border-line2 bg-white/[.04] px-4 py-3 font-semibold"
+                    className="mb-3 flex items-center gap-2 rounded-sm2 border border-line2 bg-text/[.04] px-4 py-3 font-semibold"
                   >
                     <BoltIcon className="h-4 w-4 text-accent2" />
                     <span className="grad-text">{t.nav.configurator}</span>

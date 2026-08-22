@@ -16,10 +16,10 @@ export function ConfiguratorCta() {
   return (
     <section className="py-10 sm:py-12 lg:py-14">
       <div className="wrap">
-        <div className="relative grid items-center gap-7 overflow-hidden rounded-lg2 border border-line2 bg-[linear-gradient(120deg,#12132022,#1a1e30)] p-5 sm:gap-9 sm:p-8 lg:grid-cols-[1.2fr_1fr] lg:p-12">
+        <div className="relative grid items-center gap-7 overflow-hidden rounded-lg2 border border-line2 bg-grad-soft p-5 shadow-soft sm:gap-9 sm:p-8 lg:grid-cols-[1.2fr_1fr] lg:p-12">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(124,92,255,.28),transparent_45%),radial-gradient(circle_at_90%_90%,rgba(34,211,238,.22),transparent_45%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(109,75,255,.14),transparent_50%),radial-gradient(circle_at_90%_90%,rgba(14,165,196,.12),transparent_50%)]"
           />
 
           <div className="relative z-10">

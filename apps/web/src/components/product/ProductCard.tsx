@@ -45,7 +45,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
         <button
           type="button"
           aria-label={t.common.favorites}
-          className="absolute right-2.5 top-2.5 z-10 grid h-11 w-11 place-items-center rounded-[9px] border border-black/10 bg-white/80 text-[#5b6178] backdrop-blur transition hover:text-bg sm:right-3 sm:top-3 sm:h-[34px] sm:w-[34px]"
+          className="absolute right-2.5 top-2.5 z-10 grid h-11 w-11 place-items-center rounded-[9px] border border-line2 bg-surface/85 text-muted backdrop-blur transition hover:text-accent3 sm:right-3 sm:top-3 sm:h-[34px] sm:w-[34px]"
         >
           <HeartIcon className="h-4 w-4" />
         </button>
@@ -113,7 +113,7 @@ export function StockLine({ stock }: { stock: number }) {
     >
       <span
         aria-hidden
-        className={`h-[7px] w-[7px] rounded-full ${low ? 'bg-warn shadow-[0_0_8px_#fbbf24]' : 'bg-success shadow-[0_0_8px_#34d399]'}`}
+        className={`h-[7px] w-[7px] rounded-full ${low ? 'bg-warn' : 'bg-success'}`}
       />
       {low ? t.common.lowStock : t.common.inStock}
     </span>

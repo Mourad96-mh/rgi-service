@@ -41,7 +41,7 @@ export function AdminNav({ role }: { role: Role }) {
             href={link.href}
             aria-current={active ? 'page' : undefined}
             className={`whitespace-nowrap rounded-sm2 px-3.5 py-2.5 text-[13.5px] font-medium transition ${
-              active ? 'bg-white/[.07] text-text' : 'text-muted hover:bg-white/[.04] hover:text-text'
+              active ? 'bg-text/[.07] text-text' : 'text-muted hover:bg-text/[.04] hover:text-text'
             }`}
           >
             {link.label}
