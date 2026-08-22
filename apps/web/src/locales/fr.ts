@@ -302,6 +302,7 @@ export const fr = {
     navHome: 'Tableau de bord',
     navOrders: 'Commandes',
     navProducts: 'Produits',
+    navHero: 'Carrousel',
     backToShop: 'Voir la boutique',
     // dashboard
     kpiOrdersToday: 'Commandes aujourd’hui',
@@ -346,6 +347,14 @@ export const fr = {
     status: 'Statut',
     category: 'Catégorie',
     edit: 'Modifier',
+    actions: 'Actions',
+    archive: 'Archiver',
+    archiving: 'Archivage…',
+    archived: 'Produit archivé.',
+    archiveConfirm:
+      'Archiver « {name} » ? Le produit disparaît de la boutique et de la recherche. Les commandes déjà passées le conservent, et tu peux le remettre en ligne à tout moment depuis sa fiche.',
+    archiveFailed: 'Archivage impossible.',
+    alreadyArchived: 'Déjà archivé',
     save: 'Enregistrer',
     saving: 'Enregistrement…',
     saved: 'Modifications enregistrées.',
@@ -394,6 +403,24 @@ export const fr = {
     imageTooBig: 'fichier trop lourd (10 Mo maximum).',
     imageUploadDisabled:
       'L’envoi d’images est indisponible : les identifiants Cloudinary ne sont pas configurés sur l’API.',
+    // hero carousel
+    heroTitle: 'Carrousel de la page d’accueil',
+    heroText:
+      'Remplace la photo de chaque diapositive. Le texte et le lien du bouton restent identiques — seule l’image change.',
+    heroSlide: 'Diapositive',
+    heroCurrent: 'Image actuelle',
+    heroDefault: 'Image par défaut',
+    heroCustom: 'Image personnalisée',
+    heroChange: 'Changer l’image',
+    heroReset: 'Revenir à l’image par défaut',
+    heroResetting: 'Réinitialisation…',
+    heroSaved: 'Image du carrousel mise à jour.',
+    heroResetDone: 'Image par défaut rétablie.',
+    heroSaveFailed: 'Mise à jour impossible.',
+    heroAltLabel: 'Texte alternatif de l’image',
+    heroAltHint:
+      'Décris la photo en une phrase : c’est ce que lisent les moteurs de recherche et les lecteurs d’écran.',
+    heroPreviewAria: 'Aperçu de la diapositive',
     attributesHelp:
       'Ces champs alimentent les filtres et le configurateur : une valeur erronée casse la compatibilité.',
     chooseCategory: 'Choisis d’abord une catégorie pour afficher ses caractéristiques.',
@@ -402,6 +429,107 @@ export const fr = {
     no: 'Non',
     adjustStock: 'Ajuster',
     stockUpdated: 'Stock mis à jour.',
+
+    // ---- navigation: one entry per job (ADMIN_DASHBOARD.md) ----
+    navStock: 'Stock',
+    navCategories: 'Catégories',
+    navAttributes: 'Caractéristiques',
+
+    // ---- Produits: the product record only (create / update / delete) ----
+    productsSubtitle:
+      'Fiches produits : création, modification, suppression. Les quantités se gèrent dans Stock.',
+    manageStock: 'Gérer le stock',
+    delete: 'Supprimer',
+    deleting: 'Suppression…',
+    deleted: 'Produit supprimé définitivement.',
+    deleteFailed: 'Suppression impossible.',
+    deleteTitle: 'Supprimer définitivement',
+    deleteOnlyArchive:
+      'Ce produit apparaît dans des commandes ou des configurations enregistrées. Il peut être archivé, mais pas supprimé : les commandes déjà passées doivent continuer à l’afficher.',
+    deleteConfirm:
+      'Supprimer « {name} » définitivement ? Cette action est irréversible. Le produit n’a encore été ni commandé ni utilisé dans une configuration.',
+    deleteTypeToConfirm: 'Tape SUPPRIMER pour confirmer',
+    deleteKeyword: 'SUPPRIMER',
+    checkingUsage: 'Vérification…',
+
+    // ---- Stock: quantities and alert thresholds only ----
+    stockTitle: 'Stock',
+    stockSubtitle:
+      'Quantités et seuils d’alerte. Pour modifier le prix ou la fiche d’un produit, passe par Produits.',
+    stockEmpty: 'Aucun produit pour ces filtres.',
+    stockLowOnly: 'Sous le seuil d’alerte uniquement',
+    stockAll: 'Tout le catalogue',
+    stockThreshold: 'Seuil',
+    stockSortStock: 'Stock croissant',
+    stockSortName: 'Nom (A → Z)',
+    stockSortRecent: 'Modifiés récemment',
+    stockSort: 'Trier',
+    stockHistory: 'Derniers mouvements',
+    stockHistoryEmpty: 'Aucun mouvement enregistré.',
+    stockReasonOrder: 'Commande',
+    stockReasonCancel: 'Annulation',
+    stockReasonManual: 'Correction manuelle',
+    stockReasonImport: 'Import',
+    stockOut: 'Rupture',
+    stockLow: 'Stock faible',
+    stockOk: 'En stock',
+    editProduct: 'Ouvrir la fiche',
+
+    // ---- Catégories ----
+    categoriesTitle: 'Catégories',
+    categoriesSubtitle:
+      'L’arborescence de la boutique. Elle définit les menus, les URL et les caractéristiques proposées.',
+    categoriesEmpty: 'Aucune catégorie pour le moment.',
+    newCategory: 'Ajouter une catégorie',
+    editCategory: 'Modifier la catégorie',
+    categoryName: 'Nom',
+    categoryParent: 'Catégorie parente',
+    categoryNone: 'Aucune (niveau principal)',
+    categoryType: 'Type',
+    categoryComponentType: 'Type de composant',
+    categoryComponentHelp:
+      'Détermine les caractéristiques techniques et le rôle de la catégorie dans le configurateur.',
+    categoryOrder: 'Ordre d’affichage',
+    categoryActive: 'Visible dans la boutique',
+    categorySlugHelp: 'Laisse vide pour générer le slug à partir du nom.',
+    categoryDeleteConfirm:
+      'Supprimer la catégorie « {name} » ? Les produits qu’elle contient ne seront pas supprimés, mais ils n’apparaîtront plus dans ce rayon.',
+    categorySaved: 'Catégorie enregistrée.',
+    categoryDeleted: 'Catégorie supprimée.',
+
+    // ---- Caractéristiques techniques (attribute definitions) ----
+    attributesTitle: 'Caractéristiques techniques',
+    attributesSubtitle:
+      'Les champs typés que l’équipe remplit sur chaque produit. Ils alimentent les filtres de la boutique et les règles de compatibilité du configurateur.',
+    attributesEmpty: 'Aucune caractéristique définie pour ce type.',
+    newAttribute: 'Ajouter une caractéristique',
+    editAttribute: 'Modifier la caractéristique',
+    attrCategoryType: 'S’applique à',
+    attrKey: 'Clé technique',
+    attrKeyHelp:
+      'En minuscules, sans espaces (ex. : tdp_watts). C’est la clé que lisent les règles du configurateur — elle ne se modifie plus après création.',
+    attrLabel: 'Libellé affiché',
+    attrDataType: 'Type de donnée',
+    attrTypeString: 'Texte',
+    attrTypeNumber: 'Nombre',
+    attrTypeBoolean: 'Oui / Non',
+    attrTypeEnum: 'Liste de choix',
+    attrUnit: 'Unité',
+    attrUnitHelp: 'Affichée après la valeur (ex. : W, GB, mm).',
+    attrEnumValues: 'Valeurs possibles',
+    attrEnumHelp: 'Une valeur par ligne.',
+    attrMultiple: 'Plusieurs valeurs à la fois',
+    attrRequired: 'Obligatoire sur la fiche produit',
+    attrFilterable: 'Utilisable comme filtre',
+    attrCompatibility: 'Utilisée par le configurateur',
+    attrCompatWarning:
+      'Cette caractéristique sert aux règles de compatibilité : la modifier peut changer les assemblages autorisés.',
+    attrOrder: 'Ordre',
+    attrDeleteConfirm:
+      'Supprimer la caractéristique « {name} » ? Les valeurs déjà saisies sur les produits ne seront plus lues.',
+    attrSaved: 'Caractéristique enregistrée.',
+    attrDeleted: 'Caractéristique supprimée.',
+    adminOnly: 'Réservé aux administrateurs.',
   },
   contact: {
     whatsapp: 'WhatsApp',

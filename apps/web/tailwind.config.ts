@@ -10,6 +10,15 @@ const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      /*
+       * Tailwind's defaults plus two ends the shop actually meets: `xs` for the 320–400 px
+       * phones that are still a real share of Moroccan traffic, and `3xl` for the desktops
+       * wide enough to earn a fifth product column.
+       */
+      screens: {
+        xs: '400px',
+        '3xl': '1760px',
+      },
       colors: {
         bg: '#0a0b12',
         bg2: '#0f1119',
@@ -48,6 +57,9 @@ const config: Config = {
       },
       maxWidth: {
         wrap: '1220px',
+        // The reading column stays 1220 px, but full-bleed grids may breathe wider on
+        // very large monitors rather than leaving half the screen empty.
+        'wrap-wide': '1560px',
       },
       transitionDuration: {
         DEFAULT: '200ms',

@@ -55,8 +55,14 @@ export function BuildSummary({
   }
 
   return (
-    <aside className="surface-card p-6 lg:sticky lg:top-24">
-      <div className="flex items-center justify-between gap-3">
+    /*
+     * The card treatment (rounded corners, full border) belongs to the desktop sidebar.
+     * Below `lg` this same element is the body of the bottom sheet, where a rounded box
+     * floating inside another box would read as a mistake — only the rule separating it
+     * from the sheet's bar survives.
+     */
+    <aside className="border-t border-line bg-surface p-4 sm:p-5 lg:sticky lg:top-24 lg:rounded-card lg:border lg:p-6">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <h2 className="font-display text-lg font-bold">{t.configurator.summaryTitle}</h2>
         <span
           className={`chip ${ready ? 'bg-success/15 text-success' : 'bg-white/[.06] text-faint'}`}
@@ -72,9 +78,9 @@ export function BuildSummary({
           value={`-${price((evaluation?.subtotal ?? 0) - (evaluation?.total ?? 0))}`}
           accent
         />
-        <div className="mt-1 flex items-end justify-between border-t border-line pt-3">
+        <div className="mt-1 flex flex-wrap items-end justify-between gap-x-3 border-t border-line pt-3">
           <dt className="text-sm text-muted">{t.configurator.total}</dt>
-          <dd className="grad-text font-display text-[26px] font-bold">
+          <dd className="grad-text t-h3 font-display font-bold">
             {price(evaluation?.total ?? 0)}
           </dd>
         </div>
@@ -145,7 +151,7 @@ export function BuildSummary({
             });
             setAdded(true);
           }}
-          className="btn btn-primary justify-center disabled:cursor-not-allowed disabled:opacity-40"
+          className="btn btn-primary w-full justify-center disabled:cursor-not-allowed disabled:opacity-40"
         >
           <CartIcon />
           {t.configurator.addToCart}
@@ -154,7 +160,7 @@ export function BuildSummary({
           type="button"
           onClick={save}
           disabled={saving || chosen === 0}
-          className="btn btn-ghost justify-center disabled:opacity-40"
+          className="btn btn-ghost w-full justify-center disabled:opacity-40"
         >
           <BoltIcon className="h-4 w-4" />
           {saving ? t.configurator.saving : t.configurator.save}
@@ -163,7 +169,7 @@ export function BuildSummary({
           <button
             type="button"
             onClick={clear}
-            className="text-[12.5px] text-faint transition hover:text-accent3"
+            className="min-h-[44px] text-[12.5px] text-faint transition hover:text-accent3"
           >
             {t.configurator.reset}
           </button>
@@ -198,7 +204,7 @@ export function BuildSummary({
             onClick={() => {
               void navigator.clipboard?.writeText(shareUrl).then(() => setCopied(true));
             }}
-            className="mt-2 text-[12.5px] font-semibold text-accent2 hover:underline"
+            className="mt-1 min-h-[44px] text-[12.5px] font-semibold text-accent2 hover:underline"
           >
             {copied ? t.configurator.copied : t.configurator.copy}
           </button>

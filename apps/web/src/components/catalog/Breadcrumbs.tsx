@@ -24,9 +24,19 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
 
   return (
     <>
-      <nav aria-label="Fil d'Ariane" className="mb-6 flex flex-wrap items-center gap-2 text-[13px] text-faint">
+      {/*
+        A product trail ends with the full product name, which on a phone is longer than
+        the screen. Below `sm` the trail scrolls sideways inside its own box (`.scroll-x`)
+        instead of wrapping to four ragged lines or widening the page; from `sm` up there
+        is room to wrap normally.
+      */}
+      <nav
+        aria-label="Fil d'Ariane"
+        className="scroll-x mb-5 flex items-center gap-2 whitespace-nowrap text-[13px] text-faint
+          sm:mb-6 sm:flex-wrap sm:whitespace-normal"
+      >
         {items.map((item, index) => (
-          <span key={item.href} className="flex items-center gap-2">
+          <span key={item.href} className="flex shrink-0 items-center gap-2 sm:shrink">
             {index > 0 ? <span aria-hidden>/</span> : null}
             {index === items.length - 1 ? (
               <span className="text-muted">{item.label}</span>

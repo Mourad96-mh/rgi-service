@@ -17,15 +17,17 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-5 border-t border-line bg-bg2 pb-[30px] pt-[52px]">
+    <footer className="mt-5 border-t border-line bg-bg2 pb-[30px] pt-10 sm:pt-[52px]">
       <div className="wrap">
-        <div className="mb-9 grid gap-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <div>
+        {/* One column on phones, two from `sm`, then the mockup's 4-column split from `lg`
+            — the brand cell is the wide one, so it must not be forced into a 1fr track. */}
+        <div className="mb-8 grid gap-8 sm:grid-cols-2 sm:gap-9 lg:mb-9 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          <div className="min-w-0">
             <Link href={routes.home}>
               <Logo />
             </Link>
             <p className="my-3.5 max-w-[280px] text-[13.5px] text-muted">{t.footer.about}</p>
-            <div className="mt-3.5 flex gap-2">
+            <div className="mt-3.5 flex flex-wrap gap-2">
               {['CMI', 'Visa', 'Mastercard', 'Cash'].map((label) => (
                 <span
                   key={label}
@@ -37,7 +39,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
             </div>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h5 className="mb-4 text-[13px] font-semibold uppercase tracking-[.06em] text-faint">
               {t.footer.shop}
             </h5>
@@ -52,7 +54,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
             ))}
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h5 className="mb-4 text-[13px] font-semibold uppercase tracking-[.06em] text-faint">
               {t.footer.service}
             </h5>
@@ -67,7 +69,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
             ))}
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h5 className="mb-4 text-[13px] font-semibold uppercase tracking-[.06em] text-faint">
               {t.footer.contact}
             </h5>
@@ -97,11 +99,13 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-between gap-2.5 border-t border-line pt-[22px] text-[12.5px] text-faint">
+        <div className="flex flex-wrap justify-between gap-x-5 gap-y-2.5 border-t border-line pt-[22px] text-[12.5px] text-faint">
           <span>
             © {year} {t.common.brand}. {t.footer.rights}
           </span>
-          <span className="flex gap-4">
+          {/* Three legal links do not fit on one 320 px line; they wrap rather than push
+              the row past the gutter. */}
+          <span className="flex flex-wrap gap-x-4 gap-y-1.5">
             <Link href="/mentions-legales" className="transition hover:text-muted">
               {t.footer.legal}
             </Link>

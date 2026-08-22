@@ -49,7 +49,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   return (
     <section
-      className="relative overflow-hidden pb-6 pt-8"
+      className="relative overflow-hidden pb-6 pt-5 sm:pt-8"
       aria-roledescription="carrousel"
       aria-label={t.home.carouselLabel}
       onMouseEnter={() => setPaused(true)}
@@ -71,14 +71,16 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         if (delta >= SWIPE_PX) prev();
       }}
     >
+      {/* The section clips these, so they never widen the page; the fluid size stops a
+          520 px glow from washing out an entire 360 px screen. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-[140px] -top-[120px] h-[520px] w-[520px] blur-[30px] transition-[background] duration-700"
+        className="pointer-events-none absolute -left-[22vw] -top-[120px] h-[min(520px,95vw)] w-[min(520px,95vw)] blur-[30px] transition-[background] duration-700"
         style={{ background: `radial-gradient(circle, ${TINT[slides[index].tint].left}, transparent 65%)` }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-[120px] top-[40px] h-[480px] w-[480px] blur-[30px] transition-[background] duration-700"
+        className="pointer-events-none absolute -right-[20vw] top-[40px] h-[min(480px,90vw)] w-[min(480px,90vw)] blur-[30px] transition-[background] duration-700"
         style={{ background: `radial-gradient(circle, ${TINT[slides[index].tint].right}, transparent 65%)` }}
       />
 
@@ -94,8 +96,13 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
-          <div className="flex gap-2">
+        <div className="mt-4 flex items-center justify-between gap-4 sm:mt-5">
+          {/*
+           * The dot is 6 px tall, which is nowhere near a tap target. The *button* is
+           * 44 px tall with the dot drawn inside it, so the look is unchanged and the
+           * hit area is real. Horizontal padding replaces the row gap for the same reason.
+           */}
+          <div className="-my-2 flex">
             {slides.map((slide, i) => (
               <button
                 key={slide.id}
@@ -103,10 +110,15 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 aria-current={i === index}
                 aria-label={t.home.carouselGoTo(i + 1)}
                 onClick={() => goTo(i)}
-                className={`h-[6px] rounded-full transition-all ${
-                  i === index ? 'w-8 bg-grad shadow-glow' : 'w-3 bg-white/20 hover:bg-white/40'
-                }`}
-              />
+                className="grid h-11 shrink-0 place-items-center px-1.5"
+              >
+                <span
+                  aria-hidden
+                  className={`block h-[6px] rounded-full transition-all ${
+                    i === index ? 'w-8 bg-grad shadow-glow' : 'w-3 bg-white/20 hover:bg-white/40'
+                  }`}
+                />
+              </button>
             ))}
           </div>
 
@@ -143,18 +155,20 @@ function Slide({
       aria-label={`${position + 1} / ${total}`}
       aria-hidden={!active}
     >
-      <div className="grid items-center gap-8 rounded-lg2 border border-line2 bg-surface/60 p-7 backdrop-blur-[6px] md:p-10 lg:grid-cols-[1.05fr_.95fr]">
+      <div className="grid items-center gap-6 rounded-lg2 border border-line2 bg-surface/60 p-5 backdrop-blur-[6px] sm:gap-8 sm:p-7 md:p-10 lg:grid-cols-[1.05fr_.95fr]">
         <div>
           <span className="pill">
             {slide.id === 'configurator' ? <BoltIcon className="h-3.5 w-3.5 text-accent2" /> : null}
             {slide.pill}
           </span>
-          <h2 className="my-[18px] font-display text-[clamp(30px,5.2vw,50px)] font-bold leading-[1.04]">
+          <h2 className="t-display my-4 font-display font-bold sm:my-[18px]">
             {slide.title1}
             <br />
             <span className="grad-text">{slide.title2}</span>
           </h2>
-          <p className="mb-7 max-w-[470px] text-[16.5px] text-muted">{slide.text}</p>
+          <p className="mb-6 max-w-[470px] text-[15px] text-muted sm:mb-7 sm:text-[16.5px]">
+            {slide.text}
+          </p>
           <Link
             href={slide.href}
             className="btn btn-primary"
@@ -171,7 +185,7 @@ function Slide({
             alt={slide.imageAlt}
             fill
             sizes="(max-width:1024px) 90vw, 45vw"
-            className="object-contain p-6"
+            className="object-contain p-4 sm:p-6"
             priority={position === 0}
           />
         </div>

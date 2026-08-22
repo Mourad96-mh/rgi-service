@@ -10,14 +10,14 @@ const ITEMS = [
 /** The four reassurance cards (DESIGN_SYSTEM.md §5 "Trust band"). */
 export function TrustBand() {
   return (
-    <section className="py-14">
-      <div className="wrap grid gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+    <section className="py-10 sm:py-12 lg:py-14">
+      <div className="wrap grid gap-4 sm:grid-cols-2 sm:gap-[18px] lg:grid-cols-4">
         {ITEMS.map((item) => (
-          <div key={item.title} className="surface-card flex items-start gap-3.5 p-[22px]">
+          <div key={item.title} className="surface-card flex items-start gap-3 p-4 sm:gap-3.5 sm:p-[22px]">
             <span aria-hidden className="text-2xl">
               {item.ico}
             </span>
-            <div>
+            <div className="min-w-0">
               <h3 className="mb-1 text-[14.5px] font-semibold">{item.title}</h3>
               <p className="text-[12.5px] text-faint">{item.text}</p>
             </div>

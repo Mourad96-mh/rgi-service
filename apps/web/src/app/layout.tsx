@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Orbitron, Space_Grotesk } from 'next/font/google';
 import { SITE_NAME, SITE_URL } from '@/lib/env';
 import '@/styles/globals.css';
@@ -44,6 +44,21 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
+};
+
+/**
+ * Without this every mobile browser assumes a ~980 px desktop viewport and renders the
+ * whole site zoomed out — media queries never fire and the "responsive" CSS below is
+ * inert. `maximumScale` / `userScalable` are deliberately left alone: pinch-zoom is an
+ * accessibility right, not a layout bug (DESIGN_SYSTEM.md §8).
+ *
+ * `themeColor` paints the Android address bar the page background, so the browser chrome
+ * does not sit as a white band above a near-black site.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0a0b12',
 };
 
 /**

@@ -31,7 +31,7 @@ export default async function HomePage() {
       <Hero />
 
       {apiDown ? (
-        <div className="wrap py-10">
+        <div className="wrap py-8 sm:py-10">
           <EmptyState title={t.common.apiDown} />
         </div>
       ) : null}
@@ -51,7 +51,7 @@ export default async function HomePage() {
           href={routes.category('pc-gamer')}
           linkLabel={t.common.seeAll}
         >
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4">
             {prebuilts.data.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -61,7 +61,7 @@ export default async function HomePage() {
 
       {latest?.data.length ? (
         <Section title={t.home.newTitle} text={t.home.newText}>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4">
             {latest.data.slice(0, 8).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

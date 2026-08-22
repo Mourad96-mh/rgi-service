@@ -24,10 +24,20 @@ export function Logo({
   // The wordmark is sized to sit flush with the mark above it. The mark is 2.139:1, so a
   // mark of height H is 2.139H wide; Orbitron 700 sets "Service" at roughly 5.2× its font
   // size in mixed case, hence the ~0.41 ratio. Tracking closes the remaining gap.
-  const s = size === 'sm' ? { mark: 26, word: 10.5 } : { mark: 34, word: 13.5 };
+  //
+  // The default size is fluid rather than a flat 34 px: at 34 the lockup is ~73 px wide,
+  // and on a 320 px header sharing the row with four 44 px tap targets that is the
+  // difference between fitting and wrapping. It reaches its full size by ~740 px. Both
+  // terms shrink by the same ratio so the two halves stay optically locked together.
+  const s =
+    size === 'sm'
+      ? { mark: '26px', word: '10.5px' }
+      : { mark: 'clamp(27px, 4.6vw, 34px)', word: 'clamp(10.75px, 1.83vw, 13.5px)' };
 
   return (
-    <span className={`inline-flex flex-col items-center leading-none ${className ?? ''}`}>
+    <span
+      className={`inline-flex shrink-0 flex-col items-center whitespace-nowrap leading-none ${className ?? ''}`}
+    >
       <LogoMark
         className="w-auto text-text"
         style={{ height: s.mark }}

@@ -1,3 +1,4 @@
+import type { HeroSlideId, HeroSlideImage } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 
@@ -6,11 +7,14 @@ import { routes } from '@/lib/routes';
  * component, so a slide is added or reordered by editing one array — and so this list can
  * later be served from the admin without touching the UI.
  *
- * `image` points at a real catalog photo already in `public/products`; keep them in sync
- * with `scripts/product-images.json`.
+ * `image` is the **default** photo — a real catalogue shot from `public/products`, kept in
+ * sync with `scripts/product-images.json`. Staff can replace it per slide from
+ * `/admin/carrousel`; that override lives in the database and is applied by
+ * `applyHeroImages` below, so a slide with no override still renders exactly as written
+ * here and the homepage keeps working when the API is unreachable.
  */
 export type HeroSlide = {
-  id: string;
+  id: HeroSlideId;
   pill: string;
   title1: string;
   title2: string;
@@ -67,3 +71,23 @@ export const HERO_SLIDES: HeroSlide[] = [
     tint: 'cyan',
   },
 ];
+
+/**
+ * Merge the staff-chosen photos over the defaults.
+ *
+ * Overrides are matched by slide id and ignored when they name a slide that no longer
+ * exists, so removing a slide from the array above cannot resurrect it or crash the page.
+ */
+export function applyHeroImages(
+  overrides: HeroSlideImage[] | null | undefined,
+  slides: HeroSlide[] = HERO_SLIDES,
+): HeroSlide[] {
+  if (!overrides?.length) return slides;
+
+  const bySlide = new Map(overrides.map((override) => [override.slideId, override]));
+
+  return slides.map((slide) => {
+    const override = bySlide.get(slide.id);
+    return override ? { ...slide, image: override.url, imageAlt: override.alt } : slide;
+  });
+}

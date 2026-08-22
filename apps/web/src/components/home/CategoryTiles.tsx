@@ -15,18 +15,18 @@ const ICONS: Record<string, string> = {
 
 export function CategoryTiles({ categories }: { categories: CategoryNode[] }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
       {categories.map((category) => (
         <Link
           key={category.id}
           href={routes.category(category.slug)}
-          className="group relative min-h-[130px] overflow-hidden rounded-card border border-line bg-surface p-[22px] transition hover:-translate-y-1 hover:border-accent hover:shadow-soft"
+          className="group relative min-h-[112px] overflow-hidden rounded-card border border-line bg-surface p-4 transition hover:-translate-y-1 hover:border-accent hover:shadow-soft sm:min-h-[130px] sm:p-[22px]"
         >
-          <span aria-hidden className="mb-3.5 block text-[30px]">
+          <span aria-hidden className="mb-2.5 block text-[26px] sm:mb-3.5 sm:text-[30px]">
             {ICONS[category.slug] ?? '🔧'}
           </span>
-          <h3 className="text-base font-semibold">{category.name.fr}</h3>
-          <span className="text-[12.5px] text-faint">
+          <h3 className="text-[15px] font-semibold sm:text-base">{category.name.fr}</h3>
+          <span className="block text-[12.5px] text-faint">
             {category.children.length
               ? `${category.children.length} sous-catégories`
               : 'Voir la sélection'}

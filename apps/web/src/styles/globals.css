@@ -37,6 +37,20 @@
     @apply bg-bg text-text font-sans antialiased;
     line-height: 1.5;
     overflow-x: hidden;
+    /*
+     * Part numbers and model names ("ASUS ROG STRIX B650E-F GAMING WIFI") are long,
+     * unbroken tokens. Without this they push a card wider than a 320 px phone and the
+     * whole page gains a horizontal scrollbar.
+     */
+    overflow-wrap: break-word;
+  }
+
+  /* No media ever outgrows its column, whatever intrinsic size it reports. */
+  img,
+  video,
+  svg,
+  canvas {
+    max-width: 100%;
   }
 
   h1,
@@ -58,8 +72,57 @@
 }
 
 @layer components {
+  /*
+   * The page gutter. 16 px on phones (24 px eats a tenth of a 320 px screen), 24 px from
+   * `sm` up. `.wrap-wide` is the same rhythm for full-bleed grids that may run wider than
+   * the 1220 px reading column on large monitors.
+   */
   .wrap {
-    @apply mx-auto w-full max-w-wrap px-6;
+    @apply mx-auto w-full max-w-wrap px-4 sm:px-6;
+  }
+
+  .wrap-wide {
+    @apply mx-auto w-full max-w-wrap px-4 sm:px-6 3xl:max-w-wrap-wide;
+  }
+
+  /*
+   * Fluid type scale. Every heading in the site should use one of these instead of a
+   * hardcoded `text-[Npx]`, so a title that reads well at 1440 px does not wrap to four
+   * lines on a 320 px phone. `clamp(min, preferred, max)` — the middle term is viewport
+   * relative, the outer two are the floor and ceiling.
+   */
+  .t-display {
+    font-size: clamp(2rem, 1.15rem + 4.2vw, 3.5rem);
+    line-height: 1.06;
+  }
+
+  .t-h1 {
+    font-size: clamp(1.65rem, 1.1rem + 2.6vw, 2.35rem);
+    line-height: 1.14;
+  }
+
+  .t-h2 {
+    font-size: clamp(1.375rem, 1.05rem + 1.5vw, 1.875rem);
+    line-height: 1.2;
+  }
+
+  .t-h3 {
+    font-size: clamp(1.2rem, 1.02rem + 0.85vw, 1.625rem);
+    line-height: 1.25;
+  }
+
+  .t-h4 {
+    font-size: clamp(1.05rem, 0.97rem + 0.4vw, 1.25rem);
+    line-height: 1.3;
+  }
+
+  /*
+   * A wide element — a spec table, an admin data table, a filter row — that cannot shrink
+   * any further. It scrolls inside its own box so the *page* never does.
+   */
+  .scroll-x {
+    @apply -mx-4 overflow-x-auto overscroll-x-contain px-4 sm:mx-0 sm:px-0;
+    scrollbar-width: thin;
   }
 
   .grad-text {
@@ -70,8 +133,9 @@
   }
 
   .btn {
-    @apply inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-sm2 border
-      border-transparent px-[22px] py-[13px] text-[15px] font-semibold transition;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2
+      whitespace-nowrap rounded-sm2 border border-transparent px-[18px] py-3 text-sm
+      font-semibold transition sm:px-[22px] sm:py-[13px] sm:text-[15px];
   }
 
   .btn-primary {
@@ -108,14 +172,23 @@
     @apply rounded-md border border-line bg-white/[.04] px-2 py-[3px] text-[11px] text-muted;
   }
 
+  /* 44 px is the minimum comfortable tap target on touch; desktop keeps the 42 px mockup
+     size where a mouse makes the extra 2 px unnecessary. */
   .icobtn {
-    @apply grid h-[42px] w-[42px] place-items-center rounded-[11px] border border-line
-      bg-surface text-muted transition hover:border-line2 hover:text-text;
+    @apply grid h-11 w-11 shrink-0 place-items-center rounded-[11px] border border-line
+      bg-surface text-muted transition hover:border-line2 hover:text-text
+      sm:h-[42px] sm:w-[42px];
   }
 
+  /*
+   * `text-base` under `sm` is not a style choice: iOS Safari force-zooms the viewport
+   * when a focused input's font-size is below 16 px, and the user is then left on a
+   * page they have to pinch back out of. 14 px returns from `sm` up.
+   */
   .field {
-    @apply w-full rounded-sm2 border border-line bg-surface px-4 py-[11px] text-sm text-text
-      placeholder:text-faint focus:border-accent focus:outline-none;
+    @apply w-full min-w-0 rounded-sm2 border border-line bg-surface px-4 py-3 text-base
+      text-text placeholder:text-faint focus:border-accent focus:outline-none
+      sm:py-[11px] sm:text-sm;
   }
 }
 

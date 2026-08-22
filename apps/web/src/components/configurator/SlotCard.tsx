@@ -40,7 +40,12 @@ export function SlotCard({
         errors.length ? 'border-accent3' : open ? 'border-line2' : ''
       }`}
     >
-      <div className="flex flex-wrap items-center gap-4 p-5">
+      {/*
+       * `basis-[180px]` rather than `min-w-[180px]`: the text block still asks for 180 px
+       * so the button stays on the same line on a wide card, but it may shrink below that
+       * on a 320 px phone instead of pushing the row into a horizontal scroll.
+       */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 p-4 sm:p-5">
         <span
           aria-hidden
           className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg text-sm font-bold ${
@@ -50,9 +55,11 @@ export function SlotCard({
           {filled ? <CheckIcon className="h-4 w-4" /> : index + 1}
         </span>
 
-        <div className="min-w-[180px] flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-display text-[16px] font-bold">{slot.labelFr}</h3>
+        <div className="min-w-0 flex-1 basis-[180px]">
+          <div className="flex flex-wrap items-center gap-x-2">
+            <h3 className="font-display text-[15.5px] font-bold sm:text-[16px]">
+              {slot.labelFr}
+            </h3>
             <span className="text-[11px] uppercase tracking-[.05em] text-faint">
               {slot.required ? t.configurator.required : t.configurator.optional}
             </span>
@@ -60,10 +67,14 @@ export function SlotCard({
           <p className="mt-1 max-w-[62ch] text-[12.5px] text-muted">{slot.helpFr}</p>
         </div>
 
+        {/* Full width when it has wrapped to its own line — a stray 90 px button floating
+            under the title reads as unfinished. */}
         <button
           type="button"
           onClick={() => setOpenSlot(open ? null : slot.id)}
-          className={`btn ${filled ? 'btn-ghost' : 'btn-primary'} !px-4 !py-2.5 !text-[13.5px]`}
+          className={`btn ${
+            filled ? 'btn-ghost' : 'btn-primary'
+          } w-full !px-4 !py-2.5 !text-[13.5px] xs:w-auto`}
           aria-expanded={open}
         >
           {open ? t.configurator.close : filled ? t.configurator.change : t.configurator.choose}
@@ -71,7 +82,7 @@ export function SlotCard({
       </div>
 
       {filled ? (
-        <ul className="flex flex-col gap-2 px-5 pb-5">
+        <ul className="flex flex-col gap-2 px-4 pb-4 sm:px-5 sm:pb-5">
           {parts.map((part) => (
             <ChosenPart
               key={part.id}
@@ -84,7 +95,7 @@ export function SlotCard({
               <button
                 type="button"
                 onClick={() => setOpenSlot(slot.id)}
-                className="text-[12.5px] font-semibold text-accent2 hover:underline"
+                className="inline-flex min-h-[44px] items-center text-[12.5px] font-semibold text-accent2 hover:underline"
               >
                 + {t.configurator.addAnother}
               </button>
@@ -94,7 +105,7 @@ export function SlotCard({
       ) : null}
 
       {errors.length || warnings.length ? (
-        <ul className="flex flex-col gap-1.5 px-5 pb-5">
+        <ul className="flex flex-col gap-1.5 px-4 pb-4 sm:px-5 sm:pb-5">
           {errors.map((violation) => (
             <li key={violation.ruleId} className="text-[12.5px] font-semibold text-accent3">
               {violation.messageFr}
@@ -117,24 +128,31 @@ function ChosenPart({ part, onRemove }: { part: ProductSummary; onRemove: () => 
   const image = primaryImage(part);
 
   return (
-    <li className="flex items-center gap-3 rounded-sm2 border border-line bg-bg2 p-2.5">
+    /*
+     * Four things — thumbnail, name, price, remove — do not fit on one 320 px line. The
+     * price and the remove control travel together as one group so they wrap as a unit and
+     * stay right-aligned instead of splitting across two lines.
+     */
+    <li className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-sm2 border border-line bg-bg2 p-2.5">
       <span className="photo-tile relative h-[54px] w-[54px] shrink-0">
         {image ? (
           <Image src={image.url} alt="" fill sizes="54px" className="object-contain p-1" />
         ) : null}
       </span>
-      <span className="min-w-0 flex-1">
+      <span className="min-w-0 flex-1 basis-[120px]">
         <span className="block truncate text-[13px] font-semibold">{part.name.fr}</span>
         <span className="text-[11.5px] text-faint">{part.brand}</span>
       </span>
-      <span className="font-display text-[14px] font-bold">{price(part.effectivePrice)}</span>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="rounded-md px-2 py-1 text-[12px] text-faint transition hover:text-accent3"
-      >
-        {t.configurator.remove}
-      </button>
+      <span className="ml-auto flex items-center gap-2">
+        <span className="font-display text-[14px] font-bold">{price(part.effectivePrice)}</span>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="min-h-[44px] rounded-md px-2 text-[12px] text-faint transition hover:text-accent3"
+        >
+          {t.configurator.remove}
+        </button>
+      </span>
     </li>
   );
 }

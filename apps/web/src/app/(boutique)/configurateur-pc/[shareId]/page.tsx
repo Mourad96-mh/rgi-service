@@ -30,45 +30,47 @@ export default async function SharedBuildPage({ params }: { params: { shareId: s
   }
 
   return (
-    <div className="wrap py-12">
+    <div className="wrap py-8 sm:py-12">
       <span className="pill">{t.configurator.sharedTitle}</span>
-      <h1 className="mt-5 font-display text-[clamp(26px,4.5vw,38px)] font-bold">
+      <h1 className="t-h1 mt-4 font-display font-bold sm:mt-5">
         {build.name ?? t.configurator.summaryTitle}
       </h1>
 
-      <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
+      <div className="mt-6 grid items-start gap-5 sm:mt-8 sm:gap-6 lg:grid-cols-[1fr_340px]">
         <ul className="flex flex-col gap-2.5">
           {build.items.map((item, index) => (
+            /* The price wraps under the part rather than stealing width from its name:
+               below ~360 px the two cannot share a line. */
             <li
               key={`${item.slot}-${item.product}-${index}`}
-              className="surface-card flex items-center gap-4 p-3.5"
+              className="surface-card flex flex-wrap items-center gap-x-4 gap-y-2 p-3 sm:p-3.5"
             >
-              <span className="photo-tile relative h-[62px] w-[62px] shrink-0">
+              <span className="photo-tile relative h-[54px] w-[54px] shrink-0 xs:h-[62px] xs:w-[62px]">
                 {item.image ? (
                   <Image
                     src={item.image}
                     alt=""
                     fill
-                    sizes="62px"
+                    sizes="(max-width: 400px) 54px, 62px"
                     className="object-contain p-1.5"
                   />
                 ) : null}
               </span>
-              <span className="min-w-0 flex-1">
+              <span className="min-w-0 flex-1 basis-[130px]">
                 <span className="block text-[11px] uppercase tracking-[.05em] text-faint">
                   {SLOTS.find((slot) => slot.id === item.slot)?.labelFr ?? item.slot}
                 </span>
                 <span className="block truncate text-[14px] font-semibold">{item.name}</span>
                 <span className="text-[11.5px] text-faint">{item.brand}</span>
               </span>
-              <span className="font-display text-[15px] font-bold">
+              <span className="ml-auto font-display text-[15px] font-bold">
                 {price(item.priceAtBuild)}
               </span>
             </li>
           ))}
         </ul>
 
-        <aside className="surface-card p-6 lg:sticky lg:top-24">
+        <aside className="surface-card p-5 sm:p-6 lg:sticky lg:top-24">
           <dl className="flex flex-col gap-2.5 text-sm">
             <div className="flex justify-between gap-4">
               <dt className="text-muted">{t.configurator.subtotal}</dt>

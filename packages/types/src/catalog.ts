@@ -184,3 +184,34 @@ export function effectivePriceAt(
   }
   return p.price;
 }
+
+/**
+ * Whether a product may be destroyed rather than archived (ADMIN_DASHBOARD.md — the
+ * Produits section owns the product *record*, so it must be able to delete a mistake).
+ *
+ * A product is referenced in three separate places, and all three have to be clear before
+ * a hard delete is safe:
+ *   1. `order.items[].product`               — an ordinary catalogue line
+ *   2. `order.items[].build.items[].product` — a part inside a configured PC
+ *   3. `build.items[].product`               — a saved, shareable configurator build
+ * Missing any one of them would leave an order line or a shared build pointing at nothing.
+ */
+export interface ProductUsage {
+  /** Orders referencing the product, either as a line or inside a build. */
+  orderCount: number;
+  /** Saved configurator builds referencing it. */
+  buildCount: number;
+  /** True only when every count is zero — the product has no history to protect. */
+  canDelete: boolean;
+}
+
+/** One row of the stock audit trail (DATA_MODEL.md §8), as the Stock section shows it. */
+export interface InventoryMovement {
+  id: string;
+  /** negative on a sale, positive on a restock */
+  delta: number;
+  reason: 'order' | 'cancel' | 'manual' | 'import';
+  /** e.g. the order number the movement belongs to */
+  ref?: string;
+  createdAt: string;
+}

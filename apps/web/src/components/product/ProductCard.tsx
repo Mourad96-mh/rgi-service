@@ -25,23 +25,27 @@ export function ProductCard({ product }: { product: ProductSummary }) {
             src={image.url}
             alt={image.alt ?? product.name.fr}
             fill
-            sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
-            className="object-contain p-6"
+            sizes="(max-width:640px) 92vw, (max-width:1280px) 46vw, (max-width:1760px) 30vw, 23vw"
+            className="object-contain p-4 sm:p-6"
           />
         ) : (
-          <span aria-hidden className="text-[56px] opacity-30 grayscale">
+          <span aria-hidden className="text-[clamp(40px,11vw,56px)] opacity-30 grayscale">
             🖥️
           </span>
         )}
 
         {off !== null ? (
-          <span className="chip absolute left-3 top-3 bg-accent3 text-white">-{off}%</span>
+          <span className="chip absolute left-2.5 top-2.5 z-10 bg-accent3 text-white sm:left-3 sm:top-3">
+            -{off}%
+          </span>
         ) : null}
 
+        {/* `z-10` keeps the badge and this button above the full-tile link overlay below —
+            without it the link, being the later positioned sibling, swallows the tap. */}
         <button
           type="button"
           aria-label={t.common.favorites}
-          className="absolute right-3 top-3 grid h-[34px] w-[34px] place-items-center rounded-[9px] border border-black/10 bg-white/80 text-[#5b6178] backdrop-blur transition hover:text-bg"
+          className="absolute right-2.5 top-2.5 z-10 grid h-11 w-11 place-items-center rounded-[9px] border border-black/10 bg-white/80 text-[#5b6178] backdrop-blur transition hover:text-bg sm:right-3 sm:top-3 sm:h-[34px] sm:w-[34px]"
         >
           <HeartIcon className="h-4 w-4" />
         </button>
@@ -49,12 +53,14 @@ export function ProductCard({ product }: { product: ProductSummary }) {
         <Link href={href} className="absolute inset-0" aria-label={product.name.fr} />
       </div>
 
-      <div className="flex flex-1 flex-col gap-[9px] p-4">
-        <span className="text-[11.5px] font-semibold uppercase tracking-[.05em] text-faint">
+      <div className="flex min-w-0 flex-1 flex-col gap-2 p-3.5 sm:gap-[9px] sm:p-4">
+        <span className="truncate text-[11.5px] font-semibold uppercase tracking-[.05em] text-faint">
           {product.brand}
         </span>
 
-        <h3 className="text-[14.5px] font-semibold leading-[1.35]">
+        {/* Model names run to eight words. Two lines then an ellipsis keeps every card in
+            a row the same height whatever the catalogue throws at it. */}
+        <h3 className="line-clamp-2 text-[13.5px] font-semibold leading-[1.35] sm:text-[14.5px]">
           <Link href={href} className="transition hover:text-accent2">
             {product.name.fr}
           </Link>
@@ -72,12 +78,14 @@ export function ProductCard({ product }: { product: ProductSummary }) {
 
         <StockLine stock={product.stock} />
 
-        <div className="mt-auto flex items-end justify-between pt-2">
-          <div>
+        {/* `flex-wrap` + a min width on the price column: at 320 px a five-digit price and
+            the 44 px cart button would otherwise squeeze each other. */}
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-3 gap-y-2 pt-2">
+          <div className="min-w-0">
             {product.compareAtPrice ? (
               <div className="text-xs text-faint line-through">{price(product.compareAtPrice)}</div>
             ) : null}
-            <div className="grad-text font-display text-[19px] font-bold">
+            <div className="grad-text font-display text-[17px] font-bold sm:text-[19px]">
               {price(product.effectivePrice)}
             </div>
           </div>

@@ -1,5 +1,7 @@
+import type { HeroSlideImage } from '@rgi/types';
+import { apiFetchOrNull } from '@/lib/api';
 import { t } from '@/locales/fr';
-import { HERO_SLIDES } from '@/data/hero-slides';
+import { applyHeroImages } from '@/data/hero-slides';
 import { HeroCarousel } from './HeroCarousel';
 
 const STATS = [
@@ -12,8 +14,17 @@ const STATS = [
 /**
  * Top of the homepage: the slide deck plus the figures that stay true on every slide.
  * The carousel is the only client component here — the stats render on the server.
+ *
+ * The photos staff picked in `/admin/carrousel` are fetched here rather than passed down
+ * from the page, so the hero owns its own data. `apiFetchOrNull` means an API outage
+ * costs the overrides, not the carousel: the slides fall back to the images in the code.
+ * A short revalidate keeps a swapped photo from taking the homepage's five minutes to
+ * appear — and saving one also revalidates `/` outright.
  */
-export function Hero() {
+export async function Hero() {
+  const overrides = await apiFetchOrNull<HeroSlideImage[]>('/hero-slides', { revalidate: 60 });
+  const slides = applyHeroImages(overrides);
+
   return (
     <>
       {/*
@@ -24,13 +35,16 @@ export function Hero() {
         {t.common.brand} — {t.common.tagline}
       </h1>
 
-      <HeroCarousel slides={HERO_SLIDES} />
+      <HeroCarousel slides={slides} />
 
       <div className="wrap">
-        <dl className="flex flex-wrap gap-x-10 gap-y-5 border-t border-line py-6">
+        {/* Four stats never fit on one line on a phone, and wrapping them freely leaves a
+            ragged 3 + 1. A 2-column grid below `sm` makes the break deliberate; from `sm`
+            up they go back to a single flowing row. */}
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line py-6 sm:flex sm:flex-wrap sm:gap-x-10">
           {STATS.map((stat) => (
-            <div key={stat.l}>
-              <dt className="font-display text-[24px] font-bold">{stat.n}</dt>
+            <div key={stat.l} className="min-w-0">
+              <dt className="t-h3 font-display font-bold">{stat.n}</dt>
               <dd className="text-[12.5px] text-faint">{stat.l}</dd>
             </div>
           ))}

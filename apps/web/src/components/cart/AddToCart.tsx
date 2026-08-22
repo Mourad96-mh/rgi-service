@@ -22,6 +22,11 @@ export function AddToCartButton({
 
   return (
     <>
+      {/*
+        `basis-[13rem]` inside the BuyBox's wrapping row: the button takes the rest of the
+        line next to the quantity stepper when there is room, and drops onto its own
+        full-width line as soon as there is not (roughly, under 400 px).
+      */}
       <button
         type="button"
         disabled={soldOut}
@@ -29,7 +34,7 @@ export function AddToCartButton({
           add(product, quantity);
           setAdded(true);
         }}
-        className="btn btn-primary flex-1 justify-center disabled:cursor-not-allowed disabled:opacity-40"
+        className="btn btn-primary flex-1 basis-[13rem] justify-center disabled:cursor-not-allowed disabled:opacity-40"
       >
         <CartIcon />
         {t.common.addToCart}
@@ -63,7 +68,7 @@ export function AddToCartIconButton({ product }: { product: ProductSummary }) {
         setAdded(true);
         window.setTimeout(() => setAdded(false), 2000);
       }}
-      className="grid h-[42px] w-[42px] place-items-center rounded-[11px] bg-grad text-bg shadow-glow transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+      className="grid h-11 w-11 shrink-0 place-items-center rounded-[11px] bg-grad text-bg shadow-glow transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100 sm:h-[42px] sm:w-[42px]"
     >
       {added ? <CheckIcon /> : <CartIcon />}
     </button>

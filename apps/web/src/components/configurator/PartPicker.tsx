@@ -46,28 +46,30 @@ export function PartPicker({ slot }: { slot: SlotDefinition }) {
     slot.multi && (selection[slot.id]?.length ?? 0) >= (slot.maxItems ?? 8);
 
   return (
-    <div className="border-t border-line px-5 py-5">
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="border-t border-line p-4 sm:px-5 sm:py-5">
+      {/* The search field takes the whole line on a phone and only shrinks to its 320 px
+          desktop width from `sm` up; the counts drop below it rather than squeezing it. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <input
           type="search"
           value={term}
           onChange={(event) => setTerm(event.target.value)}
           placeholder={t.configurator.searchPlaceholder}
-          className="field max-w-[320px]"
+          className="field basis-full sm:max-w-[320px] sm:basis-auto"
           aria-label={t.configurator.searchPlaceholder}
         />
-        <label className="flex cursor-pointer items-center gap-2 text-[13px] text-muted">
+        <label className="flex min-h-[44px] cursor-pointer items-center gap-2 text-[13px] text-muted">
           <input
             type="checkbox"
             checked={inStockOnly}
             onChange={(event) => setInStockOnly(event.target.checked)}
-            className="h-4 w-4 accent-[var(--accent)]"
+            className="h-[18px] w-[18px] shrink-0 accent-[var(--accent)]"
           />
           {t.configurator.inStockOnly}
         </label>
 
         {data ? (
-          <span className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-faint">
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-faint sm:ml-auto">
             <span>{t.configurator.availableCount(data.parts.length)}</span>
             {data.incompatibleCount > 0 ? (
               <span className="pill !py-1 !text-[11.5px]">
@@ -89,7 +91,7 @@ export function PartPicker({ slot }: { slot: SlotDefinition }) {
       ) : parts.length === 0 ? (
         <p className="mt-5 max-w-[60ch] text-sm text-muted">{t.configurator.noParts}</p>
       ) : (
-        <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2">
           {parts.map((part) => (
             <PartOption
               key={part.id}
@@ -126,17 +128,19 @@ function PartOption({
           chosen ? 'border-accent2 bg-white/[.05]' : 'border-line bg-surface'
         }`}
       >
-        <span className="photo-tile relative grid h-[76px] w-[76px] shrink-0 place-items-center">
+        {/* 76 px of thumbnail leaves barely 130 px for a part name on a 320 px screen, so
+            the smallest phones get a smaller tile. */}
+        <span className="photo-tile relative grid h-[64px] w-[64px] shrink-0 place-items-center xs:h-[76px] xs:w-[76px]">
           {image ? (
             <Image
               src={image.url}
               alt=""
               fill
-              sizes="76px"
+              sizes="(max-width: 400px) 64px, 76px"
               className="object-contain p-1.5"
             />
           ) : (
-            <span aria-hidden className="text-[26px] opacity-30 grayscale">
+            <span aria-hidden className="text-[22px] opacity-30 grayscale xs:text-[26px]">
               🖥️
             </span>
           )}
@@ -156,7 +160,7 @@ function PartOption({
               ))}
             </span>
           ) : null}
-          <span className="mt-auto flex items-center justify-between gap-2 pt-1">
+          <span className="mt-auto flex flex-wrap items-center justify-between gap-x-2 gap-y-1 pt-1">
             <span className="grad-text font-display text-[15px] font-bold">
               {price(part.effectivePrice)}
             </span>

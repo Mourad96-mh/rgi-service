@@ -42,7 +42,7 @@ export function ProductGallery({
   if (!count) {
     return (
       <div className="photo-tile grid aspect-square place-items-center">
-        <span aria-hidden className="text-[120px] opacity-20 grayscale">
+        <span aria-hidden className="text-[clamp(64px,22vw,120px)] opacity-20 grayscale">
           🖥️
         </span>
       </div>
@@ -56,8 +56,8 @@ export function ProductGallery({
           src={images[active].url}
           alt={images[active].alt ?? name}
           fill
-          sizes="(max-width:1024px) 100vw, 46vw"
-          className="object-contain p-8"
+          sizes="(max-width:1024px) 92vw, 46vw"
+          className="object-contain p-5 sm:p-8"
           priority
         />
         {badge}
@@ -75,16 +75,21 @@ export function ProductGallery({
         ) : null}
       </div>
 
+      {/*
+        Six 74 px thumbnails are wider than a 320 px phone. The rail scrolls itself rather
+        than wrapping to a second row (which would push the buy box further down) or
+        shrinking the thumbs to unreadable stamps.
+      */}
       {count > 1 ? (
-        <ul className="flex gap-3">
+        <ul className="scroll-x flex gap-2 py-1 sm:gap-3">
           {images.map((image, index) => (
-            <li key={image.url}>
+            <li key={image.url} className="shrink-0">
               <button
                 type="button"
                 onClick={() => setActive(index)}
                 aria-label={t.product.showImage(index + 1)}
                 aria-current={index === active}
-                className={`photo-tile relative block h-[74px] w-[74px] transition ${
+                className={`photo-tile relative block h-16 w-16 transition sm:h-[74px] sm:w-[74px] ${
                   index === active
                     ? 'ring-2 ring-accent2'
                     : 'ring-1 ring-transparent hover:ring-line2'
@@ -94,7 +99,7 @@ export function ProductGallery({
                   src={image.url}
                   alt=""
                   fill
-                  sizes="74px"
+                  sizes="(max-width:640px) 64px, 74px"
                   className="object-contain p-1.5"
                 />
               </button>
@@ -108,16 +113,16 @@ export function ProductGallery({
           role="dialog"
           aria-modal="true"
           aria-label={name}
-          className="fixed inset-0 z-50 grid place-items-center bg-bg/95 p-6 backdrop-blur"
+          className="fixed inset-0 z-50 grid place-items-center bg-bg/95 p-4 backdrop-blur sm:p-6"
           onClick={() => setZoomed(false)}
         >
-          <div className="photo-tile relative h-full max-h-[80vh] w-full max-w-[900px]">
+          <div className="photo-tile relative h-full max-h-[68vh] w-full max-w-[900px] sm:max-h-[80vh]">
             <Image
               src={images[active].url}
               alt={images[active].alt ?? name}
               fill
               sizes="90vw"
-              className="object-contain p-10"
+              className="object-contain p-5 sm:p-10"
             />
           </div>
           <button type="button" className="btn btn-ghost mt-5" onClick={() => setZoomed(false)}>

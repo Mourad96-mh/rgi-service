@@ -16,11 +16,11 @@ export function BuyBox({ product }: { product: Product }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-1 rounded-sm2 border border-line bg-surface p-1">
+        <div className="flex shrink-0 items-center gap-1 rounded-sm2 border border-line bg-surface p-1">
           <QtyButton label={t.product.decrease} onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={soldOut || quantity <= 1}>
             −
           </QtyButton>
-          <span aria-live="polite" className="min-w-[2.5rem] text-center text-sm font-semibold">
+          <span aria-live="polite" className="min-w-[2.25rem] text-center text-sm font-semibold sm:min-w-[2.5rem]">
             {quantity}
           </span>
           <QtyButton label={t.product.increase} onClick={() => setQuantity((q) => Math.min(max, q + 1))} disabled={soldOut || quantity >= max}>
@@ -56,12 +56,14 @@ function QtyButton({
   disabled: boolean;
 }) {
   return (
+    /* 44 px so the stepper is usable with a thumb; back to the mockup's 36 px where a
+       mouse pointer makes the extra size unnecessary. */
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="grid h-9 w-9 place-items-center rounded-[9px] text-lg font-bold text-muted transition hover:bg-white/[.06] hover:text-text disabled:opacity-30"
+      className="grid h-11 w-11 place-items-center rounded-[9px] text-lg font-bold text-muted transition hover:bg-white/[.06] hover:text-text disabled:opacity-30 sm:h-9 sm:w-9"
     >
       {children}
     </button>
