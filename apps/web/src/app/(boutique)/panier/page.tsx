@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function CartPage() {
   return (
-    <div className="wrap py-12">
-      <h1 className="mb-8 font-display text-[clamp(26px,4.5vw,36px)] font-bold">
+    <div className="wrap py-8 sm:py-12">
+      <h1 className="t-h1 mb-6 font-display font-bold sm:mb-8">
         {t.cart.title}
       </h1>
       <CartView />

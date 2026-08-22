@@ -78,8 +78,10 @@ export function CartView() {
   const subtotal = validation?.subtotal ?? 0;
   const blocked = !validation?.isValid;
 
+  // The bottom padding clears the sticky bar rendered at the end of this tree, so the
+  // aside's last link is never trapped underneath it.
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[1fr_340px]">
+    <div className="grid items-start gap-6 pb-[104px] lg:grid-cols-[1fr_340px] lg:pb-0">
       <ul className="flex flex-col gap-3">
         {lines.map((line, index) => (
           <CartRow
@@ -131,6 +133,33 @@ export function CartView() {
           {t.cart.continue}
         </Link>
       </aside>
+
+      {/*
+       * On a phone the summary card sits below the basket, so with three or four lines the
+       * total and the checkout button are off-screen while the customer is still deciding.
+       * This keeps both in view. Above `lg` the sticky sidebar already does that job.
+       *
+       * The right-hand padding is not decoration: the floating WhatsApp / call buttons are
+       * fixed bottom-right at the same corner, and without a reserved gutter they would sit
+       * on top of the checkout button.
+       */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-[18px] lg:hidden">
+        <div className="flex items-center gap-3 pe-[60px]">
+          <div className="min-w-0">
+            <p className="text-[11px] text-faint">{t.cart.subtotal}</p>
+            <p className="font-display text-[17px] font-bold leading-tight">{price(subtotal)}</p>
+          </div>
+          <Link
+            href={routes.checkout}
+            aria-disabled={blocked}
+            className={`btn btn-primary ms-auto shrink-0 ${
+              blocked ? 'pointer-events-none opacity-40' : ''
+            }`}
+          >
+            {t.cart.checkout}
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
@@ -151,15 +180,22 @@ function CartRow({
   const name = line.kind === 'build' ? t.cart.buildLine : (server?.name ?? line.name);
 
   return (
-    <li className={`surface-card p-4 ${server?.problem ? 'border-accent3' : ''}`}>
-      <div className="flex flex-wrap items-center gap-4">
-        <span className="photo-tile relative h-[72px] w-[72px] shrink-0">
+    <li className={`surface-card p-3.5 sm:p-4 ${server?.problem ? 'border-accent3' : ''}`}>
+      {/*
+       * Phones get an explicit two-column grid rather than a wrapping flex row. Left to
+       * wrap, the thumbnail, the name, the stepper, the total and the remove link each
+       * broke onto their own line in an order nobody chose, and a three-item basket ran
+       * past the fold. Here the photo and the name share row one, and the controls own
+       * row two. From `sm` up there is width for the single row the design intends.
+       */}
+      <div className="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
+        <span className="photo-tile relative h-[60px] w-[60px] shrink-0 sm:h-[72px] sm:w-[72px]">
           {image ? (
-            <Image src={image} alt="" fill sizes="72px" className="object-contain p-1.5" />
+            <Image src={image} alt="" fill sizes="(min-width:640px) 72px, 60px" className="object-contain p-1.5" />
           ) : null}
         </span>
 
-        <div className="min-w-[160px] flex-1">
+        <div className="min-w-0 sm:min-w-[160px] sm:flex-1">
           {line.kind === 'build' ? (
             <>
               <span className="block text-[14px] font-semibold">{name}</span>
@@ -180,38 +216,44 @@ function CartRow({
           </span>
         </div>
 
-        {/* 44px on touch screens: 32px steppers are hard to hit with a thumb. */}
-        <div className="flex items-center gap-1 rounded-sm2 border border-line bg-bg2 p-1">
+        {/* Stepper, line total and remove travel together: on a phone they are the second
+            grid row, spanning both columns; from `sm` they rejoin the single flex row. */}
+        <div className="col-span-2 flex items-center gap-3 sm:col-auto sm:contents">
+          {/* 44px on touch screens: 32px steppers are hard to hit with a thumb. */}
+          <div className="flex items-center gap-1 rounded-sm2 border border-line bg-bg2 p-1">
+            <button
+              type="button"
+              aria-label={t.product.decrease}
+              onClick={() => onQuantity(line.quantity - 1)}
+              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
+            >
+              −
+            </button>
+            <span className="min-w-[2rem] text-center text-sm font-semibold">{line.quantity}</span>
+            <button
+              type="button"
+              aria-label={t.product.increase}
+              onClick={() => onQuantity(line.quantity + 1)}
+              className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
+            >
+              +
+            </button>
+          </div>
+
+          <span className="ms-auto font-display text-[16px] font-bold sm:ms-0">
+            {price(server?.lineTotal ?? unit * line.quantity)}
+          </span>
+
+          {/* A 44px hit area on touch: this was a 12px text link, the smallest target on
+              the page and the one that empties the basket. */}
           <button
             type="button"
-            aria-label={t.product.decrease}
-            onClick={() => onQuantity(line.quantity - 1)}
-            className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
+            onClick={onRemove}
+            className="-me-2 inline-flex min-h-[44px] shrink-0 items-center px-2 text-[12px] text-faint transition hover:text-accent3 sm:me-0 sm:min-h-0 sm:px-0"
           >
-            −
-          </button>
-          <span className="min-w-[2rem] text-center text-sm font-semibold">{line.quantity}</span>
-          <button
-            type="button"
-            aria-label={t.product.increase}
-            onClick={() => onQuantity(line.quantity + 1)}
-            className="grid h-11 w-11 place-items-center rounded-md text-[17px] text-muted hover:bg-white/[.06] hover:text-text sm:h-8 sm:w-8 sm:text-base"
-          >
-            +
+            {t.cart.remove}
           </button>
         </div>
-
-        <span className="font-display text-[16px] font-bold">
-          {price(server?.lineTotal ?? unit * line.quantity)}
-        </span>
-
-        <button
-          type="button"
-          onClick={onRemove}
-          className="text-[12px] text-faint transition hover:text-accent3"
-        >
-          {t.cart.remove}
-        </button>
       </div>
 
       {server?.problem ? (

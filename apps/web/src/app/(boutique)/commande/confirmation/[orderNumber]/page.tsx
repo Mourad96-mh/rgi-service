@@ -34,7 +34,7 @@ export default async function ConfirmationPage({
 
   if (!order) {
     return (
-      <div className="wrap py-16">
+      <div className="wrap py-12 sm:py-16">
         <EmptyState
           title={t.order.notFound}
           action={
@@ -48,13 +48,13 @@ export default async function ConfirmationPage({
   }
 
   return (
-    <div className="wrap py-12">
+    <div className="wrap py-8 sm:py-12">
       <span className="inline-flex items-center gap-2 rounded-full border border-success/40 bg-success/10 px-3.5 py-1.5 text-[12.5px] font-semibold text-success">
         <CheckIcon className="h-4 w-4" />
         {ORDER_STATUS_LABEL_FR[order.status]}
       </span>
 
-      <h1 className="mt-5 font-display text-[clamp(26px,4.5vw,36px)] font-bold">
+      <h1 className="t-h1 mt-5 font-display font-bold">
         {t.order.confirmedTitle}
       </h1>
       <p className="mt-3 max-w-[60ch] text-[15px] text-muted">{t.order.confirmedText}</p>
@@ -66,27 +66,35 @@ export default async function ConfirmationPage({
             {order.items.map((item, index) => (
               <li
                 key={`${item.name}-${index}`}
-                className="surface-card flex items-center gap-4 p-3.5"
+                className="surface-card grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2 p-3.5 xs:flex xs:gap-4"
               >
-                <span className="photo-tile relative h-[60px] w-[60px] shrink-0">
+                <span className="photo-tile relative h-[54px] w-[54px] shrink-0 xs:h-[60px] xs:w-[60px]">
                   {item.image ? (
-                    <Image src={item.image} alt="" fill sizes="60px" className="object-contain p-1.5" />
+                    <Image
+                      src={item.image}
+                      alt=""
+                      fill
+                      sizes="(min-width:400px) 60px, 54px"
+                      className="object-contain p-1.5"
+                    />
                   ) : null}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[14px] font-semibold">{item.name}</span>
+                <span className="min-w-0 xs:flex-1">
+                  <span className="block text-[14px] font-semibold leading-snug">{item.name}</span>
                   <span className="text-[12px] text-faint">
                     {item.quantity} × {price(item.unitPrice)}
                     {item.build ? ` · ${item.build.items.length} composants` : ''}
                   </span>
                 </span>
-                <span className="font-display text-[15px] font-bold">{price(item.lineTotal)}</span>
+                <span className="col-span-2 text-right font-display text-[15px] font-bold xs:col-auto xs:text-left">
+                  {price(item.lineTotal)}
+                </span>
               </li>
             ))}
           </ul>
         </div>
 
-        <aside className="surface-card p-6 lg:sticky lg:top-24">
+        <aside className="surface-card p-4 sm:p-6 lg:sticky lg:top-24">
           <dl className="flex flex-col gap-3 text-sm">
             <Row label={t.order.number} value={order.orderNumber} mono />
             <Row label={t.order.status} value={ORDER_STATUS_LABEL_FR[order.status]} />
@@ -119,7 +127,7 @@ export default async function ConfirmationPage({
             </div>
             <div className="mt-1 flex items-end justify-between border-t border-line pt-3">
               <dt className="text-muted">{t.cart.total}</dt>
-              <dd className="grad-text font-display text-[24px] font-bold">
+              <dd className="grad-text t-h3 font-display font-bold">
                 {price(order.total)}
               </dd>
             </div>
@@ -138,8 +146,8 @@ export default async function ConfirmationPage({
 function Row({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex justify-between gap-4 border-b border-line pb-2.5">
-      <dt className="text-muted">{label}</dt>
-      <dd className={`text-right font-semibold ${mono ? 'font-mono text-[13px]' : ''}`}>
+      <dt className="shrink-0 text-muted">{label}</dt>
+      <dd className={`min-w-0 text-right font-semibold ${mono ? 'font-mono text-[13px]' : ''}`}>
         {value}
       </dd>
     </div>

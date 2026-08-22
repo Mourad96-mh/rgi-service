@@ -169,8 +169,8 @@ export function CheckoutForm() {
   return (
     <form onSubmit={submit} className="grid items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div className="flex flex-col gap-4">
-        <fieldset className="surface-card p-6">
-          <legend className="px-1 font-display text-[17px] font-bold">
+        <fieldset className="surface-card p-4 sm:p-6">
+          <legend className="px-1 font-display text-[16px] font-bold sm:text-[17px]">
             {t.checkout.contactTitle}
           </legend>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -180,12 +180,12 @@ export function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset className="surface-card p-6">
-          <legend className="px-1 font-display text-[17px] font-bold">
+        <fieldset className="surface-card p-4 sm:p-6">
+          <legend className="px-1 font-display text-[16px] font-bold sm:text-[17px]">
             {t.checkout.shippingTitle}
           </legend>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid gap-3 xs:grid-cols-2">
             <Choice
               checked={form.method === 'delivery'}
               onSelect={() => set('method', 'delivery')}
@@ -214,11 +214,11 @@ export function CheckoutForm() {
           ) : null}
         </fieldset>
 
-        <fieldset className="surface-card p-6">
-          <legend className="px-1 font-display text-[17px] font-bold">
+        <fieldset className="surface-card p-4 sm:p-6">
+          <legend className="px-1 font-display text-[16px] font-bold sm:text-[17px]">
             {t.checkout.paymentTitle}
           </legend>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid gap-3 xs:grid-cols-2">
             <Choice checked onSelect={() => undefined} title={t.checkout.cod} text={t.checkout.codNote} />
             {/* CMI needs the client's merchant credentials; the API refuses card orders
                 until they exist, so the option is shown but not selectable. */}
@@ -238,21 +238,29 @@ export function CheckoutForm() {
         </fieldset>
       </div>
 
-      <aside className="surface-card p-6 lg:sticky lg:top-24">
+      <aside className="surface-card p-4 sm:p-6 lg:sticky lg:top-24">
         <h2 className="font-display text-lg font-bold">{t.checkout.summaryTitle}</h2>
 
-        <ul className="mt-4 flex flex-col gap-2 border-b border-line pb-4 text-[13px]">
-          {lines.map((line) => (
-            <li key={line.id} className="flex justify-between gap-3">
-              <span className="min-w-0 truncate text-muted">
-                {line.quantity} × {line.kind === 'build' ? t.cart.buildLine : line.name}
-              </span>
-              <span className="shrink-0 font-semibold">
-                {price(line.unitPrice * line.quantity)}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <details className="group mt-4 border-b border-line pb-4" open={lines.length <= 3}>
+          <summary className="flex min-h-[36px] cursor-pointer list-none items-center justify-between gap-3 text-[13px] text-muted marker:content-none">
+            <span>{t.cart.line(lines.reduce((sum, line) => sum + line.quantity, 0))}</span>
+            <span aria-hidden className="text-faint transition group-open:rotate-180">
+              ▾
+            </span>
+          </summary>
+          <ul className="mt-3 flex flex-col gap-2 text-[13px]">
+            {lines.map((line) => (
+              <li key={line.id} className="flex justify-between gap-3">
+                <span className="min-w-0 truncate text-muted">
+                  {line.quantity} × {line.kind === 'build' ? t.cart.buildLine : line.name}
+                </span>
+                <span className="shrink-0 font-semibold">
+                  {price(line.unitPrice * line.quantity)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
 
         <dl className="mt-4 flex flex-col gap-2.5 text-sm">
           <div className="flex justify-between gap-4">
@@ -267,7 +275,7 @@ export function CheckoutForm() {
           </div>
           <div className="mt-1 flex items-end justify-between border-t border-line pt-3">
             <dt className="text-muted">{t.cart.total}</dt>
-            <dd className="grad-text font-display text-[24px] font-bold">{price(total)}</dd>
+            <dd className="grad-text t-h3 font-display font-bold">{price(total)}</dd>
           </div>
         </dl>
 

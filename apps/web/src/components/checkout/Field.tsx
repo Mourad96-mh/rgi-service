@@ -27,7 +27,7 @@ export function Field({
   const describedBy = error ? `${id}-error` : help ? `${id}-help` : undefined;
 
   return (
-    <label htmlFor={id} className="block">
+    <label htmlFor={id} className="block min-w-0">
       <span className="mb-1.5 block text-[12.5px] text-muted">
         {label}
         {optional ? <span className="text-faint"> · optionnel</span> : null}
@@ -76,7 +76,7 @@ export function Choice({
       aria-checked={checked}
       disabled={disabled}
       onClick={onSelect}
-      className={`flex items-start gap-3 rounded-sm2 border p-4 text-left transition disabled:opacity-45 ${
+      className={`flex min-h-[56px] w-full items-start gap-3 rounded-sm2 border p-3.5 text-left transition disabled:opacity-45 sm:p-4 ${
         checked ? 'border-accent2 bg-white/[.05]' : 'border-line bg-bg2 hover:border-line2'
       }`}
     >
@@ -88,7 +88,7 @@ export function Choice({
       >
         {checked ? <CheckIcon className="h-3 w-3" /> : null}
       </span>
-      <span>
+      <span className="min-w-0">
         <span className="block text-[13.5px] font-semibold">{title}</span>
         <span className="mt-0.5 block text-[12px] text-muted">{text}</span>
       </span>
