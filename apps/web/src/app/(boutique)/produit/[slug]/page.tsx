@@ -12,6 +12,7 @@ import { SITE_NAME, SITE_URL } from '@/lib/env';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { absoluteUrl } from '@/lib/url';
+import { openGraph, productTitle } from '@/lib/seo';
 import { cardSpecs, discountPct, formatAttributeValue, price, primaryImage } from '@/lib/format';
 import { Breadcrumbs, type Crumb } from '@/components/catalog/Breadcrumbs';
 import { ProductCard, StockLine } from '@/components/product/ProductCard';
@@ -39,8 +40,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await loadProduct(params.slug);
   if (!product) return { title: 'Produit introuvable' };
 
-  // Pattern from SEO_STRATEGY.md §2: "Nom du produit - Marque | Prix Maroc | Rgi Service".
-  const title = product.metaTitle?.fr ?? `${product.name.fr} – ${product.brand} | Prix Maroc`;
+  // Pattern from SEO_STRATEGY.md §2, budgeted to 60 characters: the brand is dropped when
+  // the product name already carries it, and "Prix Maroc" goes before the name is truncated.
+  const custom = product.metaTitle?.fr;
+  const title = custom ? { meta: custom, text: custom } : productTitle(product.name.fr, product.brand);
   const description =
     product.metaDescription?.fr ??
     `${product.name.fr} au prix de ${price(product.effectivePrice)} chez ${SITE_NAME}. ${
@@ -49,16 +52,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const image = primaryImage(product);
 
   return {
-    title,
+    title: title.meta,
     description,
     alternates: { canonical: routes.product(product.slug) },
-    openGraph: {
-      title,
+    openGraph: openGraph({
+      title: title.text,
       description,
       url: `${SITE_URL}${routes.product(product.slug)}`,
-      images: image ? [{ url: absoluteUrl(image.url), alt: image.alt ?? product.name.fr }] : undefined,
-      type: 'website',
-    },
+      // The product photo when there is one; the helper's default card otherwise.
+      ...(image
+        ? { images: [{ url: absoluteUrl(image.url), alt: image.alt ?? product.name.fr }] }
+        : {}),
+    }),
   };
 }
 

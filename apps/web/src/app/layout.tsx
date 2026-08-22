@@ -26,7 +26,7 @@ const wordmark = Orbitron({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — PC Gamer, composants et configurateur PC au Maroc`,
+    default: `PC Gamer et configurateur PC au Maroc | ${SITE_NAME}`,
     template: `%s | ${SITE_NAME}`,
   },
   description:

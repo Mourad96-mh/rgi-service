@@ -6,6 +6,7 @@ import { apiFetch, apiFetchOrNull, ApiError } from '@/lib/api';
 import { SITE_NAME, SITE_URL } from '@/lib/env';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
+import { openGraph, seoTitle } from '@/lib/seo';
 import { Breadcrumbs } from '@/components/catalog/Breadcrumbs';
 import { Filters, type QueryParams } from '@/components/catalog/Filters';
 import { SortSelect } from '@/components/catalog/SortSelect';
@@ -44,12 +45,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!found) return { title: 'Catégorie introuvable' };
 
   const name = found.category.name.fr;
+  const title = seoTitle(`${name} au Maroc`, 'prix et stock');
   return {
-    title: `${name} au Maroc — prix et disponibilité`,
+    title: title.meta,
     description: `${name} : sélection ${SITE_NAME}, prix en dirhams, stock à jour, livraison 48h partout au Maroc et paiement à la livraison.`,
     // Filtered and sorted variants canonicalize to the base category (SEO_STRATEGY.md §1).
     alternates: { canonical: routes.category(slug) },
-    openGraph: { title: `${name} | ${SITE_NAME}`, url: `${SITE_URL}${routes.category(slug)}` },
+    openGraph: openGraph({
+      title: title.text,
+      url: `${SITE_URL}${routes.category(slug)}`,
+    }),
   };
 }
 

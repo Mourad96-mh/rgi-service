@@ -9,9 +9,9 @@ import { EmptyState } from '@/components/ui/Section';
 import { BoltIcon } from '@/components/ui/Icons';
 
 export const metadata: Metadata = {
-  title: 'Configurateur PC — monte ton PC gamer sur mesure',
+  title: 'Configurateur PC — monte ton PC sur mesure',
   description:
-    'Configure ton PC gamer pièce par pièce : compatibilité vérifiée en direct (socket, mémoire, alimentation, encombrement), montage et tests inclus, -5% sur la configuration.',
+    'Configure ton PC gamer pièce par pièce : compatibilité vérifiée en direct, montage et tests inclus, -5% sur la configuration. Livraison partout au Maroc.',
   alternates: { canonical: routes.configurator },
 };
 
