@@ -47,7 +47,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
               <Link
                 key={category.id}
                 href={routes.category(category.slug)}
-                className="mb-2.5 block text-[13.5px] text-muted transition hover:text-text"
+                className="-my-0.5 flex min-h-[40px] items-center text-[13.5px] text-muted transition hover:text-text sm:my-0 sm:mb-2.5 sm:block sm:min-h-0"
               >
                 {category.name.fr}
               </Link>
@@ -62,7 +62,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="mb-2.5 block text-[13.5px] text-muted transition hover:text-text"
+                className="-my-0.5 flex min-h-[40px] items-center text-[13.5px] text-muted transition hover:text-text sm:my-0 sm:mb-2.5 sm:block sm:min-h-0"
               >
                 {link.label}
               </Link>

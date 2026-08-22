@@ -19,8 +19,12 @@ export function ProductTabs({ panels }: { panels: TabPanel[] }) {
   const base = useId();
 
   return (
-    <div className="mt-14">
-      <div role="tablist" aria-label={t.product.description} className="flex flex-wrap gap-2 border-b border-line">
+    <div className="mt-10 sm:mt-14">
+      <div
+        role="tablist"
+        aria-label={t.product.description}
+        className="scroll-x flex gap-2 border-b border-line"
+      >
         {panels.map((panel) => {
           const selected = panel.id === active;
           return (
@@ -32,7 +36,7 @@ export function ProductTabs({ panels }: { panels: TabPanel[] }) {
               aria-selected={selected}
               aria-controls={`${base}-panel-${panel.id}`}
               onClick={() => setActive(panel.id)}
-              className={`-mb-px border-b-2 px-4 py-3 text-sm font-semibold transition ${
+              className={`-mb-px shrink-0 whitespace-nowrap border-b-2 px-3.5 py-3 text-sm font-semibold transition sm:px-4 ${
                 selected
                   ? 'border-accent2 text-text'
                   : 'border-transparent text-muted hover:text-text'
@@ -51,7 +55,7 @@ export function ProductTabs({ panels }: { panels: TabPanel[] }) {
           id={`${base}-panel-${panel.id}`}
           aria-labelledby={`${base}-tab-${panel.id}`}
           hidden={panel.id !== active}
-          className="pt-7"
+          className="pt-6 sm:pt-7"
         >
           {panel.content}
         </div>

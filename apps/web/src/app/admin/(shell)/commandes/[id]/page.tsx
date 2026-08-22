@@ -27,7 +27,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
           ← {t.admin.ordersTitle}
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-[22px] font-bold">{order.orderNumber}</h1>
+          <h1 className="t-h3 min-w-0 break-all font-mono font-bold">{order.orderNumber}</h1>
           <StatusPill status={order.status} />
           <PaymentPill status={order.payment.status} />
         </div>
@@ -43,19 +43,25 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
             <ul className="flex flex-col gap-2.5">
               {order.items.map((item, index) => (
                 <li key={`${item.name}-${index}`} className="surface-card p-4">
-                  <div className="flex flex-wrap items-center gap-4">
-                    <span className="photo-tile relative h-[58px] w-[58px] shrink-0">
+                  <div className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2 xs:flex xs:flex-wrap xs:gap-4">
+                    <span className="photo-tile relative h-[52px] w-[52px] shrink-0 xs:h-[58px] xs:w-[58px]">
                       {item.image ? (
-                        <Image src={item.image} alt="" fill sizes="58px" className="object-contain p-1.5" />
+                        <Image
+                          src={item.image}
+                          alt=""
+                          fill
+                          sizes="(min-width:400px) 58px, 52px"
+                          className="object-contain p-1.5"
+                        />
                       ) : null}
                     </span>
-                    <span className="min-w-[160px] flex-1">
-                      <span className="block text-[14px] font-semibold">{item.name}</span>
+                    <span className="min-w-0 xs:min-w-[160px] xs:flex-1">
+                      <span className="block text-[14px] font-semibold leading-snug">{item.name}</span>
                       <span className="text-[12px] text-faint">
                         {item.quantity} × {price(item.unitPrice)}
                       </span>
                     </span>
-                    <span className="font-display text-[15px] font-bold">
+                    <span className="col-span-2 text-right font-display text-[15px] font-bold xs:col-auto xs:text-left">
                       {price(item.lineTotal)}
                     </span>
                   </div>
@@ -145,7 +151,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
               </div>
               <div className="mt-1 flex items-end justify-between border-t border-line pt-2.5">
                 <dt className="text-muted">{t.cart.total}</dt>
-                <dd className="grad-text font-display text-[20px] font-bold">
+                <dd className="grad-text t-h4 font-display font-bold">
                   {price(order.total)}
                 </dd>
               </div>

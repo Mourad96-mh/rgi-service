@@ -14,7 +14,7 @@ export default async function NewProductPage() {
         <Link href="/admin/produits" className="text-[12.5px] text-faint hover:text-text">
           ← {t.admin.productsTitle}
         </Link>
-        <h1 className="mt-2 font-display text-[26px] font-bold">{t.admin.newProductTitle}</h1>
+        <h1 className="t-h1 mt-2 font-display font-bold">{t.admin.newProductTitle}</h1>
       </div>
       <ProductForm
         categories={categories}

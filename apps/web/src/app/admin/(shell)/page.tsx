@@ -166,7 +166,7 @@ function Kpi({
       }`}
     >
       <p className="text-[12px] uppercase tracking-[.05em] text-faint">{label}</p>
-      <p className="mt-2 font-display text-[26px] font-bold">{value}</p>
+      <p className="t-h3 mt-2 break-words font-display font-bold">{value}</p>
     </div>
   );
   return href ? <Link href={href}>{content}</Link> : content;

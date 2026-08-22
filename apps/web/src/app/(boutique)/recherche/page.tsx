@@ -25,15 +25,15 @@ export default async function SearchPage({
     : [];
 
   return (
-    <div className="wrap py-10">
-      <h1 className="font-display text-[clamp(24px,4vw,32px)] font-bold">
+    <div className="wrap py-8 sm:py-10">
+      <h1 className="t-h1 font-display font-bold">
         {term ? `Résultats pour « ${term} »` : 'Recherche'}
       </h1>
       <p className="mt-2 text-muted">{t.category.results(results.length)}</p>
 
       <div className="mt-8">
         {results.length ? (
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] lg:grid-cols-4 3xl:grid-cols-5">
             {results.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

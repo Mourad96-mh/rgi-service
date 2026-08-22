@@ -26,7 +26,7 @@ export default async function EditProductPage({ params }: { params: { id: string
           ← {t.admin.productsTitle}
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-[26px] font-bold">{product.name.fr}</h1>
+          <h1 className="t-h1 min-w-0 font-display font-bold">{product.name.fr}</h1>
           {product.status === 'active' ? (
             <Link
               href={routes.product(product.slug)}
@@ -37,7 +37,7 @@ export default async function EditProductPage({ params }: { params: { id: string
             </Link>
           ) : null}
         </div>
-        <p className="font-mono text-[12px] text-faint">{product.sku}</p>
+        <p className="truncate font-mono text-[12px] text-faint">{product.sku}</p>
       </div>
 
       <ProductForm

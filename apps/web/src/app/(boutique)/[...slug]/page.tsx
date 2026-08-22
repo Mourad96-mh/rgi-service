@@ -89,35 +89,37 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const totalPages = Math.max(1, Math.ceil(data.total / PAGE_SIZE));
 
   return (
-    <div className="wrap py-10">
+    <div className="wrap py-8 sm:py-10">
       <Breadcrumbs items={crumbs} />
 
-      <header className="mb-8">
-        <h1 className="font-display text-[clamp(28px,5vw,40px)] font-bold">{category.name.fr}</h1>
+      <header className="mb-6 sm:mb-8">
+        <h1 className="t-h1 font-display font-bold">{category.name.fr}</h1>
         <p className="mt-2 text-muted">{t.category.results(data.total)}</p>
       </header>
 
       {children.length ? (
-        <div className="mb-8 flex flex-wrap gap-2">
+        <div className="scroll-x mb-6 sm:mb-8">
+          <div className="flex gap-2 pb-1">
           {children.map((child) => (
             <Link key={child.id} href={routes.category(child.slug)} className="pill hover:text-text">
               {child.name.fr}
             </Link>
           ))}
+          </div>
         </div>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[260px_1fr] lg:gap-8">
         <Filters base={base} params={searchParams} data={data} />
 
         <div>
-          <div className="mb-5 flex items-center justify-between gap-4">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <span className="text-sm text-faint">{t.category.results(data.total)}</span>
             <SortSelect />
           </div>
 
           {data.data.length ? (
-            <div className="grid gap-[18px] sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] xl:grid-cols-3 3xl:grid-cols-4">
               {data.data.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -111,10 +111,10 @@ export default async function ProductPage({ params }: PageProps) {
   const assembled = ['prebuilt', 'workstation'].includes(product.categoryType);
 
   return (
-    <div className="wrap py-10">
+    <div className="wrap py-8 sm:py-10">
       <Breadcrumbs items={buildCrumbs(product, categories ?? [])} />
 
-      <div className="grid items-start gap-10 lg:grid-cols-[1.02fr_.98fr]">
+      <div className="grid items-start gap-7 lg:grid-cols-[1.02fr_.98fr] lg:gap-10">
         <ProductGallery
           images={product.images}
           name={product.name.fr}
@@ -129,7 +129,7 @@ export default async function ProductPage({ params }: PageProps) {
           <span className="text-xs font-semibold uppercase tracking-[.05em] text-faint">
             {product.brand}
           </span>
-          <h1 className="mt-2 font-display text-[clamp(24px,4vw,34px)] font-bold leading-tight">
+          <h1 className="t-h1 mt-2 font-display font-bold">
             {product.name.fr}
           </h1>
 
@@ -144,7 +144,7 @@ export default async function ProductPage({ params }: PageProps) {
           ) : null}
 
           <div className="mt-5 flex items-end gap-3">
-            <span className="grad-text font-display text-[34px] font-bold">
+            <span className="grad-text t-h2 font-display font-bold">
               {price(product.effectivePrice)}
             </span>
             {product.compareAtPrice ? (
@@ -202,9 +202,9 @@ export default async function ProductPage({ params }: PageProps) {
                   content: (
                     <dl className="surface-card max-w-[720px] divide-y divide-[rgba(255,255,255,.06)] overflow-hidden">
                       {specs.map((spec) => (
-                        <div key={spec.key} className="flex justify-between gap-6 px-4 py-3 text-sm">
-                          <dt className="text-muted">{spec.label}</dt>
-                          <dd className="text-right font-medium">{spec.value}</dd>
+                        <div key={spec.key} className="flex justify-between gap-4 px-4 py-3 text-sm sm:gap-6">
+                          <dt className="shrink-0 text-muted">{spec.label}</dt>
+                          <dd className="min-w-0 text-right font-medium">{spec.value}</dd>
                         </div>
                       ))}
                     </dl>
@@ -230,15 +230,17 @@ export default async function ProductPage({ params }: PageProps) {
       />
 
       {product.isConfiguratorPart ? (
-        <section className="surface-card mt-14 flex flex-wrap items-center justify-between gap-6 p-8"
-          style={{ background: 'var(--grad-soft)' }}>
-          <div>
-            <h2 className="font-display text-xl font-bold">{t.product.configuratorCrossTitle}</h2>
+        <section
+          className="surface-card mt-10 flex flex-wrap items-center justify-between gap-5 p-5 sm:mt-14 sm:gap-6 sm:p-8"
+          style={{ background: 'var(--grad-soft)' }}
+        >
+          <div className="min-w-0">
+            <h2 className="t-h3 font-display font-bold">{t.product.configuratorCrossTitle}</h2>
             <p className="mt-2 max-w-[560px] text-sm text-muted">
               {t.product.configuratorCrossText}
             </p>
           </div>
-          <Link href={routes.configurator} className="btn btn-primary">
+          <Link href={routes.configurator} className="btn btn-primary w-full xs:w-auto">
             <BoltIcon className="h-[18px] w-[18px]" />
             {t.product.configuratorCrossCta}
           </Link>
@@ -246,9 +248,9 @@ export default async function ProductPage({ params }: PageProps) {
       ) : null}
 
       {others.length ? (
-        <section className="mt-16">
-          <h2 className="mb-6 font-display text-2xl font-bold">{t.product.related}</h2>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mt-12 sm:mt-16">
+          <h2 className="t-h2 mb-5 font-display font-bold sm:mb-6">{t.product.related}</h2>
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] lg:grid-cols-4">
             {others.map((item) => (
               <ProductCard key={item.id} product={item} />
             ))}
@@ -281,9 +283,9 @@ function InfoCard({ title, body }: { title: string; body: string }) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between gap-6 border-b border-line pb-2">
-      <dt className="text-muted">{label}</dt>
-      <dd className="font-medium">{value}</dd>
+    <div className="flex justify-between gap-4 border-b border-line pb-2 sm:gap-6">
+      <dt className="shrink-0 text-muted">{label}</dt>
+      <dd className="min-w-0 text-right font-medium">{value}</dd>
     </div>
   );
 }

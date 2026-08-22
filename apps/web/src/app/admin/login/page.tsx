@@ -14,14 +14,14 @@ export default function AdminLoginPage({
   searchParams: { suivant?: string };
 }) {
   return (
-    <div className="grid min-h-screen place-items-center px-6 py-12">
+    <div className="grid min-h-screen place-items-center px-4 py-8 sm:px-6 sm:py-12">
       <div className="w-full max-w-[420px]">
-        <div className="mb-8 flex items-center gap-3">
+        <div className="mb-6 flex items-center gap-3 sm:mb-8">
           <Logo />
           <p className="text-[12px] text-faint">{t.admin.title}</p>
         </div>
 
-        <h1 className="font-display text-[26px] font-bold">{t.admin.loginTitle}</h1>
+        <h1 className="t-h2 font-display font-bold">{t.admin.loginTitle}</h1>
         <p className="mt-2 text-[14px] text-muted">{t.admin.loginText}</p>
 
         <LoginForm next={searchParams.suivant} />

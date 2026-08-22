@@ -84,7 +84,7 @@ export default async function SharedBuildPage({ params }: { params: { shareId: s
             </div>
             <div className="mt-1 flex items-end justify-between border-t border-line pt-3">
               <dt className="text-muted">{t.configurator.total}</dt>
-              <dd className="grad-text font-display text-[24px] font-bold">
+              <dd className="grad-text t-h3 font-display font-bold">
                 {price(build.total)}
               </dd>
             </div>

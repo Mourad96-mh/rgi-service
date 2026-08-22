@@ -29,13 +29,13 @@ export function Pagination({
   };
 
   return (
-    <nav className="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+    <nav className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:mt-10" aria-label="Pagination">
       {Array.from({ length: totalPages }, (_, index) => index + 1).map((target) => (
         <Link
           key={target}
           href={hrefFor(target)}
           aria-current={target === page ? 'page' : undefined}
-          className={`grid h-10 min-w-10 place-items-center rounded-sm2 border px-3 text-sm font-semibold transition ${
+          className={`grid h-11 min-w-[44px] place-items-center rounded-sm2 border px-3 text-sm font-semibold transition sm:h-10 sm:min-w-10 ${
             target === page
               ? 'border-accent bg-grad-soft text-text'
               : 'border-line bg-surface text-muted hover:text-text'

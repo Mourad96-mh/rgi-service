@@ -148,7 +148,7 @@ function GalleryArrow({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`absolute top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-black/10 bg-white/85 text-bg shadow-soft transition hover:bg-white ${
+      className={`absolute top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-black/10 bg-white/85 text-bg shadow-soft transition hover:bg-white sm:h-9 sm:w-9 ${
         side === 'left' ? 'left-3' : 'right-3'
       }`}
     >

@@ -40,7 +40,7 @@ export function LoginForm({ next }: { next?: string }) {
   }
 
   return (
-    <form onSubmit={submit} className="surface-card mt-8 flex flex-col gap-4 p-6">
+    <form onSubmit={submit} className="surface-card mt-6 flex flex-col gap-4 p-4 sm:mt-8 sm:p-6">
       <label className="block">
         <span className="mb-1.5 block text-[12.5px] text-muted">{t.admin.email}</span>
         <input
@@ -71,7 +71,7 @@ export function LoginForm({ next }: { next?: string }) {
         </p>
       ) : null}
 
-      <button type="submit" disabled={pending} className="btn btn-primary justify-center disabled:opacity-50">
+      <button type="submit" disabled={pending} className="btn btn-primary w-full justify-center disabled:opacity-50">
         {pending ? t.admin.loggingIn : t.admin.login}
       </button>
     </form>

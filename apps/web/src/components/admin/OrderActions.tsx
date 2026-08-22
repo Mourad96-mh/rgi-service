@@ -38,7 +38,7 @@ export function OrderActions({
   }
 
   return (
-    <div className="surface-card flex flex-col gap-4 p-5">
+    <div className="surface-card flex flex-col gap-4 p-4 sm:p-5">
       <div>
         <h3 className="text-[13px] font-bold uppercase tracking-[.05em] text-faint">
           {t.admin.changeStatus}

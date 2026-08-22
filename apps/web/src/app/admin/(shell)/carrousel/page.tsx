@@ -20,7 +20,7 @@ export default async function AdminHeroPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-[26px] font-bold">{t.admin.heroTitle}</h1>
+        <h1 className="t-h1 font-display font-bold">{t.admin.heroTitle}</h1>
         <p className="mt-1 max-w-[70ch] text-[13px] text-faint">{t.admin.heroText}</p>
       </div>
 

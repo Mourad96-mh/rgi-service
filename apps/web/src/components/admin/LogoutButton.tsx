@@ -18,7 +18,7 @@ export function LogoutButton() {
         router.replace('/admin/login');
         router.refresh();
       }}
-      className="text-left text-[12.5px] text-faint transition hover:text-accent3 disabled:opacity-50"
+      className="inline-flex min-h-[44px] items-center text-left text-[12.5px] text-faint transition hover:text-accent3 disabled:opacity-50 lg:min-h-0"
     >
       {t.admin.logout}
     </button>
