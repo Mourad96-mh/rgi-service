@@ -76,14 +76,22 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
             {/* TODO(spec): l'adresse, l'e-mail et les horaires restent à confirmer par le
                 client (NAP LocalBusiness). Le téléphone, lui, est le vrai numéro. */}
             <p className="mb-2.5 text-[13.5px] text-muted">Casablanca, Maroc</p>
-            <p className="mb-2.5 text-[13.5px]">
-              <a
-                href={CONTACT.phoneHref}
-                className="text-muted transition hover:text-accent"
-              >
-                {CONTACT.phoneDisplay}
-              </a>
-            </p>
+            {/* All three lines, each dialable: a customer who cannot get through on the
+                shop line should not have to hunt for an alternative. The kind is labelled
+                because a mobile and a landline are answered at different hours. */}
+            {CONTACT.phones.map((line) => (
+              <p key={line.digits} className="mb-2.5 text-[13.5px]">
+                <a
+                  href={line.href}
+                  className="-my-0.5 flex min-h-[40px] items-center gap-2 text-muted transition hover:text-accent sm:my-0 sm:inline-flex sm:min-h-0"
+                >
+                  <span className="text-[11px] uppercase tracking-[.05em] text-faint">
+                    {line.kind === 'landline' ? t.contact.phoneFixed : t.contact.phoneMobile}
+                  </span>
+                  {line.display}
+                </a>
+              </p>
+            ))}
             <p className="mb-2.5 text-[13.5px]">
               <a
                 href={whatsappUrl(t.contact.whatsappPrefill)}

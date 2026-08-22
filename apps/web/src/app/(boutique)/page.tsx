@@ -92,14 +92,17 @@ function JsonLd({ categories }: { categories: CategoryNode[] }) {
           height: 630,
         },
         areaServed: 'MA',
+        // `telephone` takes the main line; every line is then published as its own
+        // ContactPoint so the shop's NAP is complete and consistent wherever Google
+        // surfaces it.
         telephone: CONTACT.phoneE164,
-        contactPoint: {
+        contactPoint: CONTACT.phones.map((line) => ({
           '@type': 'ContactPoint',
-          telephone: CONTACT.phoneE164,
+          telephone: line.e164,
           contactType: 'customer service',
           areaServed: 'MA',
           availableLanguage: ['fr', 'ar'],
-        },
+        })),
       },
       {
         '@type': 'WebSite',

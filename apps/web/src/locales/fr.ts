@@ -539,6 +539,9 @@ export const fr = {
     call: 'Appeler',
     callAria: 'Appeler Rgi Service au',
     phone: 'Téléphone',
+    phoneFixed: 'Fixe',
+    phoneMobile: 'Mobile',
+    phones: 'Nos numéros',
   },
 
   footer: {
