@@ -74,7 +74,7 @@ export default async function HomePage() {
   );
 }
 
-/** Organization + WebSite/SearchAction, site-wide entities (SEO_STRATEGY.md §1). */
+/** Organization + ComputerStore + WebSite/SearchAction, site-wide entities (SEO_STRATEGY.md §1). */
 function JsonLd({ categories }: { categories: CategoryNode[] }) {
   const data = {
     '@context': 'https://schema.org',
@@ -103,6 +103,43 @@ function JsonLd({ categories }: { categories: CategoryNode[] }) {
           areaServed: 'MA',
           availableLanguage: ['fr', 'ar'],
         })),
+      },
+      {
+        /*
+         * The local-business entity, and the reason it is `ComputerStore` rather than a
+         * plain `LocalBusiness`: schema.org has a specific type for a computer shop, and
+         * the more specific type Google can resolve, the better it matches a search like
+         * "magasin pc gamer casablanca".
+         *
+         * `address` is what proves the shop is physically in Casablanca — `Organization`
+         * alone never did, which is why the site could not compete on local queries.
+         * `areaServed` stays the whole country: the shop sits in Casablanca but delivers
+         * everywhere, and conflating the two would shrink its reach.
+         *
+         * TODO(client): streetAddress, postalCode, `geo` (lat/lng),
+         * `openingHoursSpecification` and `hasMap` (the Google Business Profile URL) are
+         * still missing — they are the remaining half of local SEO. Do NOT invent them:
+         * a NAP that disagrees with the Google Business Profile actively hurts ranking.
+         */
+        '@type': 'ComputerStore',
+        '@id': `${SITE_URL}/#localbusiness`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        image: `${SITE_URL}/og-default.png`,
+        logo: `${SITE_URL}/logo-rgi.png`,
+        telephone: CONTACT.phoneE164,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Casablanca',
+          addressRegion: 'Casablanca-Settat',
+          addressCountry: 'MA',
+        },
+        // The shop is in Casablanca; the customers are national.
+        areaServed: { '@type': 'Country', name: 'Maroc' },
+        currenciesAccepted: 'MAD',
+        paymentAccepted: 'Paiement à la livraison, Carte bancaire',
+        priceRange: 'MAD',
+        parentOrganization: { '@id': `${SITE_URL}/#organization` },
       },
       {
         '@type': 'WebSite',
