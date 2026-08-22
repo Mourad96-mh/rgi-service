@@ -40,7 +40,9 @@ export function AttributeField({
             return (
               <label
                 key={option}
-                className={`cursor-pointer rounded-md border px-2.5 py-1.5 text-[12.5px] transition ${
+                // The checkbox itself is visually hidden, so the label *is* the tap
+                // target — it keeps the 44 px minimum on touch and shrinks for a mouse.
+                className={`inline-flex min-h-[44px] cursor-pointer items-center rounded-md border px-3 text-[13px] transition sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-[12.5px] ${
                   checked ? 'border-accent2 bg-white/[.06] text-text' : 'border-line text-muted'
                 }`}
               >

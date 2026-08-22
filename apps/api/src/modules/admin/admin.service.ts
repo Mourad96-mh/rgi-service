@@ -2,16 +2,19 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
 import type {
+  InventoryMovement,
   Order as OrderDto,
   OrderStatus,
   Paginated,
   PaymentStatus,
   Product as ProductDto,
+  ProductUsage,
 } from '@rgi/types';
 import { ORDER_STATUS_FLOW, ORDER_STATUS_LABEL_FR } from '@rgi/types';
 import { Order, type OrderDocument } from '../../schemas/order.schema';
 import { Product, type ProductDocument } from '../../schemas/product.schema';
 import { InventoryLog, type InventoryLogDocument } from '../../schemas/inventory-log.schema';
+import { Build, type BuildDocument } from '../../schemas/build.schema';
 import { OrdersService } from '../orders/orders.service';
 import { ProductsService } from '../products/products.service';
 import type { OrderListQueryDto, ProductListQueryDto } from './dto/admin.dto';
@@ -38,6 +41,7 @@ export class AdminService {
     @InjectModel(Order.name) private readonly orders: Model<OrderDocument>,
     @InjectModel(Product.name) private readonly products: Model<ProductDocument>,
     @InjectModel(InventoryLog.name) private readonly logs: Model<InventoryLogDocument>,
+    @InjectModel(Build.name) private readonly builds: Model<BuildDocument>,
   ) {}
 
   async listOrders(query: OrderListQueryDto): Promise<Paginated<OrderDto>> {
@@ -170,11 +174,23 @@ export class AdminService {
       const term = new RegExp(escapeRegex(query.q), 'i');
       filter.$or = [{ 'name.fr': term }, { brand: term }, { sku: term }];
     }
+    // Each product carries its own alert threshold, so "low stock" is a comparison between
+    // two fields of the same document rather than a fixed number — hence `$expr`.
+    if (query.lowStock) {
+      filter.$expr = { $lte: ['$stock', '$lowStockThreshold'] };
+    }
+
+    const sort: Record<string, 1 | -1> =
+      query.sort === 'stock'
+        ? { stock: 1 }
+        : query.sort === 'name'
+          ? { 'name.fr': 1 }
+          : { updatedAt: -1 };
 
     const [docs, total] = await Promise.all([
       this.products
         .find(filter)
-        .sort({ updatedAt: -1 })
+        .sort(sort)
         .skip((page - 1) * limit)
         .limit(limit)
         .exec(),
@@ -182,6 +198,79 @@ export class AdminService {
     ]);
 
     return { data: docs.map((doc) => ProductsService.toDto(doc)), total, page, limit };
+  }
+
+  /**
+   * How much history a product carries, so the Produits section can offer a real delete
+   * for a mistake while refusing one for anything a customer has actually bought.
+   *
+   * A product hides in three places and all three are checked: an ordinary order line, a
+   * part *inside* a configured PC on an order line, and a saved shareable build. Counting
+   * only the first would let staff destroy a graphics card that has only ever sold inside
+   * custom builds, leaving those orders and `/configurateur-pc/[shareId]` pages pointing
+   * at nothing.
+   */
+  async productUsage(id: string): Promise<ProductUsage> {
+    if (!Types.ObjectId.isValid(id)) throw new BadRequestException('Identifiant invalide.');
+    const productId = new Types.ObjectId(id);
+
+    const [orderCount, buildCount] = await Promise.all([
+      this.orders
+        .countDocuments({
+          $or: [
+            { 'items.product': productId },
+            { 'items.build.items.product': productId },
+          ],
+        })
+        .exec(),
+      this.builds.countDocuments({ 'items.product': productId }).exec(),
+    ]);
+
+    return { orderCount, buildCount, canDelete: orderCount === 0 && buildCount === 0 };
+  }
+
+  /**
+   * Destroy a product for good. Archiving is the normal way to retire something
+   * (`DELETE /products/:id`); this exists only for a genuine mistake — a duplicate or a
+   * typo entered minutes ago — and refuses the moment the product has any history.
+   *
+   * The usage check is re-run here rather than trusted from the client: the dashboard
+   * asks first so it can disable the button, but a product can be ordered between that
+   * question and this call.
+   */
+  async deleteProductPermanently(id: string): Promise<void> {
+    const usage = await this.productUsage(id);
+    if (!usage.canDelete) {
+      throw new BadRequestException(
+        'Ce produit apparaît dans des commandes ou des configurations enregistrées : ' +
+          'il peut être archivé, mais pas supprimé.',
+      );
+    }
+
+    const doc = await this.products.findByIdAndDelete(id).exec();
+    if (!doc) throw new NotFoundException('Produit introuvable.');
+
+    // The audit trail of a product that no longer exists is unreadable noise; nothing
+    // references these rows once the product is gone.
+    await this.logs.deleteMany({ product: doc._id }).exec();
+  }
+
+  /** Stock movements for one product, newest first — the Stock section's history panel. */
+  async inventoryMovements(id: string, limit = 20): Promise<InventoryMovement[]> {
+    if (!Types.ObjectId.isValid(id)) throw new BadRequestException('Identifiant invalide.');
+    const docs = await this.logs
+      .find({ product: new Types.ObjectId(id) })
+      .sort({ createdAt: -1 })
+      .limit(Math.min(limit, 100))
+      .exec();
+
+    return docs.map((doc) => ({
+      id: String(doc._id),
+      delta: doc.delta,
+      reason: doc.reason,
+      ref: doc.ref,
+      createdAt: (doc as unknown as { createdAt: Date }).createdAt.toISOString(),
+    }));
   }
 
   /** By id and whatever its status — the dashboard edits drafts and archives too. */

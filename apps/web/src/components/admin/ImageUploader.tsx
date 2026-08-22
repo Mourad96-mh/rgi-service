@@ -158,15 +158,17 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
           setDragOver(false);
           if (e.dataTransfer.files.length) void addFiles(e.dataTransfer.files);
         }}
-        className={`rounded-card border border-dashed p-6 text-center transition ${
+        className={`rounded-card border border-dashed p-4 text-center transition sm:p-6 ${
           dragOver ? 'border-accent bg-accent/[.06]' : 'border-line2'
         }`}
       >
-        <p className="text-[13.5px] text-muted">{t.admin.imageDropHint}</p>
+        {/* Dragging a file does not exist on touch, so the phone is shown the button on
+            its own — the hint would be an instruction the device cannot follow. */}
+        <p className="hidden text-[13.5px] text-muted sm:block">{t.admin.imageDropHint}</p>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="btn btn-ghost mt-3"
+          className="btn btn-ghost w-full sm:mt-3 sm:w-auto"
           disabled={busy > 0}
         >
           {busy > 0 ? `${t.admin.imageUploading} (${busy})` : t.admin.imageChoose}
@@ -198,7 +200,7 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
               key={image.publicId || image.url}
               className="flex gap-3 rounded-card border border-line2 bg-bg2 p-3"
             >
-              <div className="photo-tile relative h-[76px] w-[76px] shrink-0 overflow-hidden rounded-sm2">
+              <div className="photo-tile relative h-[64px] w-[64px] shrink-0 overflow-hidden rounded-sm2 xs:h-[76px] xs:w-[76px]">
                 <Image
                   src={image.url}
                   alt={image.alt ?? ''}
@@ -216,7 +218,7 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
                     <button
                       type="button"
                       onClick={() => setPrimary(index)}
-                      className="text-[12px] text-faint underline-offset-2 transition hover:text-accent hover:underline"
+                      className="inline-flex min-h-[44px] items-center text-[13px] text-faint underline-offset-2 transition hover:text-accent hover:underline sm:min-h-0 sm:text-[12px]"
                     >
                       {t.admin.imageSetPrimary}
                     </button>
@@ -228,16 +230,18 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
                   onChange={(e) => setAlt(index, e.target.value)}
                   placeholder={t.admin.imageAlt}
                   aria-label={`${t.admin.imageAlt} ${index + 1}`}
-                  className="field mt-2 h-8 text-[12.5px]"
+                  className="field mt-2 sm:h-8 sm:text-[12.5px]"
                 />
 
+                {/* Reordering and deleting are the two things done by thumb on a phone,
+                    so they keep the full touch target and only shrink for a mouse. */}
                 <div className="mt-2 flex items-center gap-1.5">
                   <button
                     type="button"
                     onClick={() => move(index, -1)}
                     disabled={index === 0}
                     aria-label={t.admin.imageMoveUp}
-                    className="icobtn h-7 w-7 disabled:opacity-35"
+                    className="icobtn h-11 w-11 disabled:opacity-35 sm:h-7 sm:w-7"
                   >
                     ↑
                   </button>
@@ -246,14 +250,14 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
                     onClick={() => move(index, 1)}
                     disabled={index === images.length - 1}
                     aria-label={t.admin.imageMoveDown}
-                    className="icobtn h-7 w-7 disabled:opacity-35"
+                    className="icobtn h-11 w-11 disabled:opacity-35 sm:h-7 sm:w-7"
                   >
                     ↓
                   </button>
                   <button
                     type="button"
                     onClick={() => void remove(index)}
-                    className="ml-auto text-[12px] text-faint transition hover:text-accent3"
+                    className="ml-auto inline-flex min-h-[44px] items-center px-1 text-[13px] text-faint transition hover:text-accent3 sm:min-h-0 sm:px-0 sm:text-[12px]"
                   >
                     {t.admin.imageRemove}
                   </button>

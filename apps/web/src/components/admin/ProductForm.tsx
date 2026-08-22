@@ -159,7 +159,7 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
       </Section>
 
       <Section title={t.admin.sectionPricing}>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Text label={t.admin.fieldPrice} value={priceMad} onChange={setPriceMad} type="number" required />
           <Text label={t.admin.fieldCompareAt} value={compareMad} onChange={setCompareMad} type="number" />
           <label className="block">
@@ -246,14 +246,23 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
         </p>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
-        <button type="submit" disabled={pending} className="btn btn-primary disabled:opacity-50">
+      {/*
+       * The form is long, and on a phone the save button would otherwise sit a full
+       * screen below the last field being edited. Below `sm` the action row sticks to
+       * the bottom of the viewport; from `sm` up it goes back to being the last row.
+       */}
+      <div className="sticky bottom-0 -mx-4 flex gap-3 border-t border-line bg-bg/95 px-4 py-3 backdrop-blur sm:static sm:mx-0 sm:flex-wrap sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none">
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
+        >
           {pending ? t.admin.saving : t.admin.save}
         </button>
         <button
           type="button"
           onClick={() => router.push('/admin/produits')}
-          className="btn btn-ghost"
+          className="btn btn-ghost flex-1 sm:flex-none"
         >
           {t.common.close}
         </button>
@@ -272,8 +281,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="surface-card p-6">
-      <h2 className="font-display text-[16px] font-bold">{title}</h2>
+    <section className="surface-card p-4 sm:p-6">
+      <h2 className="t-h4 font-display font-bold">{title}</h2>
       {help ? <p className="mb-4 mt-1 text-[12px] text-faint">{help}</p> : <div className="mb-4" />}
       {children}
     </section>

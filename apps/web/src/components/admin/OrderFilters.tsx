@@ -30,14 +30,16 @@ export function OrderFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    // Full-width stacked fields on a phone; the row only forms once the search box and
+    // the two selects fit side by side.
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
       <form
         onSubmit={(event) => {
           event.preventDefault();
           apply({ q: term.trim() || undefined });
         }}
         role="search"
-        className="min-w-[240px] flex-1"
+        className="w-full sm:min-w-[240px] sm:flex-1"
       >
         <label className="block">
           <span className="mb-1.5 block text-[12px] text-faint">{t.common.search}</span>
@@ -86,12 +88,12 @@ function Select({
   options: { value: string; label: string }[];
 }) {
   return (
-    <label className="block">
+    <label className="block w-full sm:w-auto sm:flex-1 md:flex-none">
       <span className="mb-1.5 block text-[12px] text-faint">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="field min-w-[150px]"
+        className="field sm:min-w-[150px]"
       >
         <option value="">{t.admin.filterAll}</option>
         {options.map((option) => (

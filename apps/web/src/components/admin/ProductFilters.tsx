@@ -31,14 +31,16 @@ export function ProductFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    // Full-width stacked fields on a phone; the row only forms once there is width for
+    // the 240 px search box and the select side by side.
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
       <form
         role="search"
         onSubmit={(event) => {
           event.preventDefault();
           apply({ q: term.trim() || undefined });
         }}
-        className="min-w-[240px] flex-1"
+        className="w-full sm:min-w-[240px] sm:flex-1"
       >
         <label className="block">
           <span className="mb-1.5 block text-[12px] text-faint">{t.common.search}</span>
@@ -52,12 +54,12 @@ export function ProductFilters({
         </label>
       </form>
 
-      <label className="block">
+      <label className="block w-full sm:w-auto">
         <span className="mb-1.5 block text-[12px] text-faint">{t.admin.status}</span>
         <select
           value={current.status ?? ''}
           onChange={(event) => apply({ status: event.target.value || undefined })}
-          className="field min-w-[150px]"
+          className="field sm:min-w-[150px]"
         >
           <option value="">{t.admin.filterAll}</option>
           {STATUSES.map((status) => (

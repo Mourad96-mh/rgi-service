@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import type { Product } from '@rgi/types';
+import type { Product, ProductUsage } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
 export interface SaveResult {
@@ -56,20 +56,60 @@ export async function saveProduct(
   }
 }
 
-/** Quick stock correction from the list — writes an `inventorylogs` row via the API. */
-export async function setStock(id: string, quantity: number): Promise<SaveResult> {
+/**
+ * Remove a product from the shop.
+ *
+ * `DELETE /products/:id` **archives**: the row stays in MongoDB, so an order placed last
+ * month still resolves the product it contains, and the change is undone by setting the
+ * status back to "En ligne" on the product's own page. A hard delete would leave those
+ * order lines pointing at nothing.
+ */
+export async function archiveProduct(id: string): Promise<SaveResult> {
   try {
-    await adminFetch<Product>(`/products/${id}/stock`, {
-      method: 'PATCH',
-      body: JSON.stringify({ mode: 'set', quantity }),
-    });
+    await adminFetch<void>(`/products/${id}`, { method: 'DELETE' });
     revalidatePath('/admin/produits');
+    revalidatePath(`/admin/produits/${id}`);
     revalidatePath('/admin');
     return { ok: true };
   } catch (error) {
     return {
       ok: false,
-      message: error instanceof AdminApiError ? error.message : 'Mise à jour impossible.',
+      message: error instanceof AdminApiError ? error.message : 'Archivage impossible.',
+    };
+  }
+}
+
+/**
+ * What the product is referenced by, so the delete button can tell the truth *before*
+ * staff commit to anything: a product that has been ordered can only ever be archived.
+ */
+export async function fetchProductUsage(id: string): Promise<ProductUsage | null> {
+  try {
+    return await adminFetch<ProductUsage>(`/admin/products/${id}/usage`);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Destroy the record for good — the "delete" half of what the Produits section owns.
+ *
+ * Distinct from `archiveProduct` on purpose. Archiving retires a product that has a past;
+ * this is for a product that has none — a duplicate or a typo created minutes ago. The API
+ * re-checks that for itself and refuses otherwise, so a stale "deletable" answer in the
+ * browser cannot destroy an ordered product.
+ */
+export async function deleteProductForever(id: string): Promise<SaveResult> {
+  try {
+    await adminFetch<void>(`/admin/products/${id}/permanent`, { method: 'DELETE' });
+    revalidatePath('/admin/produits');
+    revalidatePath('/admin/stock');
+    revalidatePath('/admin');
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof AdminApiError ? error.message : 'Suppression impossible.',
     };
   }
 }

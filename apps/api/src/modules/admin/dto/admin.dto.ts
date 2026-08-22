@@ -1,5 +1,5 @@
-import { IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import type { OrderStatus, PaymentStatus } from '@rgi/types';
 
 export class OrderListQueryDto {
@@ -77,4 +77,22 @@ export class ProductListQueryDto {
   @Min(1)
   @Max(100)
   limit?: number;
+
+  /**
+   * Only products at or under their own alert threshold. The comparison is per-product
+   * (`stock <= lowStockThreshold`), not a global number, so a motherboard staff want 2 of
+   * and a thermal paste they want 50 of both surface at the right moment.
+   *
+   * Sent as a query string, so it is coerced by hand: `@Type(() => Boolean)` would run
+   * `Boolean('false')`, which is `true`, and the filter could never be switched off.
+   */
+  @IsOptional()
+  @Transform(({ value }) => value === true || value === 'true' || value === '1')
+  @IsBoolean()
+  lowStock?: boolean;
+
+  /** `stock` ascending puts what is about to run out at the top — the Stock section's default. */
+  @IsOptional()
+  @IsIn(['recent', 'stock', 'name'], { message: 'Tri inconnu.' })
+  sort?: 'recent' | 'stock' | 'name';
 }

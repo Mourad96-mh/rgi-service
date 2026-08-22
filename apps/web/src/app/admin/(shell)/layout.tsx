@@ -21,20 +21,32 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
+      {/*
+       * Below `lg` the sidebar is not a column but two slim rows — identity plus the way
+       * out on the first, the nav scroller on the second. Stacking the desktop column as
+       * it stands would put a wall of chrome above every page on a phone.
+       */}
       <aside className="border-b border-line bg-bg2 lg:w-[248px] lg:shrink-0 lg:border-b-0 lg:border-r">
-        <div className="flex items-center gap-3 px-5 py-5">
-          <LogoMark className="h-[22px] w-auto shrink-0 text-text" />
-          <div className="min-w-0">
-            <p className="truncate font-display text-[15px] font-bold">{t.admin.title}</p>
+        <div className="flex items-center gap-3 px-4 py-3 lg:px-5 lg:py-5">
+          <LogoMark className="h-[20px] w-auto shrink-0 text-text lg:h-[22px]" />
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-display text-[14px] font-bold lg:text-[15px]">
+              {t.admin.title}
+            </p>
             <p className="truncate text-[11.5px] text-faint">
               {staff.name} · {staff.role}
             </p>
           </div>
+          {/* On a phone logging out rides in the top bar; the desktop column keeps its
+              own copy at the bottom, where the eye expects it. */}
+          <div className="shrink-0 lg:hidden">
+            <LogoutButton />
+          </div>
         </div>
 
-        <AdminNav />
+        <AdminNav role={staff.role} />
 
-        <div className="flex flex-col gap-2 px-5 py-5">
+        <div className="hidden flex-col gap-2 px-5 py-5 lg:flex">
           <Link href="/" className="text-[12.5px] text-faint transition hover:text-text">
             ← {t.admin.backToShop}
           </Link>
@@ -42,7 +54,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 px-5 py-8 lg:px-10">{children}</main>
+      <main className="min-w-0 flex-1 px-4 py-6 sm:px-5 sm:py-8 lg:px-8 xl:px-10">
+        {/* Past ~1700 px the content stops widening: a form field or a table row that
+            spans a 2560 px monitor is harder to read, not easier. */}
+        <div className="mx-auto w-full max-w-[1680px]">{children}</div>
+      </main>
     </div>
   );
 }

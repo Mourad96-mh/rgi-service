@@ -24,7 +24,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-display text-[26px] font-bold">{t.admin.ordersTitle}</h1>
+        <h1 className="t-h1 font-display font-bold">{t.admin.ordersTitle}</h1>
         <p className="text-[13px] text-faint">{orders.total} au total</p>
       </div>
 
@@ -32,7 +32,43 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
 
       {orders.data.length ? (
         <>
-          <div className="surface-card overflow-x-auto">
+          {/*
+           * Below `lg` each order is a card rather than a row: the six columns do not fit
+           * a phone, and an order is most often opened, not compared. The whole card is
+           * the link the order number is in the table.
+           */}
+          <ul className="flex flex-col gap-3 lg:hidden">
+            {orders.data.map((order) => (
+              <li key={order.id}>
+                <Link
+                  href={`/admin/commandes/${order.id}`}
+                  className="surface-card flex flex-col gap-3 p-4 transition hover:border-line2"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-[12.5px] text-accent2">
+                      {order.orderNumber}
+                    </span>
+                    <span className="text-[12px] text-muted">{orderDate(order.createdAt)}</span>
+                  </div>
+
+                  <div className="min-w-0">
+                    <span className="block truncate font-semibold">{order.contact.name}</span>
+                    <span className="text-[11.5px] text-faint">{order.contact.phone}</span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <StatusPill status={order.status} />
+                    <PaymentPill status={order.payment.status} />
+                    <span className="ml-auto font-display text-[15px] font-bold">
+                      {price(order.total)}
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="surface-card hidden overflow-x-auto lg:block">
             <table className="w-full min-w-[760px] text-left text-[13.5px]">
               <thead className="border-b border-line text-[11.5px] uppercase tracking-[.05em] text-faint">
                 <tr>
@@ -60,13 +96,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                       <span className="text-[11.5px] text-faint">{order.contact.phone}</span>
                     </td>
                     <td className="px-4 py-3 text-[12.5px] text-muted">
-                      {order.createdAt
-                        ? new Date(order.createdAt).toLocaleDateString('fr-MA', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                          })
-                        : '—'}
+                      {orderDate(order.createdAt)}
                     </td>
                     <td className="px-4 py-3">
                       <StatusPill status={order.status} />
@@ -96,7 +126,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                     key={page}
                     href={`/admin/commandes?${params.toString()}`}
                     aria-current={active ? 'page' : undefined}
-                    className={`rounded-md border px-3 py-1.5 text-[12.5px] ${
+                    className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border px-3 text-[13px] sm:min-h-[34px] sm:min-w-0 sm:py-1.5 sm:text-[12.5px] ${
                       active ? 'border-accent2 text-text' : 'border-line text-muted hover:text-text'
                     }`}
                   >
@@ -108,12 +138,23 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
           ) : null}
         </>
       ) : (
-        <p className="surface-card p-8 text-center text-[13.5px] text-muted">
+        <p className="surface-card p-6 text-center text-[13.5px] text-muted sm:p-8">
           {t.admin.ordersEmpty}
         </p>
       )}
     </div>
   );
+}
+
+/** One date format for the phone card and the desktop row alike. */
+function orderDate(value: string | undefined): string {
+  return value
+    ? new Date(value).toLocaleDateString('fr-MA', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+    : '—';
 }
 
 function Th({ children, align }: { children: React.ReactNode; align?: 'right' }) {

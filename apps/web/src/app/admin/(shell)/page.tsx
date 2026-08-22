@@ -23,13 +23,15 @@ export default async function AdminHomePage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6 sm:gap-8">
       <div>
-        <h1 className="font-display text-[26px] font-bold">{t.admin.navHome}</h1>
+        <h1 className="t-h1 font-display font-bold">{t.admin.navHome}</h1>
         <p className="mt-1 text-[13.5px] text-muted">{t.common.tagline}</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Two KPI tiles fit from 400 px up — a single column of four on a phone would
+          push the pending-orders figure below the fold. */}
+      <div className="grid gap-3 xs:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         <Kpi label={t.admin.kpiOrdersToday} value={String(stats.ordersToday)} />
         <Kpi label={t.admin.kpiOrdersWeek} value={String(stats.ordersWeek)} />
         <Kpi label={t.admin.kpiRevenueWeek} value={price(stats.revenueWeek)} />
@@ -74,13 +76,23 @@ export default async function AdminHomePage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section>
-          <h2 className="mb-3 font-display text-lg font-bold">{t.admin.lowStockTitle}</h2>
+          {/*
+           * A signpost, not a workbench. The dashboard's job is to say what needs
+           * attention; fixing a quantity is the Stock section's job, so every route out of
+           * this panel leads there rather than into a product form.
+           */}
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <h2 className="font-display text-lg font-bold">{t.admin.lowStockTitle}</h2>
+            <Link href="/admin/stock?low=1" className="text-[12.5px] text-accent2 hover:underline">
+              {t.common.seeAll}
+            </Link>
+          </div>
           {stats.lowStock.length ? (
             <ul className="surface-card divide-y divide-[rgba(255,255,255,.06)]">
               {stats.lowStock.map((row) => (
                 <li key={row.id} className="flex items-center justify-between gap-4 px-4 py-3">
                   <Link
-                    href={`/admin/produits/${row.id}`}
+                    href="/admin/stock?low=1"
                     className="min-w-0 flex-1 truncate text-[13.5px] transition hover:text-accent2"
                   >
                     {row.name}
@@ -126,6 +138,9 @@ export default async function AdminHomePage() {
           </Link>
           <Link href="/admin/commandes?status=pending" className="btn btn-ghost">
             {t.admin.seePending}
+          </Link>
+          <Link href="/admin/stock?low=1" className="btn btn-ghost">
+            {t.admin.lowStockTitle}
           </Link>
         </div>
       </section>

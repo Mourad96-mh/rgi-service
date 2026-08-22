@@ -18,6 +18,7 @@ import { ConfiguratorModule } from './modules/configurator/configurator.module';
 import { CartModule } from './modules/cart/cart.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MediaModule } from './modules/media/media.module';
+import { HeroModule } from './modules/hero/hero.module';
 import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
@@ -46,6 +47,7 @@ import { AdminModule } from './modules/admin/admin.module';
     CartModule,
     OrdersModule,
     MediaModule,
+    HeroModule,
     AdminModule,
   ],
   providers: [
