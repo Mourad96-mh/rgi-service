@@ -28,7 +28,10 @@ const LINKS: { href: string; label: string; exact?: boolean; adminOnly?: boolean
 ];
 
 export function AdminNav({ role }: { role: Role }) {
-  const pathname = usePathname();
+  // The static export is built with `trailingSlash: true`, so this is `/admin/produits/`.
+  // Without the trim the exact match on `/admin` never fires and the dashboard link is
+  // never highlighted.
+  const pathname = usePathname().replace(/\/+$/, '') || '/';
   const links = LINKS.filter((link) => !link.adminOnly || role === 'admin');
 
   return (

@@ -50,9 +50,16 @@ const empty = (categoryType: string): Draft => ({
 export function AttributeManager({
   definitions,
   categoryTypes,
+  onChanged,
 }: {
   definitions: AttributeDefinition[];
   categoryTypes: string[];
+  /**
+   * Re-read the list from the API after a write. This is what replaced revalidatePath in
+   * the old server action: nothing re-renders on its own once the page is a client
+   * component, so the screen would keep showing the values it was built with.
+   */
+  onChanged: () => void;
 }) {
   const [filter, setFilter] = useState(categoryTypes[0] ?? '');
   const [draft, setDraft] = useState<Draft | null>(null);
@@ -94,8 +101,10 @@ export function AttributeManager({
         },
         draft.id,
       );
-      if (result.ok) setDraft(null);
-      else setError(result.message ?? t.common.error);
+      if (result.ok) {
+        setDraft(null);
+        onChanged();
+      } else setError(result.message ?? t.common.error);
     });
   }
 
@@ -104,7 +113,8 @@ export function AttributeManager({
     setError(null);
     startTransition(async () => {
       const result = await deleteAttribute(definition.id);
-      if (!result.ok) setError(result.message ?? t.common.error);
+      if (result.ok) onChanged();
+      else setError(result.message ?? t.common.error);
     });
   }
 

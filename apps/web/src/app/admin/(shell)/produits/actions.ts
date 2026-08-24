@@ -1,6 +1,6 @@
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// These were server actions. The dashboard now ships inside the static export, where no
+// server exists to run one, so they are ordinary async functions that the client
+// components already importing them call directly against the API. See lib/admin/session.
 import type { Product, ProductUsage } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
@@ -45,8 +45,6 @@ export async function saveProduct(
       id ? `/products/${id}` : '/products',
       { method: id ? 'PATCH' : 'POST', body: JSON.stringify(payload) },
     );
-    revalidatePath('/admin/produits');
-    if (id) revalidatePath(`/admin/produits/${id}`);
     return { ok: true, id: product.id };
   } catch (error) {
     return {
@@ -67,9 +65,6 @@ export async function saveProduct(
 export async function archiveProduct(id: string): Promise<SaveResult> {
   try {
     await adminFetch<void>(`/products/${id}`, { method: 'DELETE' });
-    revalidatePath('/admin/produits');
-    revalidatePath(`/admin/produits/${id}`);
-    revalidatePath('/admin');
     return { ok: true };
   } catch (error) {
     return {
@@ -102,9 +97,6 @@ export async function fetchProductUsage(id: string): Promise<ProductUsage | null
 export async function deleteProductForever(id: string): Promise<SaveResult> {
   try {
     await adminFetch<void>(`/admin/products/${id}/permanent`, { method: 'DELETE' });
-    revalidatePath('/admin/produits');
-    revalidatePath('/admin/stock');
-    revalidatePath('/admin');
     return { ok: true };
   } catch (error) {
     return {

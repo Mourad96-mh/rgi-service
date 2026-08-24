@@ -436,6 +436,21 @@ export const fr = {
     navCategories: 'Catégories',
     navAttributes: 'Caractéristiques',
 
+    // ---- the dashboard now loads its data in the browser, so it has states a
+    //      server-rendered page never had: checking the session, loading, and failing ----
+    checkingSession: 'Vérification de la session…',
+    retry: 'Réessayer',
+    loadFailed: 'Impossible de charger ces données.',
+    productNotFound: 'Ce produit est introuvable. Il a peut-être été supprimé.',
+    orderNotFound: 'Cette commande est introuvable.',
+    /**
+     * Said out loud on every screen that edits something the shop bakes in at build time.
+     * Staff who change a carousel photo and then look at rgiservice.ma must not conclude
+     * the save failed — see DEPLOY_HOSTINGER.md §1.
+     */
+    staleNotice:
+      'Enregistré. La boutique en ligne affichera ce changement après la prochaine mise en ligne du site.',
+
     // ---- Produits: the product record only (create / update / delete) ----
     productsSubtitle:
       'Fiches produits : création, modification, suppression. Les quantités se gèrent dans Stock.',

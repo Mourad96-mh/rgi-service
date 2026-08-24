@@ -1,6 +1,6 @@
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// These were server actions. The dashboard now ships inside the static export, where no
+// server exists to run one, so they are ordinary async functions that the client
+// components already importing them call directly against the API. See lib/admin/session.
 import type { Order, OrderStatus, PaymentStatus } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
@@ -19,9 +19,6 @@ export async function setOrderStatus(id: string, status: OrderStatus): Promise<A
       method: 'PATCH',
       body: JSON.stringify({ status }),
     });
-    revalidatePath(`/admin/commandes/${id}`);
-    revalidatePath('/admin/commandes');
-    revalidatePath('/admin');
     return { ok: true };
   } catch (error) {
     return {
@@ -40,8 +37,6 @@ export async function setPaymentStatus(
       method: 'PATCH',
       body: JSON.stringify({ status }),
     });
-    revalidatePath(`/admin/commandes/${id}`);
-    revalidatePath('/admin/commandes');
     return { ok: true };
   } catch (error) {
     return {

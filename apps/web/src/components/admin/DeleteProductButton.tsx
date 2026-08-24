@@ -16,7 +16,20 @@ import { deleteProductForever, fetchProductUsage } from '@/app/admin/(shell)/pro
  * The typed keyword is deliberate friction. Everything else in the dashboard is undoable;
  * this is not, so it should not be reachable by the same reflex that dismisses a confirm.
  */
-export function DeleteProductButton({ id, name }: { id: string; name: string }) {
+export function DeleteProductButton({
+  id,
+  name,
+  /**
+   * Called after a successful write so the list can re-read itself. The old server
+   * action called revalidatePath and the server component re-rendered on its own; a
+   * client page has to be told.
+   */
+  onDone,
+}: {
+  id: string;
+  name: string;
+  onDone?: () => void;
+}) {
   const [pending, startTransition] = useTransition();
   const [checking, setChecking] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -46,7 +59,8 @@ export function DeleteProductButton({ id, name }: { id: string; name: string }) 
 
     startTransition(async () => {
       const result = await deleteProductForever(id);
-      if (!result.ok) setMessage(result.message ?? t.common.error);
+      if (result.ok) onDone?.();
+      else setMessage(result.message ?? t.common.error);
     });
   }
 

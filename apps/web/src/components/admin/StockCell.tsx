@@ -9,10 +9,13 @@ export function StockCell({
   id,
   stock,
   threshold,
+  onDone,
 }: {
   id: string;
   stock: number;
   threshold: number;
+  /** Re-read the row after a save, so the badge and the "dirty" state agree again. */
+  onDone?: () => void;
 }) {
   const [value, setValue] = useState(String(stock));
   const [pending, startTransition] = useTransition();
@@ -42,7 +45,8 @@ export function StockCell({
             setError(null);
             startTransition(async () => {
               const result = await setStock(id, Number(value));
-              if (!result.ok) setError(result.message ?? t.common.error);
+              if (result.ok) onDone?.();
+              else setError(result.message ?? t.common.error);
             });
           }}
           className="inline-flex min-h-[44px] items-center rounded-md bg-grad px-3.5 text-[13px] font-semibold text-bg disabled:opacity-50 sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-[11.5px]"

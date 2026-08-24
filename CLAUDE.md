@@ -54,7 +54,7 @@ reference only, never a colour one. Reuse the same components everywhere (storef
 | Payments | **CMI** (Moroccan cards) + **Cash on Delivery** | COD is essential in Morocco |
 | State (frontend) | React Query (server state) + Zustand (cart/configurator) | |
 | Validation | `class-validator` / `zod` DTOs | Never trust client input |
-| Hosting | Frontend: Vercel. API + DB: VPS or Atlas, EU region (low latency to Morocco) | |
+| Hosting | **Frontend + admin: Hostinger shared hosting, as a static export.** API: Render (Frankfurt). DB: Atlas. | Vercel was dropped at the client's request — see `DEPLOY_HOSTINGER.md` |
 
 **Language of the site:** French first (i18n-ready for Arabic later). Currency: MAD (Moroccan Dirham).
 

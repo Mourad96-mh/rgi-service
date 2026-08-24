@@ -1,6 +1,6 @@
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// These were server actions. The dashboard now ships inside the static export, where no
+// server exists to run one, so they are ordinary async functions that the client
+// components already importing them call directly against the API. See lib/admin/session.
 import type { HeroSlideId, HeroSlideImage } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
@@ -12,9 +12,10 @@ export interface HeroResult {
 /**
  * Point one carousel slide at a new photo.
  *
- * Both the admin list and the homepage are revalidated: without the second call the shop
- * would keep serving the cached hero for up to a minute and staff would reasonably assume
- * the save had failed.
+ * The new photo is stored immediately and the admin shows it at once, but the homepage on
+ * rgiservice.ma keeps its old hero until the site is rebuilt and re-uploaded — the export
+ * bakes the carousel into `index.html`. `HeroSlideImageField` says so on screen, so staff
+ * do not read the unchanged shop as a failed save.
  */
 export async function setHeroImage(
   slideId: HeroSlideId,
@@ -25,8 +26,6 @@ export async function setHeroImage(
       method: 'PUT',
       body: JSON.stringify(image),
     });
-    revalidatePath('/admin/carrousel');
-    revalidatePath('/');
     return { ok: true };
   } catch (error) {
     return {
@@ -40,8 +39,6 @@ export async function setHeroImage(
 export async function resetHeroImage(slideId: HeroSlideId): Promise<HeroResult> {
   try {
     await adminFetch<void>(`/hero-slides/${slideId}`, { method: 'DELETE' });
-    revalidatePath('/admin/carrousel');
-    revalidatePath('/');
     return { ok: true };
   } catch (error) {
     return {

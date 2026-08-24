@@ -8,11 +8,40 @@ role-gated (`staff`, `admin`). Non-technical, French UI, fast.
 
 ## 1. Access & roles
 
-- Route group `/admin/*`, guarded by auth + role middleware.
+- Route group `/admin/*`, guarded by auth + a role check.
 - `staff`: manage catalog (products, categories, stock, flash deals) and orders.
 - `admin`: everything staff can do **plus** users, roles, and compatibility rules.
-- Redirect unauthenticated/unauthorized users; never render admin data client-side without
-  a server check.
+- Redirect unauthenticated/unauthorized users.
+
+### Amended 2026-08-24 — the gate moved into the browser
+
+This section used to end with "never render admin data client-side without a server
+check", and the app implemented exactly that: `middleware.ts` refused `/admin/*` before a
+byte of HTML was produced, and the JWT sat in an httpOnly cookie the browser could not
+read. That is the stronger design and it is what we would still choose if we had a server.
+
+We do not. The storefront ships as a static export to Hostinger shared hosting, which runs
+no Node process (`DEPLOY_HOSTINGER.md`), and Vercel was dropped at the client's request —
+which left the dashboard with nowhere to run at all. It was rewritten to work the way
+CHUN WAH and mat-den already do: the session lives in `localStorage`, travels as
+`Authorization: Bearer`, and the guard is `AdminShell`, a client component.
+
+What that does and does not change:
+
+| | Before | Now |
+|---|---|---|
+| Admin **HTML** | refused without a session | public — an empty shell, no data in it |
+| Admin **data** | bearer token, API role guards | **unchanged** — bearer token, API role guards |
+| Token readable by JS | no (httpOnly) | **yes** — an XSS on this origin can steal it |
+| Reachable by staff | only from a machine running Node | any browser |
+
+The role checks in the UI (`/admin/categories`, `/admin/attributs`) mirror the API's
+`@Roles('admin')`; they do not enforce it. **The API is the security boundary.** Every
+admin route is guarded there, and a hand-edited `localStorage` entry buys an attacker a
+screen of 401s.
+
+The full trade-off, including why the access token's 15-minute life matters more now, is
+written out at the top of `apps/web/src/lib/admin/session.ts`.
 
 ## 2. Product management (the core feature)
 

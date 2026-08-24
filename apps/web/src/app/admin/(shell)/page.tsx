@@ -1,9 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import type { Order, Paginated } from '@rgi/types';
-import { ORDER_STATUS_LABEL_FR } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { price } from '@/lib/format';
 import { adminFetch } from '@/lib/admin/session';
+import { useAdminData } from '@/lib/admin/useAdminData';
+import { AdminError, AdminLoading } from '@/components/admin/AdminState';
 import { StatusPill } from '@/components/admin/StatusPill';
 
 interface AdminStats {
@@ -16,11 +19,24 @@ interface AdminStats {
   activeDeals: number;
 }
 
-export default async function AdminHomePage() {
-  const [stats, latest] = await Promise.all([
-    adminFetch<AdminStats>('/admin/stats'),
-    adminFetch<Paginated<Order>>('/admin/orders?limit=5'),
-  ]);
+interface Home {
+  stats: AdminStats;
+  latest: Paginated<Order>;
+}
+
+export default function AdminHomePage() {
+  const { data, error, loading, reload } = useAdminData<Home>(async () => {
+    const [stats, latest] = await Promise.all([
+      adminFetch<AdminStats>('/admin/stats'),
+      adminFetch<Paginated<Order>>('/admin/orders?limit=5'),
+    ]);
+    return { stats, latest };
+  });
+
+  if (loading) return <AdminLoading />;
+  if (error || !data) return <AdminError message={error} onRetry={reload} />;
+
+  const { stats, latest } = data;
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
@@ -56,7 +72,7 @@ export default async function AdminHomePage() {
             {latest.data.map((order) => (
               <li key={order.id}>
                 <Link
-                  href={`/admin/commandes/${order.id}`}
+                  href={`/admin/commandes/detail?id=${order.id}`}
                   className="surface-card flex flex-wrap items-center gap-4 p-4 transition hover:border-line2"
                 >
                   <span className="font-mono text-[12.5px] text-faint">{order.orderNumber}</span>

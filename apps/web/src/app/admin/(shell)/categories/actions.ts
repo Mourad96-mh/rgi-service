@@ -1,6 +1,6 @@
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// These were server actions. The dashboard now ships inside the static export, where no
+// server exists to run one, so they are ordinary async functions that the client
+// components already importing them call directly against the API. See lib/admin/session.
 import type { Category } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
@@ -24,9 +24,10 @@ export interface CategoryPayload {
  * `/composants/cartes-graphiques/` URLs the SEO strategy depends on, and — through
  * `componentType` — which technical characteristics a product in it is asked for.
  *
- * `revalidatePath('/', 'layout')` is not over-caution: the storefront header is built from
- * this tree in `(boutique)/layout.tsx`, so a category added here has to invalidate every
- * cached storefront page, not just the admin one.
+ * A category added here does not reach the shop on its own. The storefront header is built
+ * from this tree at build time, and rgiservice.ma is a static export — so the change is
+ * live in the dashboard immediately and on the shop only after the next build and upload
+ * (DEPLOY_HOSTINGER.md §1). That is the cost the static target was accepted with.
  */
 export async function saveCategory(
   payload: CategoryPayload,
@@ -37,8 +38,6 @@ export async function saveCategory(
       method: id ? 'PATCH' : 'POST',
       body: JSON.stringify(payload),
     });
-    revalidatePath('/admin/categories');
-    revalidatePath('/', 'layout');
     return { ok: true };
   } catch (error) {
     return {
@@ -51,8 +50,6 @@ export async function saveCategory(
 export async function deleteCategory(id: string): Promise<CategoryResult> {
   try {
     await adminFetch<void>(`/categories/${id}`, { method: 'DELETE' });
-    revalidatePath('/admin/categories');
-    revalidatePath('/', 'layout');
     return { ok: true };
   } catch (error) {
     return {

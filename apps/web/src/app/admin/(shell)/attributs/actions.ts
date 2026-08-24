@@ -1,6 +1,6 @@
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// These were server actions. The dashboard now ships inside the static export, where no
+// server exists to run one, so they are ordinary async functions that the client
+// components already importing them call directly against the API. See lib/admin/session.
 import type { AttributeDefinition } from '@rgi/types';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
 
@@ -41,10 +41,7 @@ export async function saveAttribute(
       id ? `/attribute-definitions/${id}` : '/attribute-definitions',
       { method: id ? 'PATCH' : 'POST', body: JSON.stringify(payload) },
     );
-    revalidatePath('/admin/attributs');
     // Product forms and storefront facets are both built from these definitions.
-    revalidatePath('/admin/produits');
-    revalidatePath('/', 'layout');
     return { ok: true };
   } catch (error) {
     return {
@@ -57,9 +54,6 @@ export async function saveAttribute(
 export async function deleteAttribute(id: string): Promise<AttributeResult> {
   try {
     await adminFetch<void>(`/attribute-definitions/${id}`, { method: 'DELETE' });
-    revalidatePath('/admin/attributs');
-    revalidatePath('/admin/produits');
-    revalidatePath('/', 'layout');
     return { ok: true };
   } catch (error) {
     return {

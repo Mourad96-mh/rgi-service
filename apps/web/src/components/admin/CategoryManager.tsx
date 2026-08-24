@@ -63,7 +63,14 @@ function flatten(nodes: CategoryNode[], depth = 0): { node: CategoryNode; depth:
  * rarely and in bursts, and seeing the parent list while naming a child is most of the
  * job. The form doubles as create and edit — `editing` decides which.
  */
-export function CategoryManager({ tree }: { tree: CategoryNode[] }) {
+export function CategoryManager({
+  tree,
+  onChanged,
+}: {
+  tree: CategoryNode[];
+  /** Re-read the tree after a write — see the note on AttributeManager. */
+  onChanged: () => void;
+}) {
   const rows = flatten(tree);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [pending, startTransition] = useTransition();
@@ -88,8 +95,10 @@ export function CategoryManager({ tree }: { tree: CategoryNode[] }) {
         },
         draft.id,
       );
-      if (result.ok) setDraft(null);
-      else setError(result.message ?? t.common.error);
+      if (result.ok) {
+        setDraft(null);
+        onChanged();
+      } else setError(result.message ?? t.common.error);
     });
   }
 
@@ -98,7 +107,8 @@ export function CategoryManager({ tree }: { tree: CategoryNode[] }) {
     setError(null);
     startTransition(async () => {
       const result = await deleteCategory(id);
-      if (!result.ok) setError(result.message ?? t.common.error);
+      if (result.ok) onChanged();
+      else setError(result.message ?? t.common.error);
     });
   }
 

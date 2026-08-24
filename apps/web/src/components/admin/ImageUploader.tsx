@@ -4,21 +4,14 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import type { ProductImage } from '@rgi/types';
 import { t } from '@/locales/fr';
+import { AdminApiError } from '@/lib/admin/session';
+import { deleteAsset, signUpload, type UploadSignature } from '@/lib/admin/media';
 
 interface Props {
   images: ProductImage[];
   onChange: (images: ProductImage[]) => void;
   /** Alt text to apply to newly uploaded files — the product name. */
   defaultAlt?: string;
-}
-
-interface Signature {
-  cloudName: string;
-  apiKey: string;
-  timestamp: number;
-  signature: string;
-  folder: string;
-  uploadUrl: string;
 }
 
 const ACCEPTED = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
@@ -52,15 +45,13 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
       return null;
     }
 
-    // One signature per file: each carries its own timestamp, and Cloudinary rejects a
-    // signature reused after its window closes.
-    const signRes = await fetch('/api/admin/media/sign', { method: 'POST' });
-    if (!signRes.ok) {
-      const body = (await signRes.json().catch(() => ({}))) as { message?: string };
-      setError(body.message ?? t.admin.imageUploadFailed);
+    let sig: UploadSignature;
+    try {
+      sig = await signUpload();
+    } catch (cause) {
+      setError(cause instanceof AdminApiError ? cause.message : t.admin.imageUploadFailed);
       return null;
     }
-    const sig = (await signRes.json()) as Signature;
 
     // These fields must match exactly what the API signed, or Cloudinary returns 401.
     const form = new FormData();
@@ -115,14 +106,10 @@ export function ImageUploader({ images, onChange, defaultAlt }: Props) {
     // Only Cloudinary-hosted assets are ours to destroy. The seeded press shots are local
     // files under /public and have no Cloudinary asset behind them.
     if (image.publicId && !image.publicId.startsWith('local/')) {
-      const res = await fetch('/api/admin/media/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ publicId: image.publicId }),
-      });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { message?: string };
-        setError(body.message ?? t.admin.imageDeleteFailed);
+      try {
+        await deleteAsset(image.publicId);
+      } catch (cause) {
+        setError(cause instanceof AdminApiError ? cause.message : t.admin.imageDeleteFailed);
         return;
       }
     }

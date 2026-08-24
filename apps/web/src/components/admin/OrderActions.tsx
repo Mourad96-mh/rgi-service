@@ -18,11 +18,18 @@ export function OrderActions({
   status,
   paymentStatus,
   nextStatuses,
+  onDone,
 }: {
   id: string;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   nextStatuses: OrderStatus[];
+  /**
+   * Re-read the order after a transition. It matters more here than elsewhere: the API
+   * appends to statusHistory and can restock the whole order on cancellation, so the page
+   * beside these buttons is stale the moment one of them succeeds.
+   */
+  onDone?: () => void;
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +39,8 @@ export function OrderActions({
     setError(null);
     startTransition(async () => {
       const result = await setOrderStatus(id, next);
-      if (!result.ok) setError(result.message ?? t.common.error);
+      if (result.ok) onDone?.();
+      else setError(result.message ?? t.common.error);
       setConfirming(null);
     });
   }
@@ -100,7 +108,8 @@ export function OrderActions({
             setError(null);
             startTransition(async () => {
               const result = await setPaymentStatus(id, next);
-              if (!result.ok) setError(result.message ?? t.common.error);
+              if (result.ok) onDone?.();
+              else setError(result.message ?? t.common.error);
             });
           }}
           className="field mt-3"

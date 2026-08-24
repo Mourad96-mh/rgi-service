@@ -3,17 +3,21 @@
 The storefront is exported to plain HTML/CSS/JS and uploaded to `public_html`. Nothing
 runs on Hostinger: it hands out files.
 
-> **Read this first.** Shared hosting cannot host all of Rgi Service — only the shop
-> windows. Two pieces have to live elsewhere, and the site does not work without them:
+> **Read this first.** Shared hosting cannot host all of Rgi Service. Two pieces have to
+> live elsewhere, and the site does not work without them:
 >
 > | Piece | Where it must live | Why |
 > |---|---|---|
-> | **NestJS API** | any Node host | cart, checkout, stock, orders, and every rebuild read from it |
+> | **NestJS API** | any Node host | cart, checkout, stock, orders, the admin, and every rebuild read from it |
 > | **MongoDB** | Atlas (already live) | shared hosting offers MySQL only |
-> | **Admin dashboard** | Vercel | needs middleware + server routes for the httpOnly session |
 >
-> The API is the one that costs money. As of 2026-08-24 it is **not deployed anywhere** —
-> the old Render service returns `x-render-routing: no-server`.
+> The API is live on Render at `https://rgi-service-api.onrender.com/api/v1` (Frankfurt).
+>
+> **The admin dashboard is no longer on that list.** It used to need a Node host of its
+> own for `middleware.ts` and four route handlers; it was rewritten on 2026-08-24 to run
+> entirely in the browser against the API, so it exports to plain files and ships in this
+> same upload, at `rgiservice.ma/admin/`. See `docs/ADMIN_DASHBOARD.md` §1 for what that
+> cost.
 
 ---
 
@@ -26,7 +30,7 @@ Worth knowing before you rely on it.
 | Catalogue freshness | ISR, 120 s | **frozen until you rebuild and re-upload** |
 | Filters / sort / pagination | server-rendered | applied in the browser |
 | Search | server-rendered | browser |
-| Admin dashboard | included | **not included** |
+| Admin dashboard | included | included, and runs in the browser |
 | New product appears | automatically | only after a rebuild |
 
 The last row is the one that bites. Staff can add a product in the admin and it will not
@@ -52,8 +56,12 @@ Both variables are **inlined at build time**. `NEXT_PUBLIC_API_URL` must be the 
 
 Output: `apps/web/out/`.
 
-The script moves `src/app/admin`, `src/app/api`, `src/middleware.ts`, `src/components/admin`
-and `src/lib/admin` aside for the duration and always puts them back, including on Ctrl-C.
+The script used to move `src/app/admin`, `src/app/api`, `src/middleware.ts`,
+`src/components/admin` and `src/lib/admin` out of the tree for the duration of the build,
+because Next refuses to export while a route handler or a middleware exists. The route
+handlers and the middleware were deleted on 2026-08-24 and the dashboard now runs in the
+browser, so nothing has to be hidden: the script sets `BUILD_TARGET=static`, runs
+`next build`, and then asserts that `out/admin/index.html` is actually there.
 
 If the API is unreachable the build **fails** rather than exporting pages that read
 « catalogue momentanément indisponible ». That is deliberate: a static file is uploaded and
@@ -127,6 +135,22 @@ Then in a browser, because these only fail client-side:
 - a category page → click a brand filter → the grid must change (this is the API call)
 - `/recherche?q=rtx` → results appear
 - add to cart → `/panier` → `/commande` → place a COD order → the confirmation page loads
+
+And the dashboard, which is entirely client-side and so cannot be checked with `curl`:
+
+- `/admin/` while signed out → must bounce to `/admin/login/?suivant=…`
+- sign in → the sidebar shows your name and role
+- `/admin/produits/` → the table fills; open one → the form loads with its category's
+  technical fields
+- `/admin/stock/` → change a quantity → the row re-reads and the badge follows
+- upload one image on a product → it reaches Cloudinary (this is the `/media/sign` path,
+  the only one that talks to a third party from the browser)
+- press **Déconnexion** → back to the login, and `/admin/` no longer opens
+
+If every one of those fails at once with nothing in the UI, open the browser console: it
+will be CORS. The dashboard calls the API cross-origin exactly like the shop does, so
+`rgiservice.ma` has to be in `CORS_ORIGINS` (§5) — there is no longer a same-origin route
+handler standing in between.
 
 ---
 

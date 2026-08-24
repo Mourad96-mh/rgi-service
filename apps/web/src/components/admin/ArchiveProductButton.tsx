@@ -16,10 +16,17 @@ export function ArchiveProductButton({
   id,
   name,
   archived,
+  /**
+   * Called after a successful write so the list can re-read itself. The old server
+   * action called revalidatePath and the server component re-rendered on its own; a
+   * client page has to be told.
+   */
+  onDone,
 }: {
   id: string;
   name: string;
   archived: boolean;
+  onDone?: () => void;
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +45,8 @@ export function ArchiveProductButton({
           setError(null);
           startTransition(async () => {
             const result = await archiveProduct(id);
-            if (!result.ok) setError(result.message ?? t.common.error);
+            if (result.ok) onDone?.();
+            else setError(result.message ?? t.common.error);
           });
         }}
         className="inline-flex min-h-[44px] items-center rounded-md border border-line px-3.5 text-[13px] font-semibold text-muted transition hover:border-accent3 hover:text-accent3 disabled:opacity-50 sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-[11.5px]"

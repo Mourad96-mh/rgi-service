@@ -5,14 +5,8 @@ import Image from 'next/image';
 import type { HeroSlideId } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { resetHeroImage, setHeroImage } from '@/app/admin/(shell)/carrousel/actions';
-
-interface Signature {
-  apiKey: string;
-  timestamp: number;
-  signature: string;
-  folder: string;
-  uploadUrl: string;
-}
+import { AdminApiError } from '@/lib/admin/session';
+import { signUpload, type UploadSignature } from '@/lib/admin/media';
 
 const ACCEPTED = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -79,13 +73,13 @@ export function HeroSlideImageField({
 
     setUploading(true);
     try {
-      const signRes = await fetch('/api/admin/media/sign', { method: 'POST' });
-      if (!signRes.ok) {
-        const body = (await signRes.json().catch(() => ({}))) as { message?: string };
-        setError(body.message ?? t.admin.imageUploadFailed);
+      let sig: UploadSignature;
+      try {
+        sig = await signUpload();
+      } catch (cause) {
+        setError(cause instanceof AdminApiError ? cause.message : t.admin.imageUploadFailed);
         return;
       }
-      const sig = (await signRes.json()) as Signature;
 
       // These fields must match exactly what the API signed, or Cloudinary returns 401.
       const form = new FormData();

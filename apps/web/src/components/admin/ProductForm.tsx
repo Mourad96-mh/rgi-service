@@ -106,8 +106,10 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
         setError(result.message ?? t.common.error);
         return;
       }
+      // `router.refresh()` used to re-run the server component behind the list. There is
+      // no server component any more, and the list fetches on mount, so the push alone is
+      // enough — it remounts `ProductsView`, which re-asks the API.
       router.push('/admin/produits');
-      router.refresh();
     });
   }
 

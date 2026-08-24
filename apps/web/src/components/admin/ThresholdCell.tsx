@@ -11,7 +11,15 @@ import { setThreshold } from '@/app/admin/(shell)/stock/actions';
  * beside the current stock: staff set it while looking at how fast something is moving,
  * not while writing a description.
  */
-export function ThresholdCell({ id, threshold }: { id: string; threshold: number }) {
+export function ThresholdCell({
+  id,
+  threshold,
+  onDone,
+}: {
+  id: string;
+  threshold: number;
+  onDone?: () => void;
+}) {
   const [value, setValue] = useState(String(threshold));
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +45,8 @@ export function ThresholdCell({ id, threshold }: { id: string; threshold: number
             setError(null);
             startTransition(async () => {
               const result = await setThreshold(id, Number(value));
-              if (!result.ok) setError(result.message ?? t.common.error);
+              if (result.ok) onDone?.();
+              else setError(result.message ?? t.common.error);
             });
           }}
           className="inline-flex min-h-[44px] items-center rounded-md bg-grad px-3.5 text-[13px] font-semibold text-bg disabled:opacity-50 sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-[11.5px]"

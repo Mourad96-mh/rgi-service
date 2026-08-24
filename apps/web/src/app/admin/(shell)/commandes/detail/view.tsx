@@ -1,24 +1,47 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import type { Order } from '@rgi/types';
 import { ORDER_STATUS_FLOW, ORDER_STATUS_LABEL_FR } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { price } from '@/lib/format';
 import { adminFetch, AdminApiError } from '@/lib/admin/session';
+import { useAdminData } from '@/lib/admin/useAdminData';
+import { AdminError, AdminLoading } from '@/components/admin/AdminState';
 import { PaymentPill, StatusPill } from '@/components/admin/StatusPill';
 import { OrderActions } from '@/components/admin/OrderActions';
 
-export const metadata = { title: t.admin.orderDetail };
+export function OrderDetailView() {
+  const id = useSearchParams().get('id');
 
-export default async function AdminOrderPage({ params }: { params: { id: string } }) {
-  let order: Order;
-  try {
-    order = await adminFetch<Order>(`/admin/orders/${params.id}`);
-  } catch (error) {
-    if (error instanceof AdminApiError && error.status === 404) notFound();
-    throw error;
+  const { data, error, loading, reload } = useAdminData<Order | null>(async () => {
+    if (!id) return null;
+    try {
+      return await adminFetch<Order>(`/admin/orders/${id}`);
+    } catch (cause) {
+      // `notFound()` needed a server. A missing order is now an ordinary empty state.
+      if (cause instanceof AdminApiError && cause.status === 404) return null;
+      throw cause;
+    }
+  }, [id]);
+
+  if (loading) return <AdminLoading rows={3} />;
+  if (error) return <AdminError message={error} onRetry={reload} />;
+
+  if (!data) {
+    return (
+      <div className="flex flex-col gap-4">
+        <Link href="/admin/commandes" className="text-[12.5px] text-faint hover:text-text">
+          ← {t.admin.ordersTitle}
+        </Link>
+        <AdminError message={t.admin.orderNotFound} />
+      </div>
+    );
   }
+
+  const order = data;
 
   return (
     <div className="flex flex-col gap-6">
@@ -163,6 +186,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
             status={order.status}
             paymentStatus={order.payment.status}
             nextStatuses={ORDER_STATUS_FLOW[order.status]}
+            onDone={reload}
           />
         </aside>
       </div>
