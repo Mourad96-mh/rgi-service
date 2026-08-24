@@ -37,7 +37,12 @@ t('every internal link resolves to a real file', () => {
       let href = m[1];
       if (href.startsWith('/_next/')) continue;
       const clean = href.replace(/\/$/, '');
-      const candidates = [clean.slice(1), clean.slice(1) + '/index.html', clean.slice(1) + '.html', 'index.html'];
+      // `index.html` used to sit in this list unconditionally, which made every
+      // candidate set non-empty and the whole check vacuous — it passed while the footer
+      // linked to nine pages that do not exist. It is only the right answer for `/`.
+      const candidates = clean === ''
+        ? ['index.html']
+        : [clean.slice(1), clean.slice(1) + '/index.html', clean.slice(1) + '.html'];
       if (!candidates.some((c) => set.has(c))) broken.push(rel(f) + ' -> ' + href);
     }
   }
@@ -58,11 +63,16 @@ t('every referenced image exists', () => {
 });
 
 // ---- metadata -------------------------------------------------------------
-t('every page has exactly one h1', () => {
+t('every indexable page has exactly one h1', () => {
   const bad = [];
   for (const f of html) {
     if (rel(f) === '404.html') continue;
-    const n = (fs.readFileSync(f, 'utf8').match(/<h1[\s>]/g) ?? []).length;
+    const src = fs.readFileSync(f, 'utf8');
+    // Admin pages prerender to an empty shell and fetch their heading with their data.
+    // That is fine precisely because they are noindex: this is an SEO rule, so it applies
+    // to the pages Google reads and to no others.
+    if (/<meta name="robots" content="noindex/.test(src)) continue;
+    const n = (src.match(/<h1[\s>]/g) ?? []).length;
     if (n !== 1) bad.push(rel(f) + ' has ' + n);
   }
   assert(bad.length === 0, bad.slice(0, 10).join(', '));
