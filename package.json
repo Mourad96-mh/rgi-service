@@ -21,7 +21,11 @@
     "start:web": "npm run start --workspace=@rgi/web",
     "images": "node scripts/fetch-product-images.mjs",
     "images:trim": "node scripts/trim-product-images.mjs",
-    "logo": "node scripts/build-logo.mjs"
+    "logo": "node scripts/build-logo.mjs",
+    "qa:api": "node qa/api.mjs",
+    "qa:configurator": "node qa/configurator.mjs",
+    "qa:static": "node qa/static.mjs",
+    "qa": "npm run qa:api && npm run qa:configurator && npm run qa:static"
   },
   "engines": {
     "node": ">=20"
