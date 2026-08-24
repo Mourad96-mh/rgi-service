@@ -36,7 +36,20 @@ import { AdminModule } from './modules/admin/admin.module';
         uri: config.get<string>('mongodbUri'),
       }),
     }),
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
+    /**
+     * Global rate limit. Deliberately generous: it exists to stop scraping and runaway
+     * clients, not to police browsing.
+     *
+     * 120/minute was too low for two reasons. Moroccan mobile users routinely share one
+     * public IP behind carrier NAT, so a handful of customers browsing at once looked like
+     * one abusive client and got « Too Many Requests » on the catalogue. And a static
+     * export of the whole shop makes ~150 requests in a burst, which silently produced
+     * empty category pages.
+     *
+     * Brute-force protection lives where it belongs — the per-route @Throttle on
+     * auth (register 5/min, login 10/min, refresh 20/min), which this does not relax.
+     */
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 600 }]),
     AuthModule,
     UsersModule,
     HealthModule,
