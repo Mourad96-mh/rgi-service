@@ -72,6 +72,37 @@ await t('login', async () => {
   return 'role=' + r.body.user.role;
 });
 
+/**
+ * Rotation has to actually invalidate the token it replaced.
+ *
+ * This check exists because it did not. bcrypt ignores everything past the first 72 bytes
+ * of its input, and two refresh JWTs for the same user are identical for their first ~163,
+ * so `bcrypt.compare` matched every token this user had ever been issued and the reuse
+ * branch in `auth.service.refresh` was unreachable. Fixed by hashing a SHA-256 digest
+ * instead of the raw token — see the note there.
+ *
+ * It matters more now than it did: the dashboard is a static export, so the refresh token
+ * lives in the staff member's `localStorage` rather than an httpOnly cookie.
+ */
+await t('a rotated refresh token cannot be reused', async () => {
+  const rotated = await call('/auth/refresh', { method: 'POST', body: { refreshToken: st.refresh } });
+  eq(rotated.status, 200, 'first refresh');
+  assert(rotated.body.refreshToken !== st.refresh, 'refresh returned the same token');
+
+  const reused = await call('/auth/refresh', { method: 'POST', body: { refreshToken: st.refresh } });
+  eq(reused.status, 401, 'replaying the old refresh token');
+
+  // Reuse is treated as theft: the whole session dies, so the token that replaced it is
+  // dead too and staff must log in again.
+  const after = await call('/auth/refresh', { method: 'POST', body: { refreshToken: rotated.body.refreshToken } });
+  eq(after.status, 401, 'the session survived a detected reuse');
+
+  const back = await call('/auth/login', { method: 'POST', body: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD } });
+  eq(back.status, 200, 'log back in');
+  st.access = back.body.accessToken; st.refresh = back.body.refreshToken;
+  return 'reuse refused, session dropped';
+});
+
 S('B. Pick a category and read its contract');
 await t('category with required attributes exposes its definitions', async () => {
   const tree = await call('/categories');

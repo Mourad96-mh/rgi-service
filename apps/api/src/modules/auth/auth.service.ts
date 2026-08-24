@@ -2,6 +2,7 @@ import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/co
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { createHash } from 'node:crypto';
 import type { AuthResponse, AuthTokens } from '@rgi/types';
 import { UsersService } from '../users/users.service';
 import type { UserDocument } from '../../schemas/user.schema';
@@ -10,6 +11,29 @@ import type { LoginDto } from './dto/login.dto';
 import type { JwtPayload } from './jwt.strategy';
 
 const BCRYPT_ROUNDS = 12;
+
+/**
+ * Condense a refresh token before bcrypt sees it.
+ *
+ * **bcrypt silently ignores everything past the first 72 bytes of its input.** A refresh
+ * token here is a ~232-byte JWT, and two tokens issued to the same user share a ~163-byte
+ * prefix — identical header, and an identical payload right through `sub`, `email` and
+ * `role`. Only `iat`/`exp` differ, and they sit far beyond byte 72.
+ *
+ * So `bcrypt.compare(anyRefreshTokenOfThisUser, storedHash)` returned **true** for every
+ * one of them, and the rotation check below — which exists to catch a stolen token being
+ * replayed — could never fail. Verified against the live API on 2026-08-24: refreshing
+ * twice with the same token succeeded both times.
+ *
+ * SHA-256 first: a 64-character hex digest is comfortably inside the 72-byte window and
+ * differs completely between two tokens that differ by one bit.
+ *
+ * Changing the stored shape invalidates every refresh hash already in the database, so
+ * everyone signed in has to log in once more. That is the intended consequence.
+ */
+function digest(token: string): string {
+  return createHash('sha256').update(token).digest('hex');
+}
 
 @Injectable()
 export class AuthService {
@@ -60,7 +84,7 @@ export class AuthService {
     if (!user?.isActive || !user.refreshTokenHash) {
       throw new UnauthorizedException('Session expirée, veuillez vous reconnecter.');
     }
-    const matches = await bcrypt.compare(refreshToken, user.refreshTokenHash);
+    const matches = await bcrypt.compare(digest(refreshToken), user.refreshTokenHash);
     if (!matches) {
       // Token reuse or a stale token: drop the session entirely.
       await this.users.setRefreshTokenHash(user._id.toString(), null);
@@ -96,7 +120,7 @@ export class AuthService {
     ]);
     await this.users.setRefreshTokenHash(
       user._id.toString(),
-      await bcrypt.hash(refreshToken, BCRYPT_ROUNDS),
+      await bcrypt.hash(digest(refreshToken), BCRYPT_ROUNDS),
     );
     return { accessToken, refreshToken };
   }
