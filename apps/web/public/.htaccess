@@ -1,0 +1,54 @@
+# Rgi Service — Apache config for Hostinger shared hosting.
+# Copied verbatim into out/ by the static build; upload it alongside the site into
+# public_html. Without it: no HTTPS redirect, no compression, no cache headers, and the
+# 404 page is Hostinger's instead of ours.
+
+# ─────────── Force HTTPS + the canonical host ───────────
+# Two hosts serving identical HTML is duplicate content. rgiservice.ma is canonical;
+# www 301s to it, matching the canonical tags the build already emits.
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://rgiservice.ma/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\.rgiservice\.ma$ [NC]
+RewriteRule ^(.*)$ https://rgiservice.ma/$1 [R=301,L]
+
+# ─────────── Clean URLs ───────────
+# The export is built with trailingSlash: true, so /produit/x/ resolves to
+# produit/x/index.html on its own. This only handles a visitor who drops the slash.
+DirectoryIndex index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.*)$ /$1/ [R=301,L]
+
+ErrorDocument 404 /404.html
+
+# ─────────── Compression ───────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>
+
+# ─────────── Caching ───────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Next fingerprints these filenames, so they can never go stale.
+  <FilesMatch "\.(js|css|woff2)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, immutable"
+  </FilesMatch>
+  # HTML must revalidate: it is how a re-upload reaches people who already visited.
+  <FilesMatch "\.html$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(png|jpg|jpeg|webp|avif|svg|ico)$">
+    ExpiresDefault "access plus 1 month"
+  </FilesMatch>
+</IfModule>
+
+# ─────────── Security headers ───────────
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

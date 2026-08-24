@@ -212,6 +212,7 @@ export const fr = {
     reset: 'Tout effacer',
     resume: 'Reprendre cette configuration',
     sharedTitle: 'Configuration partagée',
+    sharedNotFound: 'Cette configuration partagée est introuvable ou a expiré.',
     howTitle: 'Comment ça marche',
     how1Title: 'Choisis tes pièces',
     how1Text:

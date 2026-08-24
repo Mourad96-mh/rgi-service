@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -8,11 +9,10 @@ import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { openGraph, seoTitle } from '@/lib/seo';
 import { Breadcrumbs } from '@/components/catalog/Breadcrumbs';
-import { Filters, type QueryParams } from '@/components/catalog/Filters';
-import { SortSelect } from '@/components/catalog/SortSelect';
-import { ProductCard } from '@/components/product/ProductCard';
 import { EmptyState } from '@/components/ui/Section';
-import { buildCrumbs, findChildren, ItemListJsonLd, Pagination } from './parts';
+import { buildCrumbs, findChildren, ItemListJsonLd } from './parts';
+import { CatalogListing, ListingView } from './listing';
+import { PAGE_SIZE } from './constants';
 
 /**
  * Category listing at the nested, keyword-rich path SEO_STRATEGY.md §1 asks for:
@@ -20,12 +20,30 @@ import { buildCrumbs, findChildren, ItemListJsonLd, Pagination } from './parts';
  */
 export const revalidate = 120;
 
-type PageProps = {
-  params: { slug: string[] };
-  searchParams: QueryParams;
-};
+type PageProps = { params: { slug: string[] } };
 
-const PAGE_SIZE = 24;
+/**
+ * Every category path the static export has to emit, flattened out of the category tree —
+ * `/composants`, `/composants/cartes-graphiques`, and so on.
+ *
+ * Only the *unfiltered first page* of each listing exists as a file. That is deliberate:
+ * it is the URL Google indexes and the one in `sitemap.xml`, so search visibility is
+ * unaffected. Filters, sorting and pagination cannot be pre-rendered — the combinations
+ * are unbounded — so on the static build they are applied in the browser instead.
+ */
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+  // See the note in produit/[slug]: `revalidate: 0` would make this route dynamic.
+  const tree = await apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 3600 });
+  const paths: { slug: string[] }[] = [];
+  const walk = (nodes: CategoryNode[]) => {
+    for (const node of nodes) {
+      paths.push({ slug: node.slug.split('/') });
+      walk(node.children);
+    }
+  };
+  walk(tree ?? []);
+  return paths;
+}
 
 async function loadCategory(slug: string) {
   try {
@@ -58,30 +76,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: PageProps) {
+export default async function CategoryPage({ params }: PageProps) {
   const slug = params.slug.join('/');
   const found = await loadCategory(slug);
   if (!found) notFound();
 
   const { category } = found;
   const base = routes.category(slug);
-  const page = Number(searchParams.page ?? 1) || 1;
 
-  const query = new URLSearchParams();
-  query.set('category', slug);
-  query.set('limit', String(PAGE_SIZE));
-  query.set('page', String(page));
-  for (const [key, value] of Object.entries(searchParams)) {
-    if (value === undefined || key === 'page') continue;
-    for (const item of Array.isArray(value) ? value : [value]) query.append(key, item);
-  }
-
+  // The unfiltered first page — the view this URL is canonical for, the one in the
+  // sitemap, and the one Google indexes. Filters, sort and pagination are applied in the
+  // browser afterwards (see ./listing), because a static host cannot read a query string.
   const [data, tree] = await Promise.all([
-    apiFetchOrNull<ProductListResponse>(`/products?${query.toString()}`, { revalidate: 120 }),
+    apiFetchOrNull<ProductListResponse>(
+      `/products?category=${encodeURIComponent(slug)}&limit=${PAGE_SIZE}&page=1`,
+      { revalidate: 120 },
+    ),
     apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 300 }),
   ]);
 
   if (!data) {
+    // On the server build this is a transient API outage and a graceful message is right —
+    // the next revalidation fixes it. In a static export there is no next time: whatever
+    // renders here is written to a file and uploaded, so a category page that quietly says
+    // « catalogue indisponible » would sit on the shop until someone noticed. Fail the
+    // build instead.
+    if (process.env.BUILD_TARGET === 'static') {
+      throw new Error(
+        `Catégorie « ${slug} » : l'API n'a pas répondu. Refus d'exporter une page vide. ` +
+          'Vérifiez que l’API tourne, puis relancez le build.',
+      );
+    }
     return (
       <div className="wrap py-16">
         <EmptyState title={t.common.apiDown} />
@@ -91,7 +116,6 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
   const crumbs = buildCrumbs(tree ?? [], slug, category.name.fr);
   const children = findChildren(tree ?? [], category.id);
-  const totalPages = Math.max(1, Math.ceil(data.total / PAGE_SIZE));
 
   return (
     <div className="wrap py-8 sm:py-10">
@@ -114,37 +138,16 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         </div>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-[260px_1fr] lg:gap-8">
-        <Filters base={base} params={searchParams} data={data} />
-
-        <div>
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <span className="text-sm text-faint">{t.category.results(data.total)}</span>
-            <SortSelect />
-          </div>
-
-          {data.data.length ? (
-            <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] xl:grid-cols-3 3xl:grid-cols-4">
-              {data.data.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title={t.category.empty}
-              action={
-                <Link href={base} className="btn btn-ghost">
-                  {t.category.emptyAction}
-                </Link>
-              }
-            />
-          )}
-
-          {totalPages > 1 ? (
-            <Pagination base={base} params={searchParams} page={page} totalPages={totalPages} />
-          ) : null}
-        </div>
-      </div>
+      {/*
+        The fallback is not a placeholder — it is the real listing, and it is what gets
+        written into the static HTML. `CatalogListing` reads the query string, which forces
+        it to render in the browser; everything up to this boundary is prerendered instead.
+        So a crawler and a visitor with no JavaScript get the full first page of products,
+        and only someone who actually clicks a filter needs JavaScript at all.
+      */}
+      <Suspense fallback={<ListingView base={base} params={{}} page={1} data={data} />}>
+        <CatalogListing slug={slug} base={base} initial={data} />
+      </Suspense>
 
       <ItemListJsonLd data={data} slug={slug} name={category.name.fr} />
     </div>

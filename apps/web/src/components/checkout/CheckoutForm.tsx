@@ -137,11 +137,7 @@ export function CheckoutForm() {
       );
 
       clear();
-      router.push(
-        `${routes.orderConfirmation(order.orderNumber)}${
-          order.publicToken ? `?token=${encodeURIComponent(order.publicToken)}` : ''
-        }`,
-      );
+      router.push(routes.orderConfirmation(order.orderNumber, order.publicToken));
     } catch (error) {
       setApiError(error instanceof Error ? error.message : t.common.error);
       setSubmitting(false);

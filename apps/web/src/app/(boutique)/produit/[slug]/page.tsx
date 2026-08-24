@@ -8,11 +8,11 @@ import type {
   ProductListResponse,
 } from '@rgi/types';
 import { ApiError, apiFetch, apiFetchOrNull } from '@/lib/api';
-import { SITE_NAME, SITE_URL } from '@/lib/env';
+import { SITE_URL } from '@/lib/env';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { absoluteUrl } from '@/lib/url';
-import { openGraph, productTitle } from '@/lib/seo';
+import { openGraph, productDescription, productTitle } from '@/lib/seo';
 import { cardSpecs, discountPct, formatAttributeValue, price, primaryImage } from '@/lib/format';
 import { Breadcrumbs, type Crumb } from '@/components/catalog/Breadcrumbs';
 import { ProductCard, StockLine } from '@/components/product/ProductCard';
@@ -26,6 +26,42 @@ import { ProductJsonLd } from './json-ld';
 export const revalidate = 120;
 
 type PageProps = { params: { slug: string } };
+
+/**
+ * Every product URL the static export has to emit.
+ *
+ * Only used when `BUILD_TARGET=static`; the server build uses ISR and ignores this.
+ *
+ * The API caps `limit` at 100 (`limit ne peut pas dépasser 100.`), so this pages through
+ * the catalogue rather than asking for it all at once. That is not future-proofing for
+ * its own sake: a product missing from this list is not a stale page on Hostinger, it is
+ * a 404 — the file simply does not exist — so the moment the catalogue passes 100 items a
+ * single-request version would start silently dropping products from the shop.
+ */
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const PER_PAGE = 100;
+  const slugs: { slug: string }[] = [];
+
+  for (let page = 1; ; page++) {
+    const batch = await apiFetchOrNull<ProductListResponse>(
+      `/products?limit=${PER_PAGE}&page=${page}&sort=newest`,
+      // Not `revalidate: 0`: that sets `cache: 'no-store'`, which marks the route dynamic
+      // and makes Next reject it for `output: export`.
+      { revalidate: 3600 },
+    );
+    if (!batch) {
+      throw new Error(
+        `generateStaticParams: the catalogue API did not answer for page ${page}. ` +
+          'Refusing to build a shop with missing product pages — start the API and retry.',
+      );
+    }
+
+    slugs.push(...batch.data.map((product) => ({ slug: product.slug })));
+    if (slugs.length >= batch.total || batch.data.length === 0) break;
+  }
+
+  return slugs;
+}
 
 async function loadProduct(slug: string): Promise<Product | null> {
   try {
@@ -46,9 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = custom ? { meta: custom, text: custom } : productTitle(product.name.fr, product.brand);
   const description =
     product.metaDescription?.fr ??
-    `${product.name.fr} au prix de ${price(product.effectivePrice)} chez ${SITE_NAME}. ${
-      product.stock > 0 ? 'En stock' : 'Sur commande'
-    }, livraison 48h au Maroc, paiement à la livraison possible.`;
+    productDescription(product.name.fr, price(product.effectivePrice), product.stock > 0);
   const image = primaryImage(product);
 
   return {

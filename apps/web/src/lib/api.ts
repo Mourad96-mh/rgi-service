@@ -37,14 +37,39 @@ type FetchOptions = RequestInit & {
  * The one place the storefront talks to the API. Every error surfaces the French message
  * the API already produced (API_SPEC.md §Cross-cutting), so pages never invent copy.
  */
+/**
+ * Statuses worth trying again: the API throttles at 120 requests/minute, and a static
+ * build asks for the whole catalogue at once — far more than that in a single burst.
+ * Without this the build would quietly bake « catalogue indisponible » into the HTML of
+ * every page unlucky enough to come after the limit.
+ */
+const RETRY_STATUSES = new Set([429, 502, 503, 504]);
+const MAX_ATTEMPTS = 5;
+const MAX_WAIT_MS = 70_000; // one throttle window plus a margin
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const { revalidate = 60, ...init } = options;
-  const res = await fetch(`${API_URL}${path}`, {
-    ...init,
-    headers: { 'Content-Type': 'application/json', ...(init.headers ?? {}) },
-    next: revalidate > 0 ? { revalidate } : undefined,
-    cache: revalidate > 0 ? undefined : 'no-store',
-  });
+
+  let res!: Response;
+  for (let attempt = 1; ; attempt++) {
+    res = await fetch(`${API_URL}${path}`, {
+      ...init,
+      headers: { 'Content-Type': 'application/json', ...(init.headers ?? {}) },
+      next: revalidate > 0 ? { revalidate } : undefined,
+      cache: revalidate > 0 ? undefined : 'no-store',
+    });
+
+    if (!RETRY_STATUSES.has(res.status) || attempt >= MAX_ATTEMPTS) break;
+
+    // The throttler says exactly how long its window has left; trust it over a guess.
+    const retryAfter = Number(res.headers.get('Retry-After'));
+    const wait = Number.isFinite(retryAfter) && retryAfter > 0
+      ? Math.min(retryAfter * 1000, MAX_WAIT_MS)
+      : Math.min(2 ** attempt * 500, MAX_WAIT_MS);
+    await sleep(wait);
+  }
 
   if (!res.ok) {
     let message = 'Le service est momentanément indisponible. Réessayez dans un instant.';

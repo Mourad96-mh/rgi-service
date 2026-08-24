@@ -1,4 +1,7 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Order } from '@rgi/types';
@@ -10,27 +13,49 @@ import { price } from '@/lib/format';
 import { EmptyState } from '@/components/ui/Section';
 import { CheckIcon } from '@/components/ui/Icons';
 
-export const metadata: Metadata = {
-  title: 'Commande confirmée',
-  robots: { index: false, follow: false },
-};
+/**
+ * The order is fetched in the browser, from `?commande=…&token=…`.
+ *
+ * It cannot be a path segment on a static host: `/commande/confirmation/RGI-2026-0042`
+ * would have to exist as a file, and the order did not exist when the site was built. The
+ * page is `noindex` anyway, so nothing is owed to a crawler here.
+ */
+export function OrderConfirmation() {
+  const searchParams = useSearchParams();
+  const orderNumber = searchParams.get('commande') ?? '';
+  const token = searchParams.get('token') ?? '';
 
-/** Always fresh: an order's status changes after it is placed. */
-export const dynamic = 'force-dynamic';
+  const [order, setOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function ConfirmationPage({
-  params,
-  searchParams,
-}: {
-  params: { orderNumber: string };
-  searchParams: { token?: string };
-}) {
-  // Guests read their own order with the token issued at checkout — order numbers are
-  // sequential, so the number alone must not be enough.
-  const query = searchParams.token ? `?token=${encodeURIComponent(searchParams.token)}` : '';
-  const order = await apiFetchOrNull<Order>(`/orders/${params.orderNumber}${query}`, {
-    revalidate: 0,
-  });
+  useEffect(() => {
+    if (!orderNumber) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    // Guests read their own order with the token issued at checkout — order numbers are
+    // sequential, so the number alone must not be enough.
+    const query = token ? `?token=${encodeURIComponent(token)}` : '';
+    apiFetchOrNull<Order>(`/orders/${encodeURIComponent(orderNumber)}${query}`, {
+      revalidate: 0,
+    }).then((found) => {
+      if (cancelled) return;
+      setOrder(found);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [orderNumber, token]);
+
+  if (loading) {
+    return (
+      <div className="wrap py-12 sm:py-16">
+        <div className="surface-card h-40 animate-pulse" />
+      </div>
+    );
+  }
 
   if (!order) {
     return (

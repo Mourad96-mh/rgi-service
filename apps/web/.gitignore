@@ -1,0 +1,4 @@
+
+# Staging dir used by scripts/build-static.mjs while admin files are moved aside
+.static-build-stash/
+out/

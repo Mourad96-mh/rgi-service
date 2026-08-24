@@ -1,32 +1,69 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import type { Build } from '@rgi/types';
 import { SLOTS } from '@rgi/types';
-import { ApiError, apiFetch } from '@/lib/api';
+import { apiFetchOrNull } from '@/lib/api';
+import { EmptyState } from '@/components/ui/Section';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { price } from '@/lib/format';
 import { ResumeBuildButton } from '@/components/configurator/ResumeBuildButton';
 
-/** A shared build is a private link, not a page for Google (SEO_STRATEGY.md §robots). */
-export const metadata: Metadata = {
-  title: 'Configuration partagée',
-  robots: { index: false, follow: false },
-};
+/**
+ * A shared build, fetched in the browser from `?id=…`.
+ *
+ * The share id cannot be a path segment on a static host — the build is created long after
+ * the site is built, so no such file exists. The page is `noindex` (a private link, not a
+ * page for Google — SEO_STRATEGY.md §robots), so this costs nothing in search.
+ */
+export function SharedBuild() {
+  const shareId = useSearchParams().get('id') ?? '';
+  const [build, setBuild] = useState<Build | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export const dynamic = 'force-dynamic';
-
-export default async function SharedBuildPage({ params }: { params: { shareId: string } }) {
-  let build: Build;
-  try {
-    build = await apiFetch<Build>(`/configurator/builds/${params.shareId}`, {
+  useEffect(() => {
+    if (!shareId) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    apiFetchOrNull<Build>(`/configurator/builds/${encodeURIComponent(shareId)}`, {
       revalidate: 0,
+    }).then((found) => {
+      if (cancelled) return;
+      setBuild(found);
+      setLoading(false);
     });
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) notFound();
-    throw error;
+    return () => {
+      cancelled = true;
+    };
+  }, [shareId]);
+
+  if (loading) {
+    return (
+      <div className="wrap py-12 sm:py-16">
+        <div className="surface-card h-40 animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!build) {
+    return (
+      <div className="wrap py-12 sm:py-16">
+        <EmptyState
+          title={t.configurator.sharedNotFound}
+          action={
+            <Link href={routes.configurator} className="btn btn-primary">
+              {t.nav.configurator}
+            </Link>
+          }
+        />
+      </div>
+    );
   }
 
   return (
