@@ -44,6 +44,21 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
+  /**
+   * Google Search Console ownership proof, added 2026-08-24 once rgiservice.ma was serving
+   * the real site (SEO_STRATEGY.md: do not submit before the domain is live, or it has to
+   * be redone).
+   *
+   * It sits in the root layout, so it renders into every page's `<head>` rather than only
+   * the homepage. That costs one meta tag per page and buys two things: the HTML-tag method
+   * keeps working if Google ever re-checks a different URL, and a future rebuild cannot
+   * quietly drop it from the one page that mattered.
+   *
+   * **Do not remove it after verification succeeds.** Google re-checks periodically and
+   * un-verifies the property when the tag disappears, which silently stops Search Console
+   * data. It is safe to leave indefinitely — it discloses nothing.
+   */
+  verification: { google: 'ajKU8vCdqrPH4Wb7tktb4UkMwGH_O97ZaSWigYWMogk' },
 };
 
 /**
