@@ -67,7 +67,7 @@ is nothing to gain.
    | Variable | Value |
    |---|---|
    | `NEXT_PUBLIC_API_URL` | `https://rgi-service-api.onrender.com/api/v1` |
-   | `NEXT_PUBLIC_SITE_URL` | your Vercel URL, e.g. `https://rgi-service.vercel.app` |
+   | `NEXT_PUBLIC_SITE_URL` | `https://rgiservice.ma` once section 6 is done; `https://rgi-service.vercel.app` until then |
 
    `NEXT_PUBLIC_SITE_URL` is what canonical URLs, `sitemap.xml`, Open Graph and the
    JSON-LD are built from — wrong here means wrong metadata everywhere.
@@ -104,6 +104,69 @@ time, not read at runtime.
 
 ---
 
+## 6. Going live on `rgiservice.ma`
+
+**The domain does not point here.** As decided on 2026-08-24 the storefront is a static
+export hosted on Hostinger shared hosting, and `rgiservice.ma` points at Hostinger. The
+whole cutover — including the MX record that must be split before the apex moves, or
+`contact@rgiservice.ma` goes dark — lives in **`DEPLOY_HOSTINGER.md`**. Do not repoint DNS
+from this file.
+
+What stays here:
+
+| Piece | Host | Address |
+|---|---|---|
+| Storefront | Hostinger | `https://rgiservice.ma` |
+| **Admin dashboard** | **Vercel** | `https://rgi-service.vercel.app/admin` |
+| API | Render | `https://rgi-service-api.onrender.com/api/v1` |
+| Database | Atlas | — |
+
+The admin cannot be part of the static export: its pages take ids that do not exist at
+build time, and its session gate is Next middleware, which needs a server. So the Vercel
+project keeps running purely to serve `/admin` for staff. That is a handful of people on a
+free plan.
+
+### 6.1 — CORS must list every origin that calls the API
+
+Browsers call the API from **two** places now — the shop on Hostinger and the admin on
+Vercel. On Render → `rgi-service-api` → Environment:
+
+```
+CORS_ORIGINS=https://rgiservice.ma,https://www.rgiservice.ma,https://rgi-service.vercel.app,https://*.vercel.app,http://localhost:3000
+```
+
+Miss the first entry and the shop's cart and filters fail silently. Miss the Vercel entries
+and staff cannot log in.
+
+### 6.2 — The Vercel project's own variables
+
+`NEXT_PUBLIC_SITE_URL` on Vercel should stay `https://rgi-service.vercel.app`. It is only
+used to build canonical URLs and JSON-LD, and the admin is `noindex` — pointing it at
+`rgiservice.ma` would make the admin advertise canonicals for pages Hostinger serves.
+
+### 6.3 — Search Console
+
+Add the property for `rgiservice.ma` (the Hostinger site) only, and submit
+`https://rgiservice.ma/sitemap.xml`. The Vercel host serves no indexable page any more.
+
+### Before you call it launched
+
+- **Render's free plan sleeps after 15 minutes idle** — the next request waits ~50 s. The
+  shop's cart and checkout go through this API, so a sleeping API means a customer watching
+  a spinner at the moment they try to pay. **Render Starter, $7/month**, removes it and is
+  the first money this project should spend.
+- Every catalogue change needs a static rebuild and re-upload (`DEPLOY_HOSTINGER.md` §7).
+
+### Optional: `api.rgiservice.ma`
+
+Pointing a subdomain at Render (Render → Settings → Custom Domain, plus a `CNAME api →
+rgi-service-api.onrender.com` at HeberJahiz) means the shop can leave Render later without
+rebuilding the storefront, stops `onrender.com` showing in the network tab, and gives CMI a
+first-party callback host. It changes `NEXT_PUBLIC_API_URL`, so it needs a fresh static
+build — cheapest to do in the same pass as the first upload.
+
+---
+
 ## Not production-ready yet
 
 This is a **staging/demo** deployment. Before a real launch:
@@ -118,5 +181,5 @@ This is a **staging/demo** deployment. Before a real launch:
 - **NAP** — the footer's address, e-mail and opening hours are placeholders, and there is no
   `LocalBusiness` JSON-LD until they are real.
 - **Analytics** — no GA4 and no consent banner yet.
-- **Domain** — point the real domain at Vercel and update `NEXT_PUBLIC_SITE_URL`; the
-  `.vercel.app` host should not be what Google indexes.
+- **Domain** — `rgiservice.ma` is registered but still parked at HeberJahiz. **Section 6**
+  is the cutover; until it is done, `.vercel.app` is what Google would index.
