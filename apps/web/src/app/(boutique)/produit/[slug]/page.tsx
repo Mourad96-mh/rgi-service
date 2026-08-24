@@ -28,15 +28,18 @@ export const revalidate = 120;
 type PageProps = { params: { slug: string } };
 
 /**
- * Every product URL the static export has to emit.
+ * Every product URL to pre-render.
  *
- * Only used when `BUILD_TARGET=static`; the server build uses ISR and ignores this.
+ * Next calls this on BOTH builds, which is why the failure below is conditional. On the
+ * static export a product missing from this list is a permanent 404 — no file exists and
+ * no server will ever make one — so an unreachable API must stop the build. On the server
+ * build the same gap is harmless: `dynamicParams` is on, so ISR renders the product the
+ * first time someone asks for it. Failing hard there would mean a dead catalogue API could
+ * block a deploy that has nothing to do with it.
  *
  * The API caps `limit` at 100 (`limit ne peut pas dépasser 100.`), so this pages through
- * the catalogue rather than asking for it all at once. That is not future-proofing for
- * its own sake: a product missing from this list is not a stale page on Hostinger, it is
- * a 404 — the file simply does not exist — so the moment the catalogue passes 100 items a
- * single-request version would start silently dropping products from the shop.
+ * the catalogue rather than asking for it all at once — otherwise the moment the catalogue
+ * passes 100 items the export would start silently dropping products from the shop.
  */
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const PER_PAGE = 100;
@@ -50,10 +53,17 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
       { revalidate: 3600 },
     );
     if (!batch) {
-      throw new Error(
-        `generateStaticParams: the catalogue API did not answer for page ${page}. ` +
-          'Refusing to build a shop with missing product pages — start the API and retry.',
+      if (process.env.BUILD_TARGET === 'static') {
+        throw new Error(
+          `generateStaticParams: the catalogue API did not answer for page ${page}. ` +
+            'Refusing to export a shop with missing product pages — start the API and retry.',
+        );
+      }
+      console.warn(
+        `generateStaticParams: the catalogue API did not answer for page ${page}; ` +
+          `pre-rendering ${slugs.length} product page(s). The rest render on demand.`,
       );
+      break;
     }
 
     slugs.push(...batch.data.map((product) => ({ slug: product.slug })));

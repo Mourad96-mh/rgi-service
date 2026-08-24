@@ -16,9 +16,11 @@
  *                        that live inside src/app/admin, so leaving them behind breaks the
  *                        webpack resolve even though no storefront page imports them.
  *
- * All three belong to the admin, which stays on Vercel. This script moves them aside,
- * builds, and always puts them back — including on failure or Ctrl-C, because leaving a
- * developer's working tree gutted would be far worse than a failed build.
+ * They all belong to the admin dashboard, which is not part of what Hostinger serves — it
+ * runs from a machine that has a Node server (today, the developer's, via `next dev`).
+ * This script moves them aside, builds, and always puts them back — including on failure
+ * or Ctrl-C, because leaving a developer's working tree gutted would be far worse than a
+ * failed build.
  */
 import { existsSync, mkdirSync, renameSync, cpSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -47,6 +49,38 @@ const serverOnly = [
 
 const moved = [];
 
+/**
+ * Rename, retrying on EPERM.
+ *
+ * Windows refuses to rename a directory while any process holds a handle on it, and this
+ * repo lives inside OneDrive. A sync pass or an antivirus scan clears in well under a
+ * second, so those are worth retrying. A running `next dev` does not clear at all - its
+ * watcher sits on src/app for as long as it lives - which is why hide() gives up with an
+ * explanation rather than retrying forever.
+ *
+ * restore() retries far harder than hide(): a failed hide is an inconvenience, a failed
+ * restore leaves the developer's source tree missing its admin directory.
+ *
+ * The sleep is synchronous on purpose: restore() also runs from a 'exit' handler, where
+ * nothing asynchronous is allowed to finish.
+ */
+function sleepSync(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function renameWithRetry(from, to, attempts = 12) {
+  for (let i = 1; ; i++) {
+    try {
+      renameSync(from, to);
+      return;
+    } catch (error) {
+      if (error.code !== 'EPERM' && error.code !== 'EBUSY' && error.code !== 'EACCES') throw error;
+      if (i >= attempts) throw error;
+      sleepSync(Math.min(100 * i, 800));
+    }
+  }
+}
+
 function hide() {
   rmSync(STASH, { recursive: true, force: true });
   mkdirSync(STASH, { recursive: true });
@@ -54,18 +88,30 @@ function hide() {
     const from = join(webRoot, rel);
     if (!existsSync(from)) continue;
     const to = join(STASH, rel.replaceAll('/', '__'));
-    renameSync(from, to);
+    renameWithRetry(from, to);
     moved.push([from, to]);
   }
 }
 
 function restore() {
+  const stuck = [];
   while (moved.length) {
     const [from, to] = moved.pop();
-    if (existsSync(to)) {
+    if (!existsSync(to)) continue;
+    try {
       rmSync(from, { recursive: true, force: true });
-      renameSync(to, from);
+      renameWithRetry(to, from, 30);
+    } catch {
+      stuck.push([to, from]);
     }
+  }
+  if (stuck.length) {
+    // Never fail silently here: the tree is mid-move and the developer must know exactly
+    // what to put back by hand.
+    console.error('');
+    console.error('  COULD NOT RESTORE these directories. Move them back manually:');
+    for (const [to, from] of stuck) console.error('    ' + to + '  ->  ' + from);
+    return;
   }
   rmSync(STASH, { recursive: true, force: true });
 }
@@ -95,7 +141,20 @@ console.log(`    site : ${siteUrl}`);
 console.log(`    api  : ${apiUrl}`);
 console.log(`    excluding: ${serverOnly.join(', ')}\n`);
 
-hide();
+try {
+  hide();
+} catch (error) {
+  // Put back whatever was already moved before giving up.
+  restore();
+  console.error('');
+  console.error('  Could not move the admin files aside: ' + error.message);
+  console.error('  Windows refuses to rename a directory while a process holds a handle on');
+  console.error('  it. In order of likelihood: a running `next dev` (its watcher sits on');
+  console.error('  src/app), an open editor, or a OneDrive sync pass on this folder.');
+  console.error('  Stop the dev server first, then retry.');
+  console.error('');
+  process.exit(1);
+}
 
 const result = spawnSync('npx', ['next', 'build'], {
   cwd: webRoot,
