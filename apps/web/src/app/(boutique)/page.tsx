@@ -120,6 +120,9 @@ function JsonLd({ categories }: { categories: CategoryNode[] }) {
          * `openingHoursSpecification` and `hasMap` (the Google Business Profile URL) are
          * still missing — they are the remaining half of local SEO. Do NOT invent them:
          * a NAP that disagrees with the Google Business Profile actively hurts ranking.
+         *
+         * Checked 2026-08-24: the Aïn Chock address on the HeberJahiz billing account is the
+         * registrant's, NOT the storefront's — confirmed by the client. Do not reuse it here.
          */
         '@type': 'ComputerStore',
         '@id': `${SITE_URL}/#localbusiness`,

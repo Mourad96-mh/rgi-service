@@ -52,6 +52,33 @@ export function productTitle(name: string, brand: string): SeoTitle {
   return seoTitle(base, 'Prix Maroc');
 }
 
+/**
+ * Google truncates a result snippet at roughly 160 characters, and the tail of ours is the
+ * cash-on-delivery promise — the single strongest trust signal in Moroccan e-commerce.
+ */
+export const DESC_MAX = 160;
+
+/**
+ * A product's meta description, budgeted the way {@link seoTitle} budgets a title.
+ *
+ * The name and the price are the part a shopper scans for, so they are never cut. What
+ * gives way is the boilerplate after them, in three steps: the full sales pitch, then a
+ * terser one that still names both delivery and COD, then nothing at all. Long catalogue
+ * names — "Kit mémoire Corsair Vengeance RGB 32 Go (2×16) DDR5 6000 MHz" — are what push
+ * the first form past the limit.
+ */
+export function productDescription(name: string, priceLabel: string, inStock: boolean): string {
+  const head = `${name} au prix de ${priceLabel} chez ${SITE_NAME}. ${
+    inStock ? 'En stock' : 'Sur commande'
+  }`;
+  const tails = [
+    ', livraison 48h au Maroc, paiement à la livraison possible.',
+    ', livraison 48h, paiement à la livraison.',
+    '.',
+  ];
+  return head + (tails.find((t) => head.length + t.length <= DESC_MAX) ?? '.');
+}
+
 /** The share card used wherever a page has no image of its own. */
 export const OG_IMAGE = {
   url: `${SITE_URL}/og-default.png`,
