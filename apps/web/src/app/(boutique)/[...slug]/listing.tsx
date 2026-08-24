@@ -110,15 +110,25 @@ function toQueryParams(search: URLSearchParams): QueryParams {
 }
 
 /**
- * Faceted browsing, done in the browser.
+ * Faceted browsing — and catalogue freshness — done in the browser.
  *
- * On a static host there is no server to read `?brand=ASUS&page=2` — the same file is
+ * On a static host there is no server to read `?brand=ASUS&page=2`, and the same file is
  * returned whatever the query string says. So the filtering that used to happen during
  * server rendering happens here instead: the query string is read on the client and the
  * catalogue API is asked directly.
  *
- * With no query string there is nothing to fetch — the server already rendered exactly
- * that view — so a plain category visit costs no extra request.
+ * This also runs when there is **no** query string, which is the part that keeps the shop
+ * honest. The prerendered grid is a photograph of the catalogue at build time; a product
+ * added in the admin since then is missing from it, and on shared hosting nothing ever
+ * corrects that until someone rebuilds and re-uploads. Re-asking the API on mount makes
+ * the visitor's copy current within one request, while the HTML that Google and a
+ * JavaScript-less visitor read stays exactly as it was.
+ *
+ * Two behaviours worth keeping straight:
+ *   - the refresh is **silent** (no `busy` dimming). A filter click should show it is
+ *     working; an ordinary page load should not flicker on every visit.
+ *   - a failed request keeps the last good data, so an API blip degrades to a slightly
+ *     stale shop rather than an empty one.
  */
 export function CatalogListing({
   slug,
@@ -136,22 +146,24 @@ export function CatalogListing({
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!qs) {
-      setData(initial);
-      setBusy(false);
-      return;
-    }
-
     let cancelled = false;
-    setBusy(true);
+    const filtered = Boolean(qs);
+
+    if (filtered) {
+      setBusy(true);
+    } else {
+      // Clearing the filters should restore the server's view instantly rather than
+      // leaving the previous filtered result on screen while the refresh is in flight.
+      setData(initial);
+    }
 
     const query = new URLSearchParams(qs);
     query.set('category', slug);
     query.set('limit', String(PAGE_SIZE));
     if (!query.get('page')) query.set('page', '1');
 
-    // `revalidate: 0` here means `cache: 'no-store'` — in the browser that is what keeps a
-    // filtered view showing current prices and stock, which the static HTML cannot.
+    // `revalidate: 0` means `cache: 'no-store'` — in the browser that is what shows current
+    // prices, stock and newly added products, none of which the static HTML can know.
     apiFetchOrNull<ProductListResponse>(`/products?${query.toString()}`, { revalidate: 0 })
       .then((next) => {
         if (cancelled) return;

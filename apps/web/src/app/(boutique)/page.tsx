@@ -7,20 +7,25 @@ import { Hero } from '@/components/home/Hero';
 import { CategoryTiles } from '@/components/home/CategoryTiles';
 import { ConfiguratorCta } from '@/components/home/ConfiguratorCta';
 import { TrustBand } from '@/components/home/TrustBand';
-import { ProductCard } from '@/components/product/ProductCard';
+import { LiveProductGrid } from '@/components/product/LiveProductGrid';
 import { EmptyState, Section } from '@/components/ui/Section';
 import { CONTACT } from '@/lib/contact';
 
 /** Home is statically rendered and revalidated — SSR/ISR for SEO (SEO_STRATEGY.md §1). */
 export const revalidate = 300;
 
+/**
+ * Declared once and shared by the server render and the browser refresh: `LiveProductGrid`
+ * re-asks the API with the very same query, so the two can never drift apart.
+ */
+const PREBUILT_QUERY = 'categoryType=prebuilt&limit=4&sort=price_asc';
+const LATEST_QUERY = 'limit=8&sort=newest';
+
 export default async function HomePage() {
   const [categories, prebuilts, latest] = await Promise.all([
     apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 300 }),
-    apiFetchOrNull<ProductListResponse>('/products?categoryType=prebuilt&limit=4&sort=price_asc', {
-      revalidate: 120,
-    }),
-    apiFetchOrNull<ProductListResponse>('/products?limit=8&sort=newest', { revalidate: 120 }),
+    apiFetchOrNull<ProductListResponse>(`/products?${PREBUILT_QUERY}`, { revalidate: 120 }),
+    apiFetchOrNull<ProductListResponse>(`/products?${LATEST_QUERY}`, { revalidate: 120 }),
   ]);
 
   const apiDown = categories === null && latest === null;
@@ -51,21 +56,13 @@ export default async function HomePage() {
           href={routes.category('pc-gamer')}
           linkLabel={t.common.seeAll}
         >
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4">
-            {prebuilts.data.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <LiveProductGrid query={PREBUILT_QUERY} initial={prebuilts.data} />
         </Section>
       ) : null}
 
       {latest?.data.length ? (
         <Section title={t.home.newTitle} text={t.home.newText}>
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4">
-            {latest.data.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <LiveProductGrid query={LATEST_QUERY} initial={latest.data} limit={8} />
         </Section>
       ) : null}
 

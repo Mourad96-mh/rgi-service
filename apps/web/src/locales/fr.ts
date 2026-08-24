@@ -125,6 +125,10 @@ export const fr = {
     emptyAction: 'Réinitialiser',
   },
   product: {
+    // Shown by the client-rendered fallback page when the API says the slug does not
+    // exist — a wrong URL or a product that has been removed, not an outage.
+    notFoundTitle: 'Ce produit n’existe pas ou n’est plus disponible.',
+    notFoundAction: 'Retour à l’accueil',
     specs: 'Caractéristiques techniques',
     description: 'Description',
     reference: 'Référence',
