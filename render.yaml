@@ -16,12 +16,21 @@ services:
     branch: main
     # Build from the repo root: the API depends on two workspace packages, and its own
     # `prebuild` script compiles them before `nest build` runs.
-    buildCommand: npm ci && npm run build --workspace=@rgi/api
+    # `--include=dev` is not optional here. This service sets NODE_ENV=production, and npm
+    # honours that by omitting devDependencies — but the compiler (`typescript`) and the
+    # Nest CLI (`@nestjs/cli`) are devDependencies, so without it the install succeeds and
+    # the build dies on `nest: not found`. Only the build needs them; the running service
+    # uses dist/.
+    buildCommand: npm ci --include=dev && npm run build --workspace=@rgi/api
     startCommand: npm run start --workspace=@rgi/api
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
         value: production
+      # Pin the runtime instead of drifting with Render's default. Root package.json
+      # requires >=20; 22 is what the build is developed and tested against.
+      - key: NODE_VERSION
+        value: "22"
       # Render injects PORT; main.ts reads it and binds 0.0.0.0.
 
       # ── secrets: entered in the Render dashboard, never committed ──
