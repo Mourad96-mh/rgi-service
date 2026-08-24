@@ -32,3 +32,6 @@ rgi-service-docs_1.zip
 
 .vercel
 .env*
+
+# the upload archive produced from apps/web/out for Hostinger
+hostinger-public_html.zip
