@@ -54,8 +54,20 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
   );
   const [stock, setStock] = useState(String(product?.stock ?? 0));
   const [threshold, setThreshold] = useState(String(product?.lowStockThreshold ?? 3));
+  /**
+   * A **new** product goes online straight away; an edit keeps whatever the product had.
+   *
+   * This defaulted to 'draft', which quietly defeated the one thing the dashboard exists
+   * for. The storefront queries `status: 'active'` and nothing else, so a draft is not a
+   * product that is hard to find — it is a product that does not exist as far as every
+   * listing, the search, the sitemap and the configurator are concerned. Staff filled in
+   * the form, saw « Produit enregistré », and then could not find it on the site, with
+   * nothing anywhere explaining why.
+   *
+   * Draft is still one click away in the select below for something genuinely unfinished.
+   */
   const [status, setStatus] = useState<'active' | 'draft' | 'archived'>(
-    product?.status ?? 'draft',
+    product?.status ?? 'active',
   );
   const [images, setImages] = useState<ProductImage[]>(product?.images ?? []);
   const [metaTitle, setMetaTitle] = useState(product?.metaTitle?.fr ?? '');

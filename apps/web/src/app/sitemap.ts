@@ -10,9 +10,7 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [tree, products] = await Promise.all([
     apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 3600 }),
-    apiFetchOrNull<ProductListResponse>('/products?limit=100&sort=newest', {
-      revalidate: 3600,
-    }),
+    allProducts(),
   ]);
 
   const flat: CategoryNode[] = [];
@@ -32,10 +30,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily' as const,
       priority: 0.8,
     })),
-    ...(products?.data ?? []).map((product) => ({
+    ...products.map((product) => ({
       url: `${SITE_URL}${routes.product(product.slug)}`,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),
   ];
+}
+
+/**
+ * Every active product, not the first hundred.
+ *
+ * The API caps `limit` at 100, so a single request silently truncated the sitemap the
+ * moment the catalogue outgrew that: the pages were exported and reachable, but Google
+ * was never told about any product past the hundredth newest one. `generateStaticParams`
+ * on the product page already pages for exactly this reason — the sitemap has to agree
+ * with it, or the two disagree about what the shop sells.
+ *
+ * A failed page stops the walk and returns what was gathered. A short sitemap is worth
+ * having; no sitemap is not.
+ */
+async function allProducts(): Promise<ProductListResponse['data']> {
+  const PER_PAGE = 100;
+  const out: ProductListResponse['data'] = [];
+
+  for (let page = 1; ; page++) {
+    const batch = await apiFetchOrNull<ProductListResponse>(
+      `/products?limit=${PER_PAGE}&page=${page}&sort=newest`,
+      { revalidate: 3600 },
+    );
+    if (!batch || batch.data.length === 0) break;
+    out.push(...batch.data);
+    if (out.length >= batch.total) break;
+  }
+
+  return out;
 }

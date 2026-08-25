@@ -13,7 +13,7 @@ import { routes } from '@/lib/routes';
 import { absoluteUrl } from '@/lib/url';
 import { openGraph, productDescription, productTitle } from '@/lib/seo';
 import { price, primaryImage } from '@/lib/format';
-import { ProductView } from '@/components/product/ProductView';
+import { LiveProduct } from '@/components/product/LiveProduct';
 import { ProductJsonLd } from './json-ld';
 
 /** Server-rendered product page — the money page for SEO (SEO_STRATEGY.md §1-§2). */
@@ -120,9 +120,20 @@ export default async function ProductPage({ params }: PageProps) {
     apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 300 }),
   ]);
 
+  /*
+   * Rendered through `LiveProduct`, not `ProductView` directly. Everything above is the
+   * build-time snapshot: it is what ships in the HTML, what Google indexes and what a
+   * visitor without JavaScript reads. `LiveProduct` then re-reads the product in the
+   * browser so the price and the stock on screen are the ones in the database, not the
+   * ones from whenever the site was last exported.
+   *
+   * The JSON-LD deliberately stays the prerendered one. It describes the copy a crawler
+   * is actually served, and it is regenerated on the next build like every other piece
+   * of metadata on this page.
+   */
   return (
-    <ProductView
-      product={product}
+    <LiveProduct
+      initial={product}
       definitions={definitions ?? []}
       related={related?.data ?? []}
       categories={categories ?? []}

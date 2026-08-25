@@ -87,14 +87,38 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
   return (await res.json()) as T;
 }
 
-/** Same as `apiFetch` but returns `null` instead of throwing on 404 / a dead API. */
+/**
+ * Same as `apiFetch` but returns `null` instead of throwing on 404 / a dead API.
+ *
+ * Callers treat `null` as "keep what is already on screen", which is the right behaviour —
+ * a stale shop beats an empty one. But swallowing the cause made the single most common
+ * production failure undiagnosable: when the browser cannot reach the API at all, every
+ * self-refreshing surface silently does nothing, and the site looks exactly like one that
+ * was never connected to its backend — new products never appear, prices never change,
+ * search returns nothing, and the console is empty.
+ *
+ * So the fallback stays and the reason is said out loud. An `ApiError` means the API
+ * answered and is logged in one line. Anything else never reached it, and the three
+ * causes that account for nearly all of those are named rather than left to guesswork.
+ */
 export async function apiFetchOrNull<T>(
   path: string,
   options: FetchOptions = {},
 ): Promise<T | null> {
   try {
     return await apiFetch<T>(path, options);
-  } catch {
+  } catch (error) {
+    if (error instanceof ApiError) {
+      console.warn(`[api] ${path} → ${error.status} ${error.message}`);
+    } else {
+      console.warn(
+        `[api] ${path} : aucune réponse de ${API_URL}.
+  1. l’API est arrêtée ou en veille ;
+  2. l’origine de ce site n’est pas dans CORS_ORIGINS côté API ;
+  3. la page est servie en HTTPS et NEXT_PUBLIC_API_URL pointe vers du HTTP.`,
+        error,
+      );
+    }
     return null;
   }
 }
