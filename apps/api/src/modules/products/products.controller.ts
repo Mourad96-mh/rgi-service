@@ -10,9 +10,13 @@ import {
   Query,
 } from '@nestjs/common';
 import type { Product, ProductListResponse, ProductSummary } from '@rgi/types';
+import { hasAtLeastRole } from '@rgi/types';
 import { Public } from '../../common/decorators/public.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import {
+  CurrentUser,
+  type RequestUser,
+} from '../../common/decorators/current-user.decorator';
 import { ProductsService, type AttrFilters } from './products.service';
 import { AttributeFilters, CatalogQuery } from './catalog-query.decorators';
 import { ProductListQueryDto } from './dto/product-list-query.dto';
@@ -22,13 +26,19 @@ import { CreateProductDto, UpdateProductDto, UpdateStockDto } from './dto/produc
 export class ProductsController {
   constructor(private readonly products: ProductsService) {}
 
+  /**
+   * Public, but not identical for everyone: the guard now attaches the user when the
+   * request carries a valid token, so the admin table keeps its `status` lens while an
+   * anonymous visitor only ever sees what is on sale.
+   */
   @Public()
   @Get()
   list(
     @CatalogQuery() query: ProductListQueryDto,
     @AttributeFilters() attrs: AttrFilters,
+    @CurrentUser() user?: RequestUser,
   ): Promise<ProductListResponse> {
-    return this.products.list(query, attrs);
+    return this.products.list(query, attrs, Boolean(user && hasAtLeastRole(user.role, 'staff')));
   }
 
   @Public()

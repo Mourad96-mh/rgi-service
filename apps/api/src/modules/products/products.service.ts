@@ -157,13 +157,28 @@ export class ProductsService {
    * sidebar renders. Each facet's counts are computed with every *other* filter applied
    * but not its own — otherwise selecting a value would collapse its own facet to one row.
    */
-  async list(query: ProductListQueryDto, attrs: AttrFilters = {}): Promise<ProductListResponse> {
+  async list(
+    query: ProductListQueryDto,
+    attrs: AttrFilters = {},
+    isStaff = false,
+  ): Promise<ProductListResponse> {
     const page = query.page ?? 1;
     const limit = query.limit ?? 24;
     const now = new Date();
 
     const base: FilterQuery<ProductDocument> = {};
-    if (!query.status || query.status !== 'all') base.status = query.status ?? 'active';
+    /*
+     * `status` is the admin table's lens on the catalogue, and it is the only parameter on
+     * this public endpoint that can reveal something the shop has not published. A draft is
+     * usually an unreleased model with a price that is not announced yet; an archived one is
+     * something deliberately withdrawn. Honouring the parameter for anyone — which is what
+     * happened while `@Public()` skipped authentication entirely — made both publicly
+     * enumerable with a single query string.
+     *
+     * Anonymous callers therefore get `active` and nothing else, whatever they ask for.
+     */
+    const status = isStaff ? (query.status ?? 'active') : 'active';
+    if (status !== 'all') base.status = status;
 
     let categoryType = query.categoryType;
     if (query.category) {
