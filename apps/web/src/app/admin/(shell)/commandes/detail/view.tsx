@@ -139,6 +139,24 @@ export function OrderDetailView() {
                 </>
               )}
             </div>
+
+            {/*
+              The one free-text field the customer gets — a floor, a landmark, an hour to
+              call. It sits with the address rather than in the sidebar because it is read
+              at the same moment, and it is styled apart from the neutral cards: it carries
+              an instruction, and a note nobody notices is the same as no note at all.
+              Rendered only when there is one, so an ordinary order stays uncluttered.
+            */}
+            {order.notes?.trim() ? (
+              <div className="surface-card border-warn/35 bg-warn/[0.05] p-5 sm:col-span-2">
+                <h3 className="text-[13px] font-bold uppercase tracking-[.05em] text-warn">
+                  {t.admin.orderNotes}
+                </h3>
+                <p className="mt-2 whitespace-pre-line text-[13.5px] leading-relaxed">
+                  {order.notes.trim()}
+                </p>
+              </div>
+            ) : null}
           </section>
 
           <section>

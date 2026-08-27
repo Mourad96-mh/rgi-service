@@ -74,6 +74,12 @@ export interface Order {
   };
   status: OrderStatus;
   statusHistory: { status: OrderStatus; at: string; by?: string }[];
+  /**
+   * What the customer typed in "Note pour la livraison" — a floor, a landmark, an hour to
+   * call. Accepted by `CreateOrderDto` and stored since day one, but it was missing here,
+   * so the one field written for the delivery driver never reached the staff.
+   */
+  notes?: string;
   createdAt?: string;
   updatedAt?: string;
 }

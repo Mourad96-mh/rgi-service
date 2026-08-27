@@ -336,6 +336,7 @@ export const fr = {
     orderItems: 'Articles',
     orderContact: 'Client',
     orderShipping: 'Livraison',
+    orderNotes: 'Note du client',
     orderTotals: 'Totaux',
     orderHistory: 'Historique',
     changeStatus: 'Faire évoluer la commande',

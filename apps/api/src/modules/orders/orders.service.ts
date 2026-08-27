@@ -364,6 +364,7 @@ export class OrdersService {
         at: entry.at.toISOString(),
         by: entry.by?.toString(),
       })),
+      notes: doc.notes,
       publicToken: doc.publicToken,
       createdAt: (doc as unknown as { createdAt?: Date }).createdAt?.toISOString(),
       updatedAt: (doc as unknown as { updatedAt?: Date }).updatedAt?.toISOString(),
