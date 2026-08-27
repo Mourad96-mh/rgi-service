@@ -316,6 +316,75 @@ export const fr = {
       payment: 'Paiement',
     },
   },
+  account: {
+    title: 'Mon compte',
+    metaTitle: 'Mon compte',
+    // Signed out
+    signIn: 'Se connecter',
+    signUp: 'Créer un compte',
+    signInText: 'Retrouve tes commandes et tes adresses enregistrées.',
+    signUpText: 'Un compte accélère tes prochaines commandes. Ce n’est pas obligatoire.',
+    email: 'E-mail',
+    password: 'Mot de passe',
+    passwordHelp: '8 caractères minimum.',
+    name: 'Nom complet',
+    phone: 'Téléphone',
+    submitSignIn: 'Se connecter',
+    submitSignUp: 'Créer mon compte',
+    working: 'Un instant…',
+    /**
+     * There is no password-reset e-mail: the project has no mail service, so the only
+     * honest recovery path is the shop's phone. Saying so here is better than a customer
+     * discovering it after being locked out.
+     */
+    forgot: (phone: string) => `Mot de passe oublié ? Appelle-nous au ${phone}.`,
+    guestHint:
+      'Tu peux commander sans compte : le paiement à la livraison ne demande aucune inscription.',
+    // Signed in
+    /**
+     * Mirrors « Ce compte n’a pas accès à l’administration » on the dashboard side.
+     * Staff and customer accounts are separate tracks; each door refuses the other.
+     */
+    staffAccount:
+      'Ce compte fait partie de l’équipe. Connecte-toi sur l’espace administration — '
+      + 'pour commander, utilise un compte client ou la commande sans compte.',
+    hello: (name: string) => `Bonjour ${name}`,
+    logout: 'Se déconnecter',
+    tabOrders: 'Mes commandes',
+    tabAddresses: 'Mes adresses',
+    tabProfile: 'Mon profil',
+    // Orders
+    ordersEmpty: 'Aucune commande sur ce compte pour le moment.',
+    /**
+     * Every order placed before accounts existed was a guest order and is attached to
+     * nobody, so a long-standing customer can sign up and find an empty list. Saying why
+     * costs one line and prevents « vous avez perdu ma commande ».
+     */
+    ordersGuestNote:
+      'Les commandes passées sans compte n’apparaissent pas ici : utilise le lien de suivi reçu à la commande.',
+    orderPlaced: 'Passée le',
+    orderItems: (count: number) => `${count} article${count > 1 ? 's' : ''}`,
+    orderView: 'Voir le détail',
+    // Addresses
+    addressesEmpty: 'Aucune adresse enregistrée.',
+    addressAdd: 'Ajouter une adresse',
+    addressEdit: 'Modifier',
+    addressDelete: 'Supprimer',
+    addressDefault: 'Adresse par défaut',
+    addressSetDefault: 'Définir par défaut',
+    addressLabel: 'Nom de l’adresse',
+    addressLabelHelp: 'Maison, bureau…',
+    addressSave: 'Enregistrer l’adresse',
+    addressCancel: 'Annuler',
+    addressesFull: (max: number) => `Maximum ${max} adresses enregistrées.`,
+    // Profile
+    profileEmailFixed: 'L’e-mail sert d’identifiant et ne peut pas être modifié ici.',
+    profileSave: 'Enregistrer',
+    saved: 'Modifications enregistrées.',
+    // Checkout integration
+    checkoutSignedIn: (name: string) => `Connecté en tant que ${name}.`,
+    checkoutUseAddress: 'Utiliser une adresse enregistrée',
+  },
   admin: {
     title: 'Administration',
     loginTitle: 'Espace équipe',

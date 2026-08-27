@@ -3,13 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import type { CheckoutQuote, ShippingMethod } from '@rgi/types';
+import type { Address, CheckoutQuote, ShippingMethod } from '@rgi/types';
 import { FREE_DELIVERY_THRESHOLD, formatMad } from '@rgi/types';
 import { api } from '@/lib/api';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { price } from '@/lib/format';
 import { cartPayload, useCart } from '@/store/cart';
+import { customerAccessToken, useCustomer } from '@/lib/account/session';
 import { EmptyState } from '@/components/ui/Section';
 import { Field, Choice } from './Field';
 
@@ -46,6 +47,7 @@ export function CheckoutForm() {
   const router = useRouter();
   const lines = useCart((state) => state.lines);
   const clear = useCart((state) => state.clear);
+  const customer = useCustomer();
 
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState<FormState>(EMPTY);
@@ -53,6 +55,9 @@ export function CheckoutForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+
+  /** Set once the account has filled the blanks, so it never does it twice. */
+  const prefilled = useRef(false);
 
   // One key for the life of this form, so a double submit returns the first order.
   const idempotencyKey = useRef<string>('');
@@ -63,6 +68,49 @@ export function CheckoutForm() {
   }
 
   useEffect(() => setMounted(true), []);
+
+  /**
+   * Fill the form from the account, once.
+   *
+   * Guarded by a ref rather than by the dependency list: the customer object changes
+   * whenever the session cache is rewritten, and re-running this would overwrite whatever
+   * the customer had typed since. Each field is only filled if still empty, so a returning
+   * visitor who started typing before hydration keeps their own input.
+   */
+  useEffect(() => {
+    if (!customer || prefilled.current) return;
+    prefilled.current = true;
+    const preferred =
+      customer.addresses?.find((address) => address.isDefault) ?? customer.addresses?.[0];
+
+    setForm((current) => ({
+      ...current,
+      name: current.name || customer.name,
+      email: current.email || customer.email,
+      phone: current.phone || customer.phone || preferred?.phone || '',
+      ...(preferred && !current.line1
+        ? {
+            line1: preferred.line1,
+            line2: preferred.line2 ?? '',
+            city: preferred.city,
+            postalCode: preferred.postalCode ?? '',
+          }
+        : {}),
+    }));
+  }, [customer]);
+
+  /** Copy a saved address into the form when the customer picks one. */
+  function applyAddress(address: Address) {
+    setForm((current) => ({
+      ...current,
+      line1: address.line1,
+      line2: address.line2 ?? '',
+      city: address.city,
+      postalCode: address.postalCode ?? '',
+      phone: current.phone || address.phone,
+    }));
+    setErrors({});
+  }
 
   const payload = useMemo(() => cartPayload(lines), [lines]);
   const key = JSON.stringify(payload);
@@ -134,6 +182,10 @@ export function CheckoutForm() {
           notes: form.notes.trim() || undefined,
         },
         idempotencyKey.current,
+        // Attaches the order to the account, which is what puts it in « Mes commandes ».
+        // Absent for a guest — and for a staff session, which is not a shopping account:
+        // `customerAccessToken` returns null for anything but a customer.
+        customerAccessToken() ?? undefined,
       );
 
       clear();
@@ -169,6 +221,11 @@ export function CheckoutForm() {
           <legend className="px-1 font-display text-[16px] font-bold sm:text-[17px]">
             {t.checkout.contactTitle}
           </legend>
+          {customer ? (
+            <p className="mt-2 text-[12.5px] text-faint">
+              {t.account.checkoutSignedIn(customer.name)}
+            </p>
+          ) : null}
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field label={t.checkout.name} value={form.name} error={errors.name} onChange={(v) => set('name', v)} autoComplete="name" />
             <Field label={t.checkout.email} value={form.email} error={errors.email} onChange={(v) => set('email', v)} type="email" autoComplete="email" />
@@ -197,16 +254,41 @@ export function CheckoutForm() {
           </div>
 
           {form.method === 'delivery' ? (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <Field label={t.checkout.address1} value={form.line1} error={errors.line1} onChange={(v) => set('line1', v)} autoComplete="address-line1" />
+            <>
+              {/*
+                Saved addresses fill the fields rather than replacing them: the customer can
+                still correct a line before ordering, and the order stores its own snapshot
+                either way, so a later edit to the address book never rewrites past orders.
+              */}
+              {customer?.addresses?.length ? (
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <span className="w-full text-[12px] text-muted">
+                    {t.account.checkoutUseAddress}
+                  </span>
+                  {customer.addresses.map((address, index) => (
+                    <button
+                      key={`${address.line1}-${index}`}
+                      type="button"
+                      onClick={() => applyAddress(address)}
+                      className="min-h-[36px] max-w-full truncate rounded-full border border-line px-3 text-[12.5px] text-muted transition hover:border-line2 hover:text-text"
+                    >
+                      {address.label || address.line1}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <Field label={t.checkout.address1} value={form.line1} error={errors.line1} onChange={(v) => set('line1', v)} autoComplete="address-line1" />
+                </div>
+                <div className="sm:col-span-2">
+                  <Field label={t.checkout.address2} value={form.line2} onChange={(v) => set('line2', v)} autoComplete="address-line2" optional />
+                </div>
+                <Field label={t.checkout.city} value={form.city} error={errors.city} onChange={(v) => set('city', v)} autoComplete="address-level2" />
+                <Field label={t.checkout.postalCode} value={form.postalCode} onChange={(v) => set('postalCode', v)} autoComplete="postal-code" optional />
               </div>
-              <div className="sm:col-span-2">
-                <Field label={t.checkout.address2} value={form.line2} onChange={(v) => set('line2', v)} autoComplete="address-line2" optional />
-              </div>
-              <Field label={t.checkout.city} value={form.city} error={errors.city} onChange={(v) => set('city', v)} autoComplete="address-level2" />
-              <Field label={t.checkout.postalCode} value={form.postalCode} onChange={(v) => set('postalCode', v)} autoComplete="postal-code" optional />
-            </div>
+            </>
           ) : null}
         </fieldset>
 

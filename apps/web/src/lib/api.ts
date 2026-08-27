@@ -200,11 +200,22 @@ export const api = {
    * The idempotency key makes a double-submit — impatient click, flaky 3G — return the
    * first order instead of placing a second one (API_SPEC.md §Cross-cutting).
    */
-  createOrder: (dto: CreateOrderDto, idempotencyKey: string) =>
+  /**
+   * `token` is the signed-in customer's access token, when there is one.
+   *
+   * The route is public — guest checkout is the norm here — but `POST /orders` attaches the
+   * order to whoever the token identifies. Without it the order is placed with `user: null`
+   * and can never appear in that customer's history, so this is the whole reason an
+   * account has anything to show.
+   */
+  createOrder: (dto: CreateOrderDto, idempotencyKey: string, token?: string) =>
     apiFetch<Order & { publicToken?: string }>('/orders', {
       method: 'POST',
       body: JSON.stringify(dto),
-      headers: { 'Idempotency-Key': idempotencyKey },
+      headers: {
+        'Idempotency-Key': idempotencyKey,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       revalidate: 0,
     }),
 

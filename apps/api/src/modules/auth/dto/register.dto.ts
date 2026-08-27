@@ -15,6 +15,6 @@ export class RegisterDto {
   name!: string;
 
   @IsOptional()
-  @Matches(/^\+?[0-9 ]{8,20}$/, { message: 'Numéro de téléphone invalide.' })
+  @Matches(/^\+?[0-9 -]{8,20}$/, { message: 'Numéro de téléphone invalide.' })
   phone?: string;
 }
