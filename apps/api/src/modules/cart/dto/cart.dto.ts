@@ -3,6 +3,7 @@ import {
   ArrayMaxSize,
   IsBoolean,
   ArrayNotEmpty,
+  IsDefined,
   IsEmail,
   IsIn,
   IsInt,
@@ -59,7 +60,15 @@ export class ShippingInputDto {
   zone?: string;
 }
 
+/**
+ * `@IsDefined()` is not decoration. `@ValidateNested()` alone skips a value that is
+ * `undefined`, so an omitted block passed validation and the service then dereferenced it
+ * — `POST /checkout/quote` and `POST /orders` answered 500 « Une erreur interne est
+ * survenue » instead of a French 400. Sending the same key as `null` was always rejected
+ * correctly, which is what kept it hidden.
+ */
 export class QuoteDto extends ValidateCartDto {
+  @IsDefined({ message: 'Le mode de livraison est requis.' })
   @ValidateNested()
   @Type(() => ShippingInputDto)
   shipping!: ShippingInputDto;
@@ -136,14 +145,20 @@ export class PaymentDto {
 }
 
 export class CreateOrderDto extends ValidateCartDto {
+  // See QuoteDto above for why each block needs @IsDefined(). `contact` matters most: it is
+  // read *after* nextOrderNumber(), so omitting it burned a real number out of the
+  // RGI-2026-… sequence before failing.
+  @IsDefined({ message: 'Les coordonnées du client sont requises.' })
   @ValidateNested()
   @Type(() => ContactDto)
   contact!: ContactDto;
 
+  @IsDefined({ message: 'Le mode de livraison est requis.' })
   @ValidateNested()
   @Type(() => OrderShippingDto)
   shipping!: OrderShippingDto;
 
+  @IsDefined({ message: 'Le moyen de paiement est requis.' })
   @ValidateNested()
   @Type(() => PaymentDto)
   payment!: PaymentDto;

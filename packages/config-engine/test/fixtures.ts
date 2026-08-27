@@ -26,7 +26,11 @@ export const caseAtx = part('case', 'Lian Li Lancool 216 ATX', 1090, {
   max_gpu_length_mm: 392,
   max_cooler_height_mm: 180,
   psu_form_factor: 'ATX',
-  radiator_support_mm: ['240', '280', '360'],
+  // A single number, matching `dataType: 'number'` in seed-attributes.ts and what staff
+  // actually type in the admin. These fixtures used to hold an array of strings, which no
+  // product in the catalogue can have — that mismatch is what let the broken `includes`
+  // form of `radiator_fit` stay green through 42 passing tests.
+  radiator_support_mm: 360,
 });
 
 export const caseItx = part('case', 'Cooler Master NR200 ITX', 990, {
@@ -34,7 +38,20 @@ export const caseItx = part('case', 'Cooler Master NR200 ITX', 990, {
   max_gpu_length_mm: 330,
   max_cooler_height_mm: 155,
   psu_form_factor: 'SFX',
-  radiator_support_mm: ['240'],
+  radiator_support_mm: 240,
+});
+
+/**
+ * Same as `caseAtx` but rated 367 mm — an odd figure taken from a real catalogue entry
+ * (XTRMLAB OBSIDIAN MINI). A 360 mm radiator obviously fits; only an equality test would
+ * say otherwise, which is exactly the bug `radiator_fit` used to have.
+ */
+export const caseRadiator367 = part('case', 'XTRMLAB Obsidian 367', 1090, {
+  form_factors_supported: ['ATX', 'MATX', 'ITX'],
+  max_gpu_length_mm: 392,
+  max_cooler_height_mm: 180,
+  psu_form_factor: 'ATX',
+  radiator_support_mm: 367,
 });
 
 // ── cartes mères ──────────────────────────────────────────────────────────
@@ -112,6 +129,19 @@ export const coolerAm4Only = part('cooler', 'Ventirad AM4 uniquement', 390, {
   height_mm: 150,
   tdp_watts: 150,
   type: 'air',
+});
+
+/**
+ * An air cooler that nonetheless carries `radiator_mm` — its fan diameter, entered in the
+ * wrong field. Two real products do this (DeepCool Gammaxx AG300 at 92, AK400 at 120), so
+ * the rule has to stay quiet for them rather than rely on the catalogue being perfect.
+ */
+export const coolerAirWithFanSize = part('cooler', 'DeepCool Gammaxx AG300 (air)', 390, {
+  socket_support: ['AM5', 'AM4', 'LGA1700'],
+  height_mm: 128,
+  tdp_watts: 150,
+  type: 'air',
+  radiator_mm: 92,
 });
 
 // ── mémoire ───────────────────────────────────────────────────────────────

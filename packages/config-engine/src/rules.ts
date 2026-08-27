@@ -135,7 +135,14 @@ export const DEFAULT_RULES: Rule[] = [
   {
     id: 'radiator_fit',
     description: 'Le radiateur du watercooling doit être supporté par le boîtier.',
-    type: 'includes',
+    // `includes` (exact set membership) was wrong on both counts. `radiator_support_mm` is
+    // declared `dataType: 'number'` in seed-attributes.ts and staff enter a single figure
+    // (367, 399, 435…), so membership reduced to *equality*: a 360 mm radiator in a case
+    // rated 367 mm warned, and so did every air cooler carrying a fan size in
+    // `radiator_mm`. The check is a fit, not a lookup — the radiator has to be no longer
+    // than what the case takes. `lte` also returns true when either side is absent, which
+    // is what silences air coolers with no radiator and cases that never declare a limit.
+    type: 'lte',
     left: { slot: 'cooler', attr: 'radiator_mm' },
     right: { slot: 'case', attr: 'radiator_support_mm' },
     severity: 'warning',
