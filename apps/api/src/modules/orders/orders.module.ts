@@ -4,6 +4,7 @@ import { Order, OrderSchema } from '../../schemas/order.schema';
 import { InventoryLog, InventoryLogSchema } from '../../schemas/inventory-log.schema';
 import { Product, ProductSchema } from '../../schemas/product.schema';
 import { CartModule } from '../cart/cart.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 
@@ -15,6 +16,7 @@ import { OrdersService } from './orders.service';
       { name: Product.name, schema: ProductSchema },
     ]),
     CartModule,
+    NotificationsModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

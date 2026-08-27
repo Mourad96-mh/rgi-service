@@ -20,6 +20,12 @@ export interface AppConfig {
     uploadPreset: string;
     folder: string;
   };
+  whatsapp: {
+    /** The shop handset that receives the "new order" alert. Digits only, no `+`. */
+    to: string;
+    /** CallMeBot key for that handset. Empty disables the notification entirely. */
+    callmebotApiKey: string;
+  };
 }
 
 export default (): AppConfig => ({
@@ -43,5 +49,12 @@ export default (): AppConfig => ({
     apiSecret: process.env.CLOUDINARY_API_SECRET ?? '',
     uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET ?? 'rgi_service_products',
     folder: process.env.CLOUDINARY_FOLDER ?? 'rgi-service/products',
+  },
+  whatsapp: {
+    // Defaults to the number the storefront already points every WhatsApp link at
+    // (apps/web/src/lib/contact.ts) — the same inbox, so staff read one thread. Without a
+    // key nothing is ever sent, so this default cannot leak an order by accident.
+    to: process.env.SHOP_WHATSAPP_NUMBER ?? '212661827969',
+    callmebotApiKey: process.env.CALLMEBOT_API_KEY ?? '',
   },
 });

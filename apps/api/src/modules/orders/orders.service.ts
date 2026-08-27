@@ -14,6 +14,7 @@ import { InventoryLog, type InventoryLogDocument } from '../../schemas/inventory
 import { Product, type ProductDocument } from '../../schemas/product.schema';
 import { shortId } from '../../common/utils/slug';
 import { CartService, type PricedLine } from '../cart/cart.service';
+import { WhatsappService } from '../notifications/whatsapp.service';
 import type { CreateOrderDto } from '../cart/dto/cart.dto';
 
 /** One product and how many units an order takes off the shelf. */
@@ -36,6 +37,7 @@ export class OrdersService {
     @InjectModel(InventoryLog.name) private readonly logs: Model<InventoryLogDocument>,
     @InjectConnection() private readonly connection: Connection,
     private readonly cart: CartService,
+    private readonly whatsapp: WhatsappService,
   ) {}
 
   /**
@@ -204,7 +206,16 @@ export class OrdersService {
     };
 
     const doc = await this.placeAtomically(payload, needs);
-    return OrdersService.toDto(doc);
+    const order = OrdersService.toDto(doc);
+
+    // Deliberately not awaited. The order is committed; telling the shop about it is a
+    // courtesy that runs on a third-party relay, and a relay that is slow or down must
+    // never hold the customer on a spinner or fail a sale it cannot affect. The service
+    // swallows its own errors — the `.catch()` is belt and braces against an unexpected
+    // synchronous throw.
+    void this.whatsapp.notifyNewOrder(order).catch(() => undefined);
+
+    return order;
   }
 
   /**
