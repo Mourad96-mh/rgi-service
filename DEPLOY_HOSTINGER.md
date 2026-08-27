@@ -45,14 +45,33 @@ The build reads the whole catalogue from the API, so **the API must be running a
 reachable** — locally or deployed.
 
 ```bash
-# from the repo root, with the API running
+# from the repo root
 NEXT_PUBLIC_SITE_URL=https://rgiservice.ma \
-NEXT_PUBLIC_API_URL=https://api.rgiservice.ma/api/v1 \
+NEXT_PUBLIC_API_URL=https://rgi-service-api.onrender.com/api/v1 \
 npm run build:static --workspace=@rgi/web
 ```
 
+> **Use the `onrender.com` host, not `api.rgiservice.ma`.** This block used to name the
+> subdomain, which **does not resolve** — it is an *optional, not-yet-done* step described
+> in `DEPLOY.md` § "Optional: `api.rgiservice.ma`". Building against it produces a site
+> that looks perfect and cannot reach its API at all: the catalogue pages are prerendered,
+> so the shop renders, but every filter, search, cart, checkout and admin call fails in the
+> browser. If you do set the subdomain up later, change this line **and rebuild** — the
+> value is baked into the files you upload.
+
 Both variables are **inlined at build time**. `NEXT_PUBLIC_API_URL` must be the URL the
 *visitor's browser* will call — not `localhost`, which only works on your machine.
+
+Note that `.env` and `apps/web/.env.local` both hold `http://localhost:4000/api/v1`. Real
+shell variables win over `.env` files in Next, so passing them on the command line as
+above is enough — but never rely on the `.env` values for a production build.
+
+**Check before uploading**, because this failure is invisible in the HTML:
+
+```bash
+grep -rl "localhost:4000\|localhost:3000" apps/web/out | head   # must print nothing
+grep -rho "https://[a-z0-9.-]*/api/v1" apps/web/out | sort -u   # must be the API you meant
+```
 
 Output: `apps/web/out/`.
 
