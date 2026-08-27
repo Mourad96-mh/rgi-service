@@ -124,7 +124,12 @@ export class OrdersService {
       reason,
       ref: orderNumber,
     }));
-    await this.logs.create(docs, session ? { session } : {});
+    if (!docs.length) return;
+    // Mongoose refuses `create()` with a session and several documents unless the insert
+    // is ordered — parallel inserts cannot share one transaction. A one-product cart has a
+    // single movement and slipped through; a configured PC (one movement per part) or any
+    // cart with two products did not, and the order failed after its number was taken.
+    await this.logs.create(docs, session ? { session, ordered: true } : { ordered: true });
   }
 
   async create(
