@@ -114,6 +114,39 @@ describe('each compatibility rule: one passing case, one failing case', () => {
     const sel = { ...f.validAm5Build, case: f.caseItx, cooler: f.coolerAio360, psu: f.psu750Sfx };
     expect(warnings(sel)).toContain('radiator_fit');
   });
+});
+
+/**
+ * `radiator_fit` shipped as `includes` — set membership against a number — so it only
+ * stayed silent when the two figures matched exactly. Against the live catalogue that
+ * warned on most builds, valid ones included, and a warning that fires almost always is a
+ * warning nobody reads. These are the four shapes the real data actually produces.
+ */
+describe('radiator_fit is a fit, not an exact match', () => {
+  it('does not warn when the radiator is smaller than the case allows (360 in 367)', () => {
+    const sel = { ...f.validAm5Build, case: f.caseRadiator367, cooler: f.coolerAio360 };
+    expect(warnings(sel)).not.toContain('radiator_fit');
+  });
+
+  it('does not warn when radiator and case are exactly equal (360 in 360)', () => {
+    const sel = { ...f.validAm5Build, case: f.caseAtx, cooler: f.coolerAio360 };
+    expect(warnings(sel)).not.toContain('radiator_fit');
+  });
+
+  it('still warns when the radiator is genuinely too long (360 in 240)', () => {
+    const sel = { ...f.validAm5Build, case: f.caseItx, cooler: f.coolerAio360, psu: f.psu750Sfx };
+    expect(warnings(sel)).toContain('radiator_fit');
+  });
+
+  it('stays silent for an air cooler whose radiator_mm is really a fan size', () => {
+    const sel = { ...f.validAm5Build, case: f.caseRadiator367, cooler: f.coolerAirWithFanSize };
+    expect(warnings(sel)).not.toContain('radiator_fit');
+  });
+
+  it('stays silent for an air cooler with no radiator at all', () => {
+    const sel = { ...f.validAm5Build, cooler: f.coolerTallAir, case: f.caseAtx };
+    expect(warnings(sel)).not.toContain('radiator_fit');
+  });
 
   it('carries the rule’s French message and the slots to highlight', () => {
     const sel = { ...f.validAm5Build, motherboard: f.moboLga1700Atx };
