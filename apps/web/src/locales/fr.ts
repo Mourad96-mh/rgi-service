@@ -238,6 +238,7 @@ export const fr = {
     remove: 'Retirer',
     subtotal: 'Sous-total',
     shipping: 'Livraison',
+    shippingFree: 'Offerte',
     shippingLater: 'Calculée à l’étape suivante',
     total: 'Total',
     checkout: 'Passer la commande',
@@ -294,6 +295,26 @@ export const fr = {
     keepLink: 'Garde ce lien pour suivre ta commande.',
     notFound: 'Commande introuvable ou lien expiré.',
     backHome: 'Retour à l’accueil',
+    whatsappCta: 'Envoyer ma commande sur WhatsApp',
+    whatsappAria: 'Envoyer le récapitulatif de la commande à Rgi Service sur WhatsApp',
+    whatsappHint:
+      'Envoie ton récapitulatif sur WhatsApp : l’équipe le reçoit tout de suite et te rappelle plus vite pour confirmer la livraison.',
+    /**
+     * Labels for the message the customer sends to the shop. It is read on a phone, by
+     * someone who has to call the customer back and pick the parts off a shelf — so it
+     * carries the phone number, the address and every component, not just a total.
+     */
+    wa: {
+      intro: (orderNumber: string) =>
+        `Bonjour Rgi Service, je confirme ma commande *${orderNumber}*.`,
+      customer: 'Client',
+      phone: 'Téléphone',
+      email: 'E-mail',
+      items: 'Articles',
+      parts: 'Composants',
+      note: 'Note',
+      payment: 'Paiement',
+    },
   },
   admin: {
     title: 'Administration',

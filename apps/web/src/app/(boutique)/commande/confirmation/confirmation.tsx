@@ -11,7 +11,8 @@ import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { price } from '@/lib/format';
 import { EmptyState } from '@/components/ui/Section';
-import { CheckIcon } from '@/components/ui/Icons';
+import { CheckIcon, WhatsAppIcon } from '@/components/ui/Icons';
+import { orderWhatsappUrl } from '@/lib/order-whatsapp';
 
 /**
  * The order is fetched in the browser, from `?commande=…&token=…`.
@@ -84,6 +85,28 @@ export function OrderConfirmation() {
       </h1>
       <p className="mt-3 max-w-[60ch] text-[15px] text-muted">{t.order.confirmedText}</p>
 
+      {/*
+        The order is already saved by the time this renders — this only hands the shop a
+        copy on WhatsApp, from the customer's own account, and only if they press Send.
+        It sits above the fold and before the recap because that is the one moment the
+        customer is still looking at the screen; buried under the totals it goes unused.
+      */}
+      <div className="surface-card mt-6 flex flex-col gap-3 border-[#25D366]/35 bg-[#25D366]/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:p-5">
+        <p className="max-w-[52ch] text-[13.5px] leading-relaxed text-muted">
+          {t.order.whatsappHint}
+        </p>
+        <a
+          href={orderWhatsappUrl(order)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.order.whatsappAria}
+          className="flex min-h-[46px] shrink-0 items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-5 text-[14px] font-semibold text-[#0e1220] shadow-[0_10px_24px_-10px_rgba(16,24,48,.45)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+        >
+          <WhatsAppIcon className="h-[20px] w-[20px]" />
+          {t.order.whatsappCta}
+        </a>
+      </div>
+
       <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
         <div className="flex flex-col gap-3">
           <h2 className="font-display text-lg font-bold">{t.order.items}</h2>
@@ -147,7 +170,7 @@ export function OrderConfirmation() {
             <div className="flex justify-between gap-4">
               <dt className="text-muted">{t.cart.shipping}</dt>
               <dd className="font-semibold">
-                {order.shipping.cost === 0 ? 'Offerte' : price(order.shipping.cost)}
+                {order.shipping.cost === 0 ? t.cart.shippingFree : price(order.shipping.cost)}
               </dd>
             </div>
             <div className="mt-1 flex items-end justify-between border-t border-line pt-3">
