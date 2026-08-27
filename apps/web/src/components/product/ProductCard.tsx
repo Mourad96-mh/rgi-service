@@ -4,7 +4,6 @@ import type { ProductSummary } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
 import { cardSpecs, discountPct, price, primaryImage } from '@/lib/format';
-import { HeartIcon } from '@/components/ui/Icons';
 import { AddToCartIconButton } from '@/components/cart/AddToCart';
 
 /**
@@ -40,16 +39,9 @@ export function ProductCard({ product }: { product: ProductSummary }) {
           </span>
         ) : null}
 
-        {/* `z-10` keeps the badge and this button above the full-tile link overlay below —
-            without it the link, being the later positioned sibling, swallows the tap. */}
-        <button
-          type="button"
-          aria-label={t.common.favorites}
-          className="absolute right-2.5 top-2.5 z-10 grid h-11 w-11 place-items-center rounded-[9px] border border-line2 bg-surface/85 text-muted backdrop-blur transition hover:text-accent3 sm:right-3 sm:top-3 sm:h-[34px] sm:w-[34px]"
-        >
-          <HeartIcon className="h-4 w-4" />
-        </button>
-
+        {/* A heart button used to sit here. It had no click handler and pointed at a
+            /favoris page that never existed — decoration that looked like a feature. It is
+            gone until there is a real wishlist behind it. */}
         <Link href={href} className="absolute inset-0" aria-label={product.name.fr} />
       </div>
 

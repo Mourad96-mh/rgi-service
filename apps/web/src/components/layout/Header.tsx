@@ -2,16 +2,16 @@ import Link from 'next/link';
 import type { CategoryNode } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
-import { BoltIcon, HeartIcon, UserIcon } from '@/components/ui/Icons';
+import { BoltIcon, UserIcon } from '@/components/ui/Icons';
 import { CartBadge } from '@/components/cart/CartBadge';
 import { SearchField } from './SearchField';
 import { MobileNav } from './MobileNav';
 import { Logo } from '@/components/brand/Logo';
 
 /**
- * Sticky, blurred header with the Rgi Service logo, the search field, the account /
- * favourites / cart icons, and a second row of categories where the configurator is
- * highlighted with its −5% badge (DESIGN_SYSTEM.md §5).
+ * Sticky, blurred header with the Rgi Service logo, the search field, the account and
+ * cart icons, and a second row of categories where the configurator is highlighted with
+ * its −5% badge (DESIGN_SYSTEM.md §5).
  */
 export function Header({ categories }: { categories: CategoryNode[] }) {
   return (
@@ -35,9 +35,6 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           <div className="flex flex-1 items-center justify-end gap-1.5 xs:gap-2 sm:gap-3 md:gap-4">
             <Link href={routes.account} aria-label={t.common.account} className="icobtn">
               <UserIcon />
-            </Link>
-            <Link href="/favoris" aria-label={t.common.favorites} className="icobtn hidden sm:grid">
-              <HeartIcon />
             </Link>
             <CartBadge />
             <MobileNav categories={categories} />

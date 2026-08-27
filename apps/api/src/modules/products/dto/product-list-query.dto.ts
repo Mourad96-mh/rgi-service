@@ -40,6 +40,15 @@ export class ProductListQueryDto extends PaginationDto {
   @IsBooleanString()
   inStock?: string;
 
+  /**
+   * `?promo=true` — only what is actually discounted right now. "Right now" matters: a
+   * flash deal has a start and an end, so the same query answers differently an hour
+   * later, and the promo section must never keep advertising a deal that has closed.
+   */
+  @IsOptional()
+  @IsBooleanString()
+  promo?: string;
+
   @IsOptional()
   @IsString()
   q?: string;

@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom';
 import type { CategoryNode } from '@rgi/types';
 import { t } from '@/locales/fr';
 import { routes } from '@/lib/routes';
-import { BoltIcon, CloseIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from '@/components/ui/Icons';
+import { BoltIcon, CloseIcon, MenuIcon, SearchIcon, UserIcon } from '@/components/ui/Icons';
 import { SearchField } from './SearchField';
 
 /**
@@ -126,9 +126,9 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                     <SearchField variant="drawer" autoFocus={searching} onSubmitted={close} />
                   </div>
 
-                  {/* Favourites has no room in the header below `sm`, so on phones this is
-                      the only way to reach it. */}
-                  <div className="mb-3 grid grid-cols-2 gap-2 sm:hidden">
+                  {/* The account icon has no room in the header below `sm`, so on phones
+                      this is the only way to reach it. */}
+                  <div className="mb-3 grid sm:hidden">
                     <Link
                       href={routes.account}
                       onClick={close}
@@ -136,14 +136,6 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                     >
                       <UserIcon className="h-4 w-4" />
                       {t.common.account}
-                    </Link>
-                    <Link
-                      href="/favoris"
-                      onClick={close}
-                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-sm2 border border-line bg-text/[.03] px-3 text-[13px] font-semibold text-muted"
-                    >
-                      <HeartIcon className="h-4 w-4" />
-                      {t.common.favorites}
                     </Link>
                   </div>
 

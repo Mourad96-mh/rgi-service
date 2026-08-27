@@ -8,6 +8,7 @@ import { CategoryTiles } from '@/components/home/CategoryTiles';
 import { ConfiguratorCta } from '@/components/home/ConfiguratorCta';
 import { TrustBand } from '@/components/home/TrustBand';
 import { LiveProductGrid } from '@/components/product/LiveProductGrid';
+import { PromoSection, PROMO_QUERY } from '@/components/home/PromoSection';
 import { EmptyState, Section } from '@/components/ui/Section';
 import { CONTACT } from '@/lib/contact';
 
@@ -22,10 +23,11 @@ const PREBUILT_QUERY = 'categoryType=prebuilt&limit=4&sort=price_asc';
 const LATEST_QUERY = 'limit=8&sort=newest';
 
 export default async function HomePage() {
-  const [categories, prebuilts, latest] = await Promise.all([
+  const [categories, prebuilts, latest, promos] = await Promise.all([
     apiFetchOrNull<CategoryNode[]>('/categories', { revalidate: 300 }),
     apiFetchOrNull<ProductListResponse>(`/products?${PREBUILT_QUERY}`, { revalidate: 120 }),
     apiFetchOrNull<ProductListResponse>(`/products?${LATEST_QUERY}`, { revalidate: 120 }),
+    apiFetchOrNull<ProductListResponse>(`/products?${PROMO_QUERY}`, { revalidate: 120 }),
   ]);
 
   const apiDown = categories === null && latest === null;
@@ -46,6 +48,10 @@ export default async function HomePage() {
           <CategoryTiles categories={categories} />
         </Section>
       ) : null}
+
+      {/* Rendered unconditionally: it hides itself when nothing is on sale, and reveals
+          itself when staff start a promotion after the last static export. */}
+      <PromoSection initial={promos?.data ?? []} />
 
       <ConfiguratorCta />
 
