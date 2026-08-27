@@ -25,6 +25,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: `${SITE_URL}/`, changeFrequency: 'daily', priority: 1 },
     { url: `${SITE_URL}${routes.configurator}`, changeFrequency: 'weekly', priority: 0.9 },
+    // Listed even when no sale is running: the URL is permanent, and dropping a page in and
+    // out of the sitemap as deals come and go teaches Google to distrust it.
+    { url: `${SITE_URL}${routes.promotions}`, changeFrequency: 'daily', priority: 0.8 },
     ...flat.map((category) => ({
       url: `${SITE_URL}${routes.category(category.slug)}`,
       changeFrequency: 'daily' as const,

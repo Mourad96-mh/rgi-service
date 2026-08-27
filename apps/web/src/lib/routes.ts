@@ -30,6 +30,7 @@ export const routes = {
     return `/commande/confirmation?${search.toString()}`;
   },
   account: '/compte',
+  promotions: '/promotions',
   search: (q: string) => `/recherche?q=${encodeURIComponent(q)}`,
 };
 

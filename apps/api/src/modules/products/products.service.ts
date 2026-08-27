@@ -190,6 +190,31 @@ export class ProductsService {
     if (query.categoryType) base.categoryType = query.categoryType;
     if (query.brand?.length) base.brand = { $in: query.brand };
     if (query.inStock === 'true') base.stock = { $gt: 0 };
+    /*
+     * "On promotion" is two different things in this catalogue and the section has to show
+     * both: a **flash deal** whose window is open right now, and a permanent **compareAtPrice**
+     * markdown (the struck-through price the product card already renders).
+     *
+     * It goes in `$and` rather than a bare `$or` so it composes with a category or brand
+     * filter instead of replacing it — `/promotions?category=composants` has to keep meaning
+     * "discounted *and* a component". `$expr` is what lets the second branch compare two
+     * fields of the same document.
+     */
+    if (query.promo === 'true') {
+      base.$and = [
+        ...((base.$and as FilterQuery<ProductDocument>[] | undefined) ?? []),
+        {
+          $or: [
+            {
+              'flashDeal.startsAt': { $lte: now },
+              'flashDeal.endsAt': { $gte: now },
+              $expr: { $lt: ['$flashDeal.price', '$price'] },
+            },
+            { $expr: { $gt: ['$compareAtPrice', '$price'] } },
+          ],
+        },
+      ];
+    }
     if (query.minPrice !== undefined || query.maxPrice !== undefined) {
       base.price = {
         ...(query.minPrice !== undefined ? { $gte: query.minPrice } : {}),

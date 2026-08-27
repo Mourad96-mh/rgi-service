@@ -20,6 +20,12 @@ export interface ProductPayload {
   description: { fr: string };
   price: number;
   compareAtPrice?: number;
+  /**
+   * A time-boxed promo price. `null` is not the same as absent on a PATCH: absent means
+   * "leave the promotion alone", `null` is what actually removes one. The API maps `null`
+   * to clearing the field.
+   */
+  flashDeal?: { price: number; startsAt: string; endsAt: string } | null;
   stock: number;
   lowStockThreshold: number;
   isConfiguratorPart: boolean;

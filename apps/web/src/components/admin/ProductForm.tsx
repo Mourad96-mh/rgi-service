@@ -22,6 +22,22 @@ const COMPONENT_TYPES = new Set([
   'cpu', 'motherboard', 'ram', 'gpu', 'psu', 'case', 'cooler', 'storage', 'fan',
 ]);
 
+/**
+ * ISO instant → the value an `<input type="datetime-local">` expects.
+ *
+ * That input speaks **local** wall-clock time with no zone, while the API stores UTC.
+ * Slicing `toISOString()` directly would show a Casablanca shopkeeper an hour that is not
+ * the one they typed, so the offset is subtracted first.
+ */
+function toLocalInput(iso?: string): string {
+  if (!iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
+    .toISOString()
+    .slice(0, 16);
+}
+
 /** "Carte mère MSI B650" → "carte-mere-msi-b650" */
 function slugify(value: string): string {
   return value
@@ -52,6 +68,11 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
   const [compareMad, setCompareMad] = useState(
     product?.compareAtPrice ? String(toMad(product.compareAtPrice)) : '',
   );
+  const [promoMad, setPromoMad] = useState(
+    product?.flashDeal ? String(toMad(product.flashDeal.price)) : '',
+  );
+  const [promoStart, setPromoStart] = useState(toLocalInput(product?.flashDeal?.startsAt));
+  const [promoEnd, setPromoEnd] = useState(toLocalInput(product?.flashDeal?.endsAt));
   const [stock, setStock] = useState(String(product?.stock ?? 0));
   const [threshold, setThreshold] = useState(String(product?.lowStockThreshold ?? 3));
   /**
@@ -88,6 +109,42 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
     event.preventDefault();
     setError(null);
 
+    /*
+     * A flash deal is all-or-nothing: a price with no end date would run for ever, and a
+     * date range with no price means nothing. Catching it here rather than letting the API
+     * 400 keeps the message next to the fields the shopkeeper just filled in.
+     */
+    const promoFilled = [promoMad, promoStart, promoEnd].filter(Boolean).length;
+    if (promoFilled > 0 && promoFilled < 3) {
+      setError(t.admin.promoErrorIncomplete);
+      return;
+    }
+    /*
+     * `undefined` disappears in JSON.stringify, and on a PATCH an absent key means "leave
+     * it alone" — so clearing the three fields on an existing product has to send an
+     * explicit `null`, which the API maps to removing the deal. On a new product there is
+     * nothing to clear, so absent is right.
+     */
+    let flashDeal: ProductPayload['flashDeal'] = product ? null : undefined;
+    if (promoFilled === 3) {
+      const promoCentimes = toCentimes(Number(promoMad));
+      const startsAt = new Date(promoStart);
+      const endsAt = new Date(promoEnd);
+      if (promoCentimes >= toCentimes(Number(priceMad || 0))) {
+        setError(t.admin.promoErrorPrice);
+        return;
+      }
+      if (endsAt <= startsAt) {
+        setError(t.admin.promoErrorDates);
+        return;
+      }
+      flashDeal = {
+        price: promoCentimes,
+        startsAt: startsAt.toISOString(),
+        endsAt: endsAt.toISOString(),
+      };
+    }
+
     const payload: ProductPayload = {
       name: { fr: name.trim() },
       slug: (slug.trim() || slugify(name)).toLowerCase(),
@@ -97,6 +154,7 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
       description: { fr: description.trim() },
       price: toCentimes(Number(priceMad || 0)),
       compareAtPrice: compareMad ? toCentimes(Number(compareMad)) : undefined,
+      flashDeal,
       stock: Number(stock || 0),
       lowStockThreshold: Number(threshold || 0),
       isConfiguratorPart: isPart,
@@ -189,6 +247,50 @@ export function ProductForm({ categories, definitions, product, uploadEnabled }:
             </select>
           </label>
         </div>
+
+        {/*
+          * The promo lives inside the Prix block on purpose: it *is* a price, and a
+          * shopkeeper looking for "how do I discount this" looks at the prices.
+          */}
+        <fieldset className="mt-5 rounded-sm2 border border-line p-4">
+          <legend className="px-1.5 text-[12.5px] font-semibold text-muted">
+            {t.admin.promoLegend}
+          </legend>
+          <p className="mb-3 text-[12.5px] leading-relaxed text-faint">{t.admin.promoHelp}</p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Text
+              label={t.admin.fieldPromoPrice}
+              value={promoMad}
+              onChange={setPromoMad}
+              type="number"
+            />
+            <Text
+              label={t.admin.fieldPromoStart}
+              value={promoStart}
+              onChange={setPromoStart}
+              type="datetime-local"
+            />
+            <Text
+              label={t.admin.fieldPromoEnd}
+              value={promoEnd}
+              onChange={setPromoEnd}
+              type="datetime-local"
+            />
+          </div>
+          {promoMad || promoStart || promoEnd ? (
+            <button
+              type="button"
+              onClick={() => {
+                setPromoMad('');
+                setPromoStart('');
+                setPromoEnd('');
+              }}
+              className="mt-3 text-[12.5px] font-semibold text-accent underline underline-offset-2"
+            >
+              {t.admin.promoClear}
+            </button>
+          ) : null}
+        </fieldset>
       </Section>
 
       <Section title={t.admin.sectionAttributes} help={t.admin.attributesHelp}>
