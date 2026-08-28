@@ -43,6 +43,12 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
             <h5 className="mb-4 text-[13px] font-semibold uppercase tracking-[.06em] text-faint">
               {t.footer.shop}
             </h5>
+            <Link
+              href={routes.promotions}
+              className="-my-0.5 flex min-h-[40px] items-center text-[13.5px] font-semibold text-accent3 transition hover:opacity-80 sm:my-0 sm:mb-2.5 sm:block sm:min-h-0"
+            >
+              {t.nav.promotions}
+            </Link>
             {categories.slice(0, 6).map((category) => (
               <Link
                 key={category.id}
