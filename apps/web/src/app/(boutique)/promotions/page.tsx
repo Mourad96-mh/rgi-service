@@ -4,7 +4,8 @@ import { apiFetchOrNull } from '@/lib/api';
 import { SITE_URL } from '@/lib/env';
 import { openGraph, seoTitle } from '@/lib/seo';
 import { t } from '@/locales/fr';
-import { PromoResults, PROMO_PAGE_QUERY } from './results';
+import { PROMO_PAGE_QUERY } from '@/lib/promo';
+import { PromoResults } from './results';
 
 /** Prices change under this page more than under any other, so keep the window short. */
 export const revalidate = 120;

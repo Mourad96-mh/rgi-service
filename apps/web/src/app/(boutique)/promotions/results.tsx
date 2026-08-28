@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import type { ProductListResponse, ProductSummary } from '@rgi/types';
 import { apiFetchOrNull } from '@/lib/api';
 import { t } from '@/locales/fr';
+import { PROMO_PAGE_QUERY } from '@/lib/promo';
 import { EmptyState } from '@/components/ui/Section';
 import { ProductCard } from '@/components/product/ProductCard';
-
-/** 100 is the API's hard cap on `limit`; asking for more is a 400. */
-export const PROMO_PAGE_QUERY = 'promo=true&limit=100&sort=price_asc';
 
 /**
  * The grid under the promotions heading.

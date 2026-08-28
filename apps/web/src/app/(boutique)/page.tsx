@@ -8,7 +8,8 @@ import { CategoryTiles } from '@/components/home/CategoryTiles';
 import { ConfiguratorCta } from '@/components/home/ConfiguratorCta';
 import { TrustBand } from '@/components/home/TrustBand';
 import { LiveProductGrid } from '@/components/product/LiveProductGrid';
-import { PromoSection, PROMO_QUERY } from '@/components/home/PromoSection';
+import { PromoSection } from '@/components/home/PromoSection';
+import { PROMO_QUERY } from '@/lib/promo';
 import { EmptyState, Section } from '@/components/ui/Section';
 import { CONTACT } from '@/lib/contact';
 
