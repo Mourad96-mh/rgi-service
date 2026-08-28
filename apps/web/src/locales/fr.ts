@@ -28,6 +28,7 @@ export const fr = {
   nav: {
     configurator: 'Configurateur PC',
     configuratorBadge: '-5%',
+    promotions: 'Promotions',
   },
   home: {
     heroPill: 'N°1 du gaming au Maroc',

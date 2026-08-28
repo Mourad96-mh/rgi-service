@@ -54,6 +54,16 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
               {t.nav.configuratorBadge}
             </span>
           </Link>
+          {/* Kept next to the configurator, in the discount pink the product cards use for
+              a markdown, so the one deal-hunting entry point is not buried among the
+              categories. The page exists whether or not a sale is running (it says so
+              plainly), so this link never has to be conditional. */}
+          <Link
+            href={routes.promotions}
+            className="whitespace-nowrap font-bold text-accent3 transition hover:opacity-80"
+          >
+            {t.nav.promotions}
+          </Link>
           {categories.map((category) => (
             <Link
               key={category.id}

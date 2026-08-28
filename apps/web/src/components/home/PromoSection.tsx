@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react';
 import type { ProductListResponse, ProductSummary } from '@rgi/types';
 import { apiFetchOrNull } from '@/lib/api';
 import { t } from '@/locales/fr';
+import { PROMO_QUERY } from '@/lib/promo';
 import { routes } from '@/lib/routes';
 import { Section } from '@/components/ui/Section';
 import { ProductCard } from '@/components/product/ProductCard';
-
-/** Same query on the server and in the browser, so the two can never drift. */
-export const PROMO_QUERY = 'promo=true&limit=4&sort=price_asc';
 
 /**
  * The "Promotions du moment" row — a section that decides for itself whether it exists.

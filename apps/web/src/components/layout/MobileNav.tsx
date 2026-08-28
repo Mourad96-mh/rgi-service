@@ -151,6 +151,14 @@ export function MobileNav({ categories }: { categories: CategoryNode[] }) {
                     </span>
                   </Link>
 
+                  <Link
+                    href={routes.promotions}
+                    onClick={close}
+                    className="mb-3 flex min-h-[44px] items-center rounded-sm2 border border-accent3/30 bg-accent3/[.06] px-4 py-3 font-semibold text-accent3"
+                  >
+                    {t.nav.promotions}
+                  </Link>
+
                   {categories.map((category) => (
                     <div key={category.id} className="border-b border-line py-2 last:border-0">
                       <Link
