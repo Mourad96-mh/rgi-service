@@ -5,12 +5,16 @@ import { routes } from '@/lib/routes';
 import { Logo } from '@/components/brand/Logo';
 import { CONTACT, whatsappUrl } from '@/lib/contact';
 
-const SERVICE_LINKS = [
-  { href: '/livraison', label: 'Livraison & retours' },
-  { href: '/garantie', label: 'Garantie & SAV' },
-  { href: '/paiement', label: 'Moyens de paiement' },
-  { href: '/faq', label: 'Questions fréquentes' },
-];
+/**
+ * TODO(client): the « Service client » column and the legal row used to live here, linking
+ * to /livraison /garantie /paiement /faq /mentions-legales /cgv /confidentialite. **None of
+ * those routes has ever existed**, so every page in the export shipped seven dead links —
+ * 707 of them across the site, which is what qa/static.mjs now catches. They are removed
+ * rather than stubbed: the service pages need delivery zones, costs, delays, warranty terms
+ * and a return window, and the legal pages need the company's RC, ICE, IF, capital and
+ * registered address. Inventing any of that on a live shop taking payment on delivery is
+ * worse than saying nothing. Restore both blocks once the client supplies the figures.
+ */
 
 /** Dark 4-column footer with payment badges and the legal row (DESIGN_SYSTEM.md §5). */
 export function Footer({ categories }: { categories: CategoryNode[] }) {
@@ -21,7 +25,7 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
       <div className="wrap">
         {/* One column on phones, two from `sm`, then the mockup's 4-column split from `lg`
             — the brand cell is the wide one, so it must not be forced into a 1fr track. */}
-        <div className="mb-8 grid gap-8 sm:grid-cols-2 sm:gap-9 lg:mb-9 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div className="mb-8 grid gap-8 sm:grid-cols-2 sm:gap-9 lg:mb-9 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div className="min-w-0">
             <Link href={routes.home}>
               <Logo />
@@ -56,21 +60,6 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
                 className="-my-0.5 flex min-h-[40px] items-center text-[13.5px] text-muted transition hover:text-text sm:my-0 sm:mb-2.5 sm:block sm:min-h-0"
               >
                 {category.name.fr}
-              </Link>
-            ))}
-          </div>
-
-          <div className="min-w-0">
-            <h5 className="mb-4 text-[13px] font-semibold uppercase tracking-[.06em] text-faint">
-              {t.footer.service}
-            </h5>
-            {SERVICE_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="-my-0.5 flex min-h-[40px] items-center text-[13.5px] text-muted transition hover:text-text sm:my-0 sm:mb-2.5 sm:block sm:min-h-0"
-              >
-                {link.label}
               </Link>
             ))}
           </div>
@@ -113,22 +102,9 @@ export function Footer({ categories }: { categories: CategoryNode[] }) {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-between gap-x-5 gap-y-2.5 border-t border-line pt-[22px] text-[12.5px] text-faint">
+        <div className="border-t border-line pt-[22px] text-[12.5px] text-faint">
           <span>
             © {year} {t.common.brand}. {t.footer.rights}
-          </span>
-          {/* Three legal links do not fit on one 320 px line; they wrap rather than push
-              the row past the gutter. */}
-          <span className="flex flex-wrap gap-x-4 gap-y-1.5">
-            <Link href="/mentions-legales" className="transition hover:text-muted">
-              {t.footer.legal}
-            </Link>
-            <Link href="/cgv" className="transition hover:text-muted">
-              {t.footer.cgv}
-            </Link>
-            <Link href="/confidentialite" className="transition hover:text-muted">
-              {t.footer.privacy}
-            </Link>
           </span>
         </div>
       </div>

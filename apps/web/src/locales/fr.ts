@@ -677,13 +677,9 @@ export const fr = {
     about:
       'Rgi Service assemble, teste et garantit des PC gamers et stations de travail au Maroc. Composants d’origine, prix en dirhams, support local.',
     shop: 'Boutique',
-    service: 'Service client',
     contact: 'Contact',
     payments: 'Paiement',
     rights: 'Tous droits réservés.',
-    legal: 'Mentions légales',
-    cgv: 'CGV',
-    privacy: 'Confidentialité',
   },
 } as const;
 
